@@ -1,18 +1,14 @@
 import React, {useEffect} from 'react';
-import logo from './logo.svg';
 import './App.css';
-import MainFlow from "./views/MainFlow";
 import {
     Box,
     Divider,
     Drawer,
     IconButton,
     List,
-    ListItem,
     styled,
     Typography,
     Toolbar,
-    ListItemButton, ListItemIcon, ListItemText, Icon
 } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import {Menu, Home, Tag, Notifications, Message, Bookmark, Person, ArrowLeft} from "@mui/icons-material";
@@ -68,6 +64,7 @@ function App() {
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'flex',
+        variant: 'outlined',
     }));
 
     const [open, setOpen] = React.useState<boolean>(true);
@@ -163,7 +160,8 @@ function App() {
               >
                   {
                       menuItems.map(({index, icon, title}) => {
-                          return (<DrawerMenuItem selectedIndex={selectedIndex}
+                          return (<DrawerMenuItem key={index}
+                                          selectedIndex={selectedIndex}
                                           setSelectedIndex={setSelectedIndex}
                                           index={index}
                                           MenuIcon={icon}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Avatar, Button, Card, CardActions, CardContent, CardHeader, Collapse, Typography} from "@mui/material";
+import {Avatar, Button, Card, CardActions, CardContent, CardHeader, Typography} from "@mui/material";
 
 function MainFlow() {
     return (
