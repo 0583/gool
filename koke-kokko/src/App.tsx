@@ -163,7 +163,7 @@ function App() {
                       <ArrowLeft color="primary"/>
                   </IconButton>
                   <img width="24" src="icon.png" alt="Koke-kokko Icon"></img>
-                  <Typography sx={{ marginLeft: 2 }} color="primary">Koke-kokko</Typography>
+                  <Typography sx={{ marginLeft: 2 }} variant="h5" color="primary">Koke-kokko</Typography>
               </DrawerHeader>
               <Divider />
               <List
