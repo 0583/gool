@@ -1,4 +1,4 @@
-import {ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
+import {ListItem, ListItemButton, ListItemIcon, ListItemText, Typography} from "@mui/material";
 import React from "react";
 
 interface DrawerMenuItemProps {
@@ -17,7 +17,11 @@ function DrawerMenuItem(props: DrawerMenuItemProps) {
                 <ListItemIcon>
                     {props.MenuIcon}
                 </ListItemIcon>
-                <ListItemText primary={props.title}/>
+                <ListItemText>
+                    <Typography fontWeight={props.selectedIndex === props.index ? 'bold' : 'normal'}>
+                        {props.title}
+                    </Typography>
+                </ListItemText>
             </ListItemButton>
         </ListItem>
     );
