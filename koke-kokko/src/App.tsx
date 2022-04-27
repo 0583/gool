@@ -129,7 +129,7 @@ function App() {
 
   return (
       <Box sx={{ display: 'flex' }}>
-          <AppBar position="fixed" open={open}>
+          <AppBar position="fixed" variant="outlined" open={open}>
               <Toolbar>
                   <IconButton
                       color="inherit"
