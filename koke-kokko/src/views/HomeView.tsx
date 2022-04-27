@@ -1,8 +1,8 @@
-import {Button, FormControlLabel, Stack, Switch, TextField} from "@mui/material";
+import {Box, Button, FormControlLabel, Stack, Switch, TextField} from "@mui/material";
 
 function HomeView() {
     return (
-        <div>
+        <Box sx={{ width: '100%' }}>
             <Stack spacing={2} sx={{ maxWidth: 400 }}>
                 <TextField
                     id="outlined-textarea"
@@ -15,7 +15,7 @@ function HomeView() {
                     <Button variant="outlined" >Kokko!</Button>
                 </Stack>
             </Stack>
-        </div>
+        </Box>
     )
 }
 
