@@ -92,7 +92,7 @@ function HomeView() {
                             />
                             <CardContent>
                                 <Typography variant="body1">
-                                    The adorable pink hero <Link>#Kirby</Link> made his debut in Kirby's Dream Land on Game Boy in Japan 30 years ago today! What is your favorite Kirby memory?
+                                    The adorable pink hero <Link href="#">#Kirby</Link> made his debut in Kirby's Dream Land on Game Boy in Japan 30 years ago today! What is your favorite Kirby memory?
                                 </Typography>
                             </CardContent>
                             <CardMedia
@@ -156,7 +156,6 @@ function HomeView() {
                         <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
                             <CardMedia
                                 component="img"
-                                height="140"
                                 image="examples/lN4Qc82z.png"
                                 alt="News Image 1"
                             />
@@ -178,7 +177,6 @@ function HomeView() {
                         <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
                             <CardMedia
                                 component="img"
-                                height="140"
                                 image="examples/V2oHe4a4.jpeg"
                                 alt="News Image 2"
                             />
