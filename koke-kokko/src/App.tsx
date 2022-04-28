@@ -8,7 +8,7 @@ import {
     List,
     styled,
     Typography,
-    Toolbar,
+    Toolbar, Stack, Avatar,
 } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import {Menu, Home, Tag, Notifications, Message, Bookmark, Person, ArrowLeft} from "@mui/icons-material";
@@ -140,9 +140,18 @@ function App() {
                   >
                       <Menu/>
                   </IconButton>
-                  <Typography variant="h6" noWrap component="div">
-                      { toolBarHeader }
-                  </Typography>
+                  <Stack sx={{ width: '100%' }} direction="row" justifyContent="space-between" alignItems="center">
+                      <Stack direction="row" justifyContent="flex-start">
+                          <Typography variant="h6" noWrap component="div">
+                              { toolBarHeader }
+                          </Typography>
+                      </Stack>
+
+                      <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
+                          <Typography>YU Xiqian</Typography>
+                          <Avatar src="avatars/xiqyu.png"/>
+                      </Stack>
+                  </Stack>
               </Toolbar>
           </AppBar>
           <Drawer
