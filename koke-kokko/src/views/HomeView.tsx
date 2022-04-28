@@ -11,7 +11,7 @@ import {
     Switch,
     TextField, Typography
 } from "@mui/material";
-import {Favorite, LocationCity, Photo, Pin, PinDrop, Search, Share, Tag} from "@mui/icons-material";
+import {Favorite, Photo, PinDrop, Search, Share, Tag} from "@mui/icons-material";
 import React from "react";
 
 function HomeView() {
