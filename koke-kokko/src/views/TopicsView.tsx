@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Box, Tab, Tabs, Typography} from "@mui/material";
 
 function TopicsView() {
@@ -39,7 +39,7 @@ function TopicsView() {
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange}>
+                <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered>
                     {
                         topicTypes.map((value) => {
                             return (<Tab label={value} />);
@@ -49,7 +49,7 @@ function TopicsView() {
                 {
                     topicTypes.map((category, index) => {
                         return (
-                            <TabPanel category={category} index={index}>
+                            <TabPanel category={category} index={index} key={index}>
                                 <Typography variant="h2">Item #{index}</Typography>
                                 <Typography variant="h5">{category}</Typography>
                             </TabPanel>

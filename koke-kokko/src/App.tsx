@@ -74,7 +74,7 @@ function App() {
     }));
 
     const [open, setOpen] = React.useState<boolean>(true);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [toolBarHeader, setToolBarHeader] = React.useState<string>("Home");
     const menuItems = [
         {
@@ -129,7 +129,7 @@ function App() {
 
   return (
       <Box sx={{ display: 'flex' }}>
-          <AppBar position="fixed" variant="outlined" open={open}>
+          <AppBar position="fixed" variant="outlined" elevation={0} open={open}>
               <Toolbar>
                   <IconButton
                       color="inherit"
