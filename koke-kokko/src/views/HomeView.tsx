@@ -6,14 +6,33 @@ import {
     FormControlLabel,
     Grid, IconButton,
     InputAdornment, Link,
-    List, ListItem,
+    List, ListItem, Menu, MenuItem,
     Stack,
     Switch,
     TextField, Typography
 } from "@mui/material";
 import {Favorite, LocationCity, Photo, Pin, PinDrop, Search, Share, Tag} from "@mui/icons-material";
+import React from "react";
 
 function HomeView() {
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [visibility, setVisibility] = React.useState<string>('Public');
+
+    function closeEvent(visibility: string) {
+        return () => {
+            setVisibility(visibility);
+            handleClose();
+        }
+    }
+
+    const visibilityMenuOpen = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Grid container>
             <Grid item xs={7}>
@@ -27,7 +46,7 @@ function HomeView() {
                                 multiline
                             />
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
-                                <Stack direction="row" spacing={1} justifyContent="flex-start">
+                                <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center">
                                     <Chip
                                         icon={<Photo/>}
                                         size="small"
@@ -46,12 +65,50 @@ function HomeView() {
                                         label="Location"
                                         variant="outlined"
                                     />
+                                    <Button
+                                        size="small"
+                                        id="basic-button"
+                                        aria-controls={visibilityMenuOpen ? 'basic-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={visibilityMenuOpen ? 'true' : undefined}
+                                        onClick={handleClick}
+                                    >
+                                        Visibility: {visibility}
+                                    </Button>
+                                    <Menu
+                                        id="basic-menu"
+                                        anchorEl={anchorEl}
+                                        open={visibilityMenuOpen}
+                                        onClose={handleClose}
+                                        MenuListProps={{
+                                            'aria-labelledby': 'basic-button',
+                                        }}
+                                    >
+                                        <MenuItem onClick={closeEvent("Public")}>
+                                            <Stack>
+                                                <Typography fontWeight={visibility === "Public" ? "bold" : "normal"}>Public</Typography>
+                                                {visibility === "Public" &&
+                                                    (<Typography variant="body2" color="gray">Every Koke-kokko user could see this post.</Typography>)}
+                                            </Stack>
+                                        </MenuItem>
+                                        <MenuItem onClick={closeEvent("Followers")}>
+                                            <Stack>
+                                                <Typography fontWeight={visibility === "Followers" ? "bold" : "normal"}>Followers</Typography>
+                                                {visibility === "Followers" &&
+                                                    (<Typography variant="body2" color="gray">Everyone you're following could see this post.</Typography>)}
+                                            </Stack>
+                                        </MenuItem>
+                                        <MenuItem onClick={closeEvent("Private")}>
+                                            <Stack>
+                                                <Typography fontWeight={visibility === "Private" ? "bold" : "normal"}>Private</Typography>
+                                                {visibility === "Private" &&
+                                                    (<Typography variant="body2" color="gray">Only yourself can see this post.</Typography>)}
+                                            </Stack>
+                                        </MenuItem>
+                                    </Menu>
                                 </Stack>
-                                <Stack direction="row" justifyContent="flex-end">
-                                    <FormControlLabel
-                                        control={<Switch size="small" defaultChecked color="primary" />}
-                                        label={<Typography variant="body2">Public</Typography>} />
-                                    <Button size="small" variant="outlined" >Post</Button>
+                                <Stack spacing={1} direction="row" justifyContent="flex-end">
+                                    <Button size="small" variant="outlined">Post</Button>
                                 </Stack>
                             </Stack>
                         </Stack>
