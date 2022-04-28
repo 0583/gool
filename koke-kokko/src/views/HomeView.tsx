@@ -2,7 +2,7 @@ import {
     Avatar,
     Button,
     Card, CardActions, CardContent, CardHeader,
-    CardMedia,
+    CardMedia, Chip,
     FormControlLabel,
     Grid, IconButton,
     InputAdornment, Link,
@@ -11,7 +11,7 @@ import {
     Switch,
     TextField, Typography
 } from "@mui/material";
-import {Favorite, Search, Share} from "@mui/icons-material";
+import {Favorite, LocationCity, Photo, Pin, PinDrop, Search, Share, Tag} from "@mui/icons-material";
 
 function HomeView() {
     return (
@@ -26,9 +26,33 @@ function HomeView() {
                                 placeholder="Input here"
                                 multiline
                             />
-                            <Stack direction="row" justifyContent="flex-end">
-                                <FormControlLabel control={<Switch defaultChecked color="primary" />} label="Visible to Everyone" />
-                                <Button variant="outlined" >Kokko!</Button>
+                            <Stack direction="row" justifyContent="space-between" alignItems="center">
+                                <Stack direction="row" spacing={1} justifyContent="flex-start">
+                                    <Chip
+                                        icon={<Photo/>}
+                                        size="small"
+                                        label="Image"
+                                        variant="outlined"
+                                    />
+                                    <Chip
+                                        icon={<Tag/>}
+                                        size="small"
+                                        label="Topic"
+                                        variant="outlined"
+                                    />
+                                    <Chip
+                                        icon={<PinDrop/>}
+                                        size="small"
+                                        label="Location"
+                                        variant="outlined"
+                                    />
+                                </Stack>
+                                <Stack direction="row" justifyContent="flex-end">
+                                    <FormControlLabel
+                                        control={<Switch size="small" defaultChecked color="primary" />}
+                                        label={<Typography variant="body2">Public</Typography>} />
+                                    <Button size="small" variant="outlined" >Post</Button>
+                                </Stack>
                             </Stack>
                         </Stack>
                     </ListItem>
