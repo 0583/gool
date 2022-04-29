@@ -84,21 +84,21 @@ function HomeView() {
                                             'aria-labelledby': 'basic-button',
                                         }}
                                     >
-                                        <MenuItem onClick={closeEvent("Public")}>
+                                        <MenuItem onClick={closeEvent("Public")} selected={ visibility === "Public" }>
                                             <Stack>
                                                 <Typography fontWeight={visibility === "Public" ? "bold" : "normal"}>Public</Typography>
                                                 {visibility === "Public" &&
                                                     (<Typography variant="body2" color="gray">Every Koke-kokko user could see this post.</Typography>)}
                                             </Stack>
                                         </MenuItem>
-                                        <MenuItem onClick={closeEvent("Followers")}>
+                                        <MenuItem onClick={closeEvent("Followers")} selected={ visibility === "Followers" }>
                                             <Stack>
                                                 <Typography fontWeight={visibility === "Followers" ? "bold" : "normal"}>Followers</Typography>
                                                 {visibility === "Followers" &&
-                                                    (<Typography variant="body2" color="gray">Everyone you're following could see this post.</Typography>)}
+                                                    (<Typography variant="body2" color="gray">People you're following could see this post.</Typography>)}
                                             </Stack>
                                         </MenuItem>
-                                        <MenuItem onClick={closeEvent("Private")}>
+                                        <MenuItem onClick={closeEvent("Private")} selected={ visibility === "Private" }>
                                             <Stack>
                                                 <Typography fontWeight={visibility === "Private" ? "bold" : "normal"}>Private</Typography>
                                                 {visibility === "Private" &&
