@@ -1,11 +1,48 @@
 import React from 'react';
 import {Box, List, Tab, Tabs, Typography} from "@mui/material";
 import TopicItem from "../widgets/TopicItem";
+import {
+    AssuredWorkload, DirectionsRun,
+    HealthAndSafety, Mic,
+    Newspaper,
+    PhoneAndroid,
+} from "@mui/icons-material";
 
 function TopicsView() {
     const [panelIndex, setPanelIndex] = React.useState<number>(0);
 
-    const [topicTypes, setTopicTypes] = React.useState<string[]>(["Sports", "Health", "News", "Entertainment", "Technology", "Politics"]);
+    const topicTypes = [
+        {
+            "key": 0,
+            "name": "Sports",
+            "icon": (<DirectionsRun/>)
+        },
+        {
+            "key": 1,
+            "name": "Health",
+            "icon": (<HealthAndSafety/>)
+        },
+        {
+            "key": 2,
+            "name": "News",
+            "icon": (<Newspaper/>)
+        },
+        {
+            "key": 3,
+            "name": "Entertainment",
+            "icon": (<Mic/>)
+        },
+        {
+            "key": 4,
+            "name": "Technology",
+            "icon": (<PhoneAndroid/>)
+        },
+        {
+            "key": 5,
+            "name": "Politics",
+            "icon": (<AssuredWorkload/>)
+        }
+    ]
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setPanelIndex(newValue);
@@ -51,6 +88,16 @@ function TopicsView() {
                         kokkoCount={8246}
                         image="topics/moscow.png"
                     />
+                    <TopicItem
+                        topicName="最高裁の判決が「，」から「、」に変更したワケ"
+                        category="News · LIVE"
+                        kokkoCount={9180}
+                    />
+                    <TopicItem
+                        topicName="低所得子育て世帯に5万円給付 6月以降に 厚労省"
+                        category="News · LIVE"
+                        kokkoCount={555}
+                    />
                 </List>
             </div>
         );
@@ -61,17 +108,16 @@ function TopicsView() {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered>
                     {
-                        topicTypes.map((value) => {
-                            return (<Tab label={value} />);
+                        topicTypes.map(({icon, key, name}) => {
+                            return (<Tab key={key} icon={icon} aria-label={name} />);
                         })
                     }
                 </Tabs>
                 {
-                    topicTypes.map((category, index) => {
+                    topicTypes.map(({icon, key, name}) => {
                         return (
-                            <TabPanel category={category} index={index} key={index}>
-                                <Typography variant="h2">Item #{index}</Typography>
-                                <Typography variant="h5">{category}</Typography>
+                            <TabPanel category={name} index={key}>
+                                <Typography variant="h2">{name}</Typography>
                             </TabPanel>
                         )
                     })
