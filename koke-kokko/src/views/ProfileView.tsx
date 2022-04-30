@@ -1,7 +1,7 @@
 import {
     AccordionDetails,
     AccordionSummary,
-    Avatar, Box,
+    Avatar, Box, Button,
     Card, CardActions,
     CardContent,
     CardHeader, CardMedia,
@@ -139,6 +139,9 @@ function ProfileView() {
                         getProperties("Time Zone", "GMT+08:00", "A time zone is an area that observes a uniform standard time for legal, commercial and social purposes. Time zones tend to follow the boundaries between countries and their subdivisions instead of strictly following longitude, because it is convenient for areas in frequent communication to keep the same time.")
                     )}
                 </Box>
+                <Button sx={{ marginLeft: 2 }}>
+                    Export Personal Info
+                </Button>
             </Grid>
         </Grid>
     )
