@@ -93,7 +93,7 @@ function TopicsView() {
                     topicTypes.map(({icon, key, name}) => {
                         return (
                             <TabPanel category={name} index={key}>
-                                <List>
+                                <List sx={{ marginTop: 1}}>
                                     <TopicItem
                                         topicName="新型コロナウイルスワクチンの基本情報"
                                         category="COVID-19 · LIVE"
