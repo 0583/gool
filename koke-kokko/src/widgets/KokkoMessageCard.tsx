@@ -7,8 +7,6 @@ import {
     CardHeader,
     CardMedia,
     IconButton,
-    ListItem,
-    Typography
 } from "@mui/material";
 import {Favorite, Share} from "@mui/icons-material";
 

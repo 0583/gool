@@ -11,12 +11,11 @@ import {
     Toolbar, Stack, Avatar,
 } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import {Menu, Home, Tag, Notifications, Message, Bookmark, Person, ArrowLeft} from "@mui/icons-material";
+import {Menu, Home, Tag, Notifications, Bookmark, Person, ArrowLeft} from "@mui/icons-material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 import HomeView from "./views/HomeView";
 import TopicsView from "./views/TopicsView";
 import NotificationsView from "./views/NotificationsView";
-import MessagesView from "./views/MessagesView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
 

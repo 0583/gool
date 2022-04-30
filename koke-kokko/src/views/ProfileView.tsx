@@ -1,15 +1,13 @@
 import {
     AccordionDetails,
     AccordionSummary,
-    Avatar, Box, Button,
-    Card, CardActions,
-    CardContent,
-    CardHeader, CardMedia,
-    Grid, IconButton, Link, List,
+    Box, Button,
+    CardMedia,
+    Grid, IconButton, List,
     ListItem, Stack,
     Typography
 } from "@mui/material";
-import {Edit, ExpandMore, Favorite, Share} from "@mui/icons-material";
+import {Edit, ExpandMore} from "@mui/icons-material";
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import React from "react";

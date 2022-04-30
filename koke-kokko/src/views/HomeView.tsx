@@ -1,17 +1,14 @@
 import {
-    Avatar,
     Button,
-    Card, CardActions, CardContent, CardHeader,
+    Card, CardActions, CardContent,
     CardMedia, Chip,
-    FormControlLabel,
-    Grid, IconButton,
+    Grid,
     InputAdornment, Link,
     List, ListItem, Menu, MenuItem,
     Stack,
-    Switch,
     TextField, Typography
 } from "@mui/material";
-import {Favorite, Photo, PinDrop, Search, Share, Tag} from "@mui/icons-material";
+import {Photo, PinDrop, Search, Tag} from "@mui/icons-material";
 import React from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 
