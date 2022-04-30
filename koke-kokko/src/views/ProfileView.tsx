@@ -138,9 +138,15 @@ function ProfileView() {
                         getProperties("Time Zone", "GMT+08:00", "A time zone is an area that observes a uniform standard time for legal, commercial and social purposes. Time zones tend to follow the boundaries between countries and their subdivisions instead of strictly following longitude, because it is convenient for areas in frequent communication to keep the same time.")
                     )}
                 </Box>
+                <Stack direction="row" spacing={1}>
                 <Button sx={{ marginLeft: 2 }}>
-                    Export Personal Info
+                    Export All
                 </Button>
+
+                <Button sx={{ marginLeft: 2 }} variant="outlined" color="error">
+                    Delete Account
+                </Button>
+                </Stack>
             </Grid>
         </Grid>
     )
