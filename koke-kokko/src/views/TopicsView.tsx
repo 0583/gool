@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, List, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Divider, List, Tab, Tabs, Typography} from "@mui/material";
 import TopicItem from "../widgets/TopicItem";
 import {
     AssuredWorkload, DirectionsRun,
@@ -69,6 +69,7 @@ function TopicsView() {
                 aria-labelledby={`simple-tab-${index}`}
                 {...other}
             >
+                <Divider sx={{ marginX: -2 }}/>
                 {panelIndex === index && (
                     <Box>
                         <Typography>{children}</Typography>
@@ -80,7 +81,7 @@ function TopicsView() {
 
     return (
         <Box sx={{ width: '100%' }} marginTop={-2}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box>
                 <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered >
                     {
                         topicTypes.map(({icon, key, name}) => {
@@ -126,6 +127,7 @@ function TopicsView() {
                                         viewCount={61104}
                                     />
                                 </List>
+                                <Divider sx={{ fontSize: 13, color: 'gray'}}>5 Topics</Divider>
                             </TabPanel>
                         )
                     })
