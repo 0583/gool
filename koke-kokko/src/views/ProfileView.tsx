@@ -34,7 +34,7 @@ function getProperties(itemName: string, content: string, description: string) {
             aria-controls="panel1a-content"
             id="panel1a-header"
         >
-            <Typography sx={{ width: "33%"}}>{itemName}</Typography>
+            <Typography sx={{ width: "33%"}} fontWeight="bold">{itemName}</Typography>
             <Typography sx={{ color: "text.secondary" }}>{content}</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -110,7 +110,7 @@ function ProfileView() {
                             aria-controls="panel1a-content"
                             id="panel1a-header"
                         >
-                            <Typography >Avatar</Typography>
+                            <Typography fontWeight="bold">Avatar</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
                             <CardMedia
