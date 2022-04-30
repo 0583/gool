@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import {Favorite, Photo, PinDrop, Search, Share, Tag} from "@mui/icons-material";
 import React from "react";
+import KokkoMessageCard from "../widgets/KokkoMessageCard";
 
 function HomeView() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -112,80 +113,52 @@ function HomeView() {
                     </ListItem>
 
                     <ListItem key="kokko_1">
-                        <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
-                            <CardHeader
-                                avatar={<Avatar src="avatars/ianhui.png"/>}
-                                title="XU Jiahao"
-                                subheader="April 28, 2022"
-                            />
-                            <CardContent>
-                                <Typography variant="body1">
-                                    Thanks to the Bipartisan Infrastructure Law, we’re going to start replacing 100% of the lead pipes and water lines that go into homes and schools in this country.
-                                </Typography>
-                                <Typography variant="body1">
-                                    Every American, every child, should be able to turn on a faucet and drink water that’s clean.
-                                </Typography>
-                            </CardContent>
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
-                                    <Favorite/>
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <Share/>
-                                </IconButton>
-                            </CardActions>
-                        </Card>
+                        <KokkoMessageCard
+                            username="XU Jiahao"
+                            avatar="avatars/ianhui.png"
+                            date="April 28, 2022"
+                            content={
+                                <>
+                                    <Typography variant="body1">
+                                        Thanks to the Bipartisan Infrastructure Law, we’re going to start replacing 100% of the lead pipes and water lines that go into homes and schools in this country.
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        Every American, every child, should be able to turn on a faucet and drink water that’s clean.
+                                    </Typography>
+                                </>
+                            }
+                            showActions={true}
+                        />
                     </ListItem>
 
                     <ListItem key="kokko_2">
-                        <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
-                            <CardHeader
-                                avatar={<Avatar src="avatars/yzhuo.png"/>}
-                                title="YUAN Zhuo"
-                                subheader="April 13, 2022"
-                            />
-                            <CardContent>
+                        <KokkoMessageCard
+                            username="YUAN Zhuo"
+                            avatar="avatars/yzhuo.png"
+                            date="April 13, 2022"
+                            content={
                                 <Typography variant="body1">
                                     The adorable pink hero <Link href="#">#Kirby</Link> made his debut in Kirby's Dream Land on Game Boy in Japan 30 years ago today! What is your favorite Kirby memory?
                                 </Typography>
-                            </CardContent>
-                            <CardMedia
-                                component="img"
-                                image="examples/FRXaiWUWUAIMXEO.jpeg"
-                                alt="Kirby Image"
-                            />
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
-                                    <Favorite color="error"/>
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <Share/>
-                                </IconButton>
-                            </CardActions>
-                        </Card>
+                            }
+                            image="examples/FRXaiWUWUAIMXEO.jpeg"
+                            isLiked={true}
+                            showActions={true}
+                        />
                     </ListItem>
 
                     <ListItem key="kokko_3">
-                        <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
-                            <CardHeader
-                                avatar={<Avatar src="avatars/xiqyu.png"/>}
-                                title="YU Xiqian"
-                                subheader="April 26, 2022"
-                            />
-                            <CardContent>
+                        <KokkoMessageCard
+                            username="YU Xiqian"
+                            avatar="avatars/xiqyu.png"
+                            date="April 28, 2022"
+                            content={
                                 <Typography variant="body1">
                                     can't believe what i've just seen...
                                 </Typography>
-                            </CardContent>
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
-                                    <Favorite/>
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <Share/>
-                                </IconButton>
-                            </CardActions>
-                        </Card>
+                            }
+                            showActions={true}
+                        />
                     </ListItem>
                 </List>
             </Grid>
