@@ -1,5 +1,6 @@
 import React from 'react';
-import {Box, Tab, Tabs, Typography} from "@mui/material";
+import {Box, List, Tab, Tabs, Typography} from "@mui/material";
+import TopicItem from "../widgets/TopicItem";
 
 function TopicsView() {
     const [panelIndex, setPanelIndex] = React.useState<number>(0);
@@ -32,6 +33,25 @@ function TopicsView() {
                         <Typography>{children}</Typography>
                     </Box>
                 )}
+                <List>
+                    <TopicItem
+                        topicName="新型コロナウイルスワクチンの基本情報"
+                        category="COVID-19 · LIVE"
+                        kokkoCount={8246}
+                        image="topics/covid.jpeg"
+                    />
+                    <TopicItem
+                        topicName="Lavrov"
+                        category="Trending in Politics"
+                        kokkoCount={1605}
+                    />
+                    <TopicItem
+                        topicName="ロシア外務省 日本大使館の外交官ら8人追放へ"
+                        category="World News · LIVE"
+                        kokkoCount={8246}
+                        image="topics/moscow.png"
+                    />
+                </List>
             </div>
         );
     }
