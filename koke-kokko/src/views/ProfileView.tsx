@@ -6,10 +6,10 @@ import {
     CardContent,
     CardHeader, CardMedia,
     Grid, IconButton, Link, List,
-    ListItem,
+    ListItem, Stack,
     Typography
 } from "@mui/material";
-import {ExpandMore, Favorite, Share} from "@mui/icons-material";
+import {Edit, ExpandMore, Favorite, Share} from "@mui/icons-material";
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import React from "react";
@@ -26,6 +26,24 @@ const Accordion = styled((props: AccordionProps) => (
         display: 'none',
     },
 }));
+
+function getProperties(itemName: string, content: string, description: string) {
+    return (<Accordion variant="outlined">
+        <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+        >
+            <Typography sx={{ width: "33%"}}>{itemName}</Typography>
+            <Typography sx={{ color: "text.secondary" }}>{content}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+            <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
+                {description}
+            </Typography>
+        </AccordionDetails>
+    </Accordion>);
+}
 
 function ProfileView() {
     return (
@@ -77,48 +95,49 @@ function ProfileView() {
             </Grid>
             <Grid item xs={5}>
                 <Box margin={2}>
-                    <Typography variant="h4" marginBottom={2}>
-                        Personal Info
-                    </Typography>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" marginBottom={2}>
+                        <Typography variant="h4">
+                            Personal Info
+                        </Typography>
+                        <IconButton>
+                            <Edit/>
+                        </IconButton>
+                    </Stack>
+
                     <Accordion variant="outlined">
                         <AccordionSummary
                             expandIcon={<ExpandMore />}
                             aria-controls="panel1a-content"
                             id="panel1a-header"
                         >
-                            <Typography>Accordion 1</Typography>
+                            <Typography >Avatar</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                                malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            </Typography>
+                            <CardMedia
+                                component="img"
+                                image="avatars/xiqyu.png"
+                            />
                         </AccordionDetails>
                     </Accordion>
-                    <Accordion variant="outlined">
-                        <AccordionSummary
-                            expandIcon={<ExpandMore />}
-                            aria-controls="panel2a-content"
-                            id="panel2a-header"
-                        >
-                            <Typography>Accordion 2</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                                malesuada lacus ex, sit amet blandit leo lobortis eget.
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                    <Accordion variant="outlined">
-                        <AccordionSummary
-                            expandIcon={<ExpandMore />}
-                            aria-controls="panel3a-content"
-                            id="panel3a-header"
-                        >
-                            <Typography>Disabled Accordion</Typography>
-                        </AccordionSummary>
-                    </Accordion>
+                    {(
+                        getProperties("First Name", "Xiqian", "A given name (also known as a forename or first name) is the part of a personal name that identifies a person, potentially with a middle name as well, and differentiates that person from the other members of a group (typically a family or clan) who have a common surname.")
+                    )}
+
+                    {(
+                        getProperties("Last Name", "YU", "Surname, family name, or last name is the portion of one's personal name that indicates one's family, tribe or community.")
+                    )}
+
+                    {(
+                        getProperties("Gender", "Not presented", "Gender is the range of characteristics pertaining to femininity and masculinity and differentiating between them. Depending on the context, this may include sex-based social structures (i.e. gender roles) and gender identity.")
+                    )}
+
+                    {(
+                        getProperties("Location", "Asia/Shanghai", "In geography, location or place are used to denote a region (point, line, or area) on Earth's surface or elsewhere.")
+                    )}
+
+                    {(
+                        getProperties("Time Zone", "GMT+08:00", "A time zone is an area that observes a uniform standard time for legal, commercial and social purposes. Time zones tend to follow the boundaries between countries and their subdivisions instead of strictly following longitude, because it is convenient for areas in frequent communication to keep the same time.")
+                    )}
                 </Box>
             </Grid>
         </Grid>
