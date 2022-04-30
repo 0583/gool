@@ -95,20 +95,21 @@ function App() {
             icon: (<Notifications/>),
             view: (<NotificationsView/>)
         },
+        // 私信好难做…
+        // {
+        //     index: 2.5,
+        //     title: "Messages",
+        //     icon: (<Message/>),
+        //     view: (<MessagesView/>)
+        // },
         {
             index: 3,
-            title: "Messages",
-            icon: (<Message/>),
-            view: (<MessagesView/>)
-        },
-        {
-            index: 4,
             title: "Bookmarks",
             icon: (<Bookmark/>),
             view: (<BookmarksView/>)
         },
         {
-            index: 5,
+            index: 4,
             title: "Profile",
             icon: (<Person/>),
             view: (<ProfileView/>)
