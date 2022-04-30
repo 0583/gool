@@ -2,7 +2,7 @@ import {
     AccordionDetails,
     AccordionSummary,
     Box, Button,
-    CardMedia,
+    CardMedia, Divider,
     Grid, IconButton, List,
     ListItem, Stack,
     Typography
@@ -89,6 +89,7 @@ function ProfileView() {
                             }
                             showActions={false}/>
                     </ListItem>
+                    <Divider sx={{ margin: 2, fontSize: 13, color: 'gray'}}>3 Kokkos</Divider>
                 </List>
             </Grid>
             <Grid item xs={5}>

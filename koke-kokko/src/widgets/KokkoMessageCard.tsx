@@ -5,7 +5,7 @@ import {
     CardActions,
     CardContent,
     CardHeader,
-    CardMedia,
+    CardMedia, Divider,
     IconButton,
 } from "@mui/material";
 import {Favorite, Share} from "@mui/icons-material";
@@ -30,6 +30,7 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
                 title={props.username}
                 subheader={props.date}
             />
+            <Divider/>
             <CardContent>
                 {props.content}
             </CardContent>

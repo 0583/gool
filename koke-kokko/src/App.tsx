@@ -69,7 +69,7 @@ function App() {
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'flex',
-        variant: 'outlined',
+        variant: 'outlined'
     }));
 
     const [open, setOpen] = React.useState<boolean>(true);
@@ -94,13 +94,6 @@ function App() {
             icon: (<Notifications/>),
             view: (<NotificationsView/>)
         },
-        // 私信好难做…
-        // {
-        //     index: 2.5,
-        //     title: "Messages",
-        //     icon: (<Message/>),
-        //     view: (<MessagesView/>)
-        // },
         {
             index: 3,
             title: "Bookmarks",
@@ -129,10 +122,12 @@ function App() {
 
   return (
       <Box sx={{ display: 'flex' }}>
-          <AppBar position="fixed" variant="outlined" elevation={0} open={open}>
+          <AppBar
+              sx={{ backdropFilter: 'blur(50px)', backgroundColor: 'rgba(255, 255, 255, 0.5)' }}
+              position="fixed" variant="outlined" elevation={0} open={open}>
               <Toolbar>
                   <IconButton
-                      color="inherit"
+                      color="primary"
                       aria-label="open drawer"
                       onClick={handleDrawerOpen}
                       edge="start"
@@ -142,13 +137,12 @@ function App() {
                   </IconButton>
                   <Stack sx={{ width: '100%' }} direction="row" justifyContent="space-between" alignItems="center">
                       <Stack direction="row" justifyContent="flex-start">
-                          <Typography variant="h6" noWrap component="div">
+                          <Typography variant="h5" noWrap component="div" fontWeight="bold" color="black">
                               { toolBarHeader }
                           </Typography>
                       </Stack>
 
                       <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
-                          <Typography>YU Xiqian</Typography>
                           <Avatar src="avatars/xiqyu.png"/>
                       </Stack>
                   </Stack>
