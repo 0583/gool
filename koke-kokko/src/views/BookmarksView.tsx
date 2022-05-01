@@ -45,7 +45,7 @@ function BookmarksView() {
                 </Box>
             </Grid>
             <Grid item xs={6}>
-                <Stack spacing={1}>
+                <Stack spacing={1} margin={1}>
                     <ListItem>
                         <Stack spacing={1}>
                             <Stack spacing={1} direction="row" justifyContent="space-between" alignItems="center">
