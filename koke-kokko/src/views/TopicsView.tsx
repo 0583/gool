@@ -127,7 +127,7 @@ function TopicsView() {
                                         viewCount={61104}
                                     />
                                 </List>
-                                <Divider sx={{ fontSize: 13, color: 'gray'}}>5 Topics</Divider>
+                                <Divider sx={{ fontSize: 13, color: 'gray', marginX: -2}}>5 Topics</Divider>
                             </TabPanel>
                         )
                     })
