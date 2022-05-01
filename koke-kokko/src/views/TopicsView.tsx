@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Divider, List, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Divider, Grid, List, Stack, Tab, Tabs, Typography} from "@mui/material";
 import TopicItem from "../widgets/TopicItem";
 import {
     AssuredWorkload, DirectionsRun,
@@ -80,8 +80,8 @@ function TopicsView() {
     }
 
     return (
-        <Box sx={{ width: '100%' }} marginTop={-2}>
-            <Box>
+        <Box sx={{width: '100%'}} marginTop={-2}>
+            <Stack>
                 <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered >
                     {
                         topicTypes.map(({icon, key, name}) => {
@@ -132,7 +132,7 @@ function TopicsView() {
                         )
                     })
                 }
-            </Box>
+            </Stack>
         </Box>
     )
 }
