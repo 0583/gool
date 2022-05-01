@@ -43,9 +43,9 @@ function NotificationsView() {
     ]
 
     return (
-        <Grid container justifyContent={"center"}>
-            <Grid item md={7}>
-                <List sx={{ width: '100%', maxWidth: 800, bgcolor: 'background.paper' }}>
+        <Grid container justifyContent={"center"}  >
+            <Grid item >
+                <List sx={{ width: 800, bgcolor: 'background.paper' }}>
                     {
                         notificationItems.map(({Username, UserAvatar, NoticeContext,Time,NewsAva,NewsText},index) => {
                             return (<NotificationItem key={index}
