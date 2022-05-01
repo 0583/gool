@@ -132,7 +132,7 @@ export default function PersistentDrawerLeft() {
                         borderBottom: 1,
                         borderColor: 'rgba(0, 0, 0, 0.12)',
                         backdropFilter: 'blur(50px)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
+                        backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
                 <Toolbar>
                     <IconButton
                         color="primary"
