@@ -69,7 +69,7 @@ function App() {
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'flex',
-        variant: 'outlined'
+        variant: 'outlined',
     }));
 
     const [open, setOpen] = React.useState<boolean>(true);
@@ -161,13 +161,13 @@ function App() {
               anchor="left"
               open={open}
           >
-              <DrawerHeader>
+              <Stack direction="row" height={65} alignItems="center">
                   <IconButton onClick={handleDrawerClose}>
                       <ArrowLeft color="primary"/>
                   </IconButton>
-                  <img width="24" src="icon.png" alt="Koke-kokko Icon"></img>
+                  <img width="24" height="24" src="icon.png" alt="Koke-kokko Icon"></img>
                   <Typography sx={{ marginLeft: 2 }} variant="h5" color="primary">Koke-kokko</Typography>
-              </DrawerHeader>
+              </Stack>
               <Divider />
               <List
                   sx={{ width: '100%', maxWidth: 360 }}
@@ -187,9 +187,7 @@ function App() {
           </Drawer>
           <Main open={open}>
               <DrawerHeader/>
-              <div>
-                  {menuItems[selectedIndex].view}
-              </div>
+              {menuItems[selectedIndex].view}
           </Main>
       </Box>
   );
