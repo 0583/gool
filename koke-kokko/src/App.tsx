@@ -171,7 +171,7 @@ export default function PersistentDrawerLeft() {
             >
                 <DrawerHeader>
                     <Stack direction="row" height={64} alignItems="center" sx={{ width: '100%' }}>
-                        <IconButton onClick={handleDrawerClose}>
+                        <IconButton color="primary" onClick={handleDrawerClose}>
                             {theme.direction === 'ltr' ? <ChevronLeftIcon color="primary" /> : <ChevronRightIcon color="primary" />}
                         </IconButton>
                         <img width="24" height="24" src="icon.png" alt="Koke-kokko Icon"></img>
