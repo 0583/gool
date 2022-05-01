@@ -1,20 +1,19 @@
 import {
-    Avatar,
     Button,
-    Card, CardActions, CardContent, CardHeader,
+    Card, CardActions, CardContent,
     CardMedia, Chip,
-    FormControlLabel,
-    Grid, IconButton,
+    Grid,
     InputAdornment, Link,
     List, ListItem, Menu, MenuItem,
     Stack,
-    Switch,
     TextField, Typography
 } from "@mui/material";
-import {Favorite, Photo, PinDrop, Search, Share, Tag} from "@mui/icons-material";
+import { Photo, PinDrop, Search, Tag } from "@mui/icons-material";
 import React from "react";
+import KokkoMessageCard from "../widgets/KokkoMessageCard";
 
 function HomeView() {
+    const [kokkoText, setKokkoText] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [visibility, setVisibility] = React.useState<string>('Public');
 
@@ -40,27 +39,30 @@ function HomeView() {
                     <ListItem key="send_kokko">
                         <Stack spacing={2} sx={{ width: '100%' }}>
                             <TextField
+                                inputProps={{ maxLength: 140 }}
                                 id="outlined-textarea"
                                 label="What's happening?"
                                 placeholder="Input here"
+                                value={kokkoText}
+                                onChange={(e) => { setKokkoText(e.target.value) }}
                                 multiline
                             />
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
                                 <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center">
                                     <Chip
-                                        icon={<Photo/>}
+                                        icon={<Photo />}
                                         size="small"
                                         label="Image"
                                         variant="outlined"
                                     />
                                     <Chip
-                                        icon={<Tag/>}
+                                        icon={<Tag />}
                                         size="small"
                                         label="Topic"
                                         variant="outlined"
                                     />
                                     <Chip
-                                        icon={<PinDrop/>}
+                                        icon={<PinDrop />}
                                         size="small"
                                         label="Location"
                                         variant="outlined"
@@ -84,111 +86,83 @@ function HomeView() {
                                             'aria-labelledby': 'basic-button',
                                         }}
                                     >
-                                        <MenuItem onClick={closeEvent("Public")} selected={ visibility === "Public" }>
+                                        <MenuItem onClick={closeEvent("Public")} selected={visibility === "Public"}>
                                             <Stack>
                                                 <Typography fontWeight={visibility === "Public" ? "bold" : "normal"}>Public</Typography>
-                                                {visibility === "Public" &&
-                                                    (<Typography variant="body2" color="gray">Every Koke-kokko user could see this post.</Typography>)}
+                                                <Typography variant="body2" color="gray">Every Koke-kokko user could see this post.</Typography>
                                             </Stack>
                                         </MenuItem>
-                                        <MenuItem onClick={closeEvent("Followers")} selected={ visibility === "Followers" }>
+                                        <MenuItem onClick={closeEvent("Followers")} selected={visibility === "Followers"}>
                                             <Stack>
                                                 <Typography fontWeight={visibility === "Followers" ? "bold" : "normal"}>Followers</Typography>
-                                                {visibility === "Followers" &&
-                                                    (<Typography variant="body2" color="gray">People you're following could see this post.</Typography>)}
+                                                <Typography variant="body2" color="gray">People you're following could see this post.</Typography>
                                             </Stack>
                                         </MenuItem>
-                                        <MenuItem onClick={closeEvent("Private")} selected={ visibility === "Private" }>
+                                        <MenuItem onClick={closeEvent("Private")} selected={visibility === "Private"}>
                                             <Stack>
                                                 <Typography fontWeight={visibility === "Private" ? "bold" : "normal"}>Private</Typography>
-                                                {visibility === "Private" &&
-                                                    (<Typography variant="body2" color="gray">Only yourself can see this post.</Typography>)}
+                                                <Typography variant="body2" color="gray">Only yourself can see this post.</Typography>
                                             </Stack>
                                         </MenuItem>
                                     </Menu>
                                 </Stack>
-                                <Stack spacing={1} direction="row" justifyContent="flex-end">
-                                    <Button size="small" variant="outlined">Post</Button>
+                                <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
+                                    <Typography fontSize={12} color="text.secondary">
+                                        {kokkoText ? kokkoText.length.toString() + " / 140" : undefined}
+                                    </Typography>
+                                    <Button disabled={!(kokkoText.trim())} size="small" variant="outlined">Post</Button>
                                 </Stack>
                             </Stack>
                         </Stack>
                     </ListItem>
 
                     <ListItem key="kokko_1">
-                        <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
-                            <CardHeader
-                                avatar={<Avatar src="avatars/ianhui.png"/>}
-                                title="XU Jiahao"
-                                subheader="April 28, 2022"
-                            />
-                            <CardContent>
-                                <Typography variant="body1">
-                                    Thanks to the Bipartisan Infrastructure Law, we’re going to start replacing 100% of the lead pipes and water lines that go into homes and schools in this country.
-                                </Typography>
-                                <Typography variant="body1">
-                                    Every American, every child, should be able to turn on a faucet and drink water that’s clean.
-                                </Typography>
-                            </CardContent>
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
-                                    <Favorite/>
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <Share/>
-                                </IconButton>
-                            </CardActions>
-                        </Card>
+                        <KokkoMessageCard
+                            username="XU Jiahao"
+                            avatar="avatars/ianhui.png"
+                            date="April 28, 2022"
+                            content={
+                                <>
+                                    <Typography variant="body1">
+                                        Thanks to the Bipartisan Infrastructure Law, we’re going to start replacing 100% of the lead pipes and water lines that go into homes and schools in this country.
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        Every American, every child, should be able to turn on a faucet and drink water that’s clean.
+                                    </Typography>
+                                </>
+                            }
+                            showActions={true}
+                        />
                     </ListItem>
 
                     <ListItem key="kokko_2">
-                        <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
-                            <CardHeader
-                                avatar={<Avatar src="avatars/yzhuo.png"/>}
-                                title="YUAN Zhuo"
-                                subheader="April 13, 2022"
-                            />
-                            <CardContent>
+                        <KokkoMessageCard
+                            username="YUAN Zhuo"
+                            avatar="avatars/yzhuo.png"
+                            date="April 13, 2022"
+                            content={
                                 <Typography variant="body1">
                                     The adorable pink hero <Link href="#">#Kirby</Link> made his debut in Kirby's Dream Land on Game Boy in Japan 30 years ago today! What is your favorite Kirby memory?
                                 </Typography>
-                            </CardContent>
-                            <CardMedia
-                                component="img"
-                                image="examples/FRXaiWUWUAIMXEO.jpeg"
-                                alt="Kirby Image"
-                            />
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
-                                    <Favorite color="error"/>
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <Share/>
-                                </IconButton>
-                            </CardActions>
-                        </Card>
+                            }
+                            image="examples/FRXaiWUWUAIMXEO.jpeg"
+                            isLiked={true}
+                            showActions={true}
+                        />
                     </ListItem>
 
                     <ListItem key="kokko_3">
-                        <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
-                            <CardHeader
-                                avatar={<Avatar src="avatars/xiqyu.png"/>}
-                                title="YU Xiqian"
-                                subheader="April 26, 2022"
-                            />
-                            <CardContent>
+                        <KokkoMessageCard
+                            username="YU Xiqian"
+                            avatar="avatars/xiqyu.png"
+                            date="April 28, 2022"
+                            content={
                                 <Typography variant="body1">
                                     can't believe what i've just seen...
                                 </Typography>
-                            </CardContent>
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
-                                    <Favorite/>
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                    <Share/>
-                                </IconButton>
-                            </CardActions>
-                        </Card>
+                            }
+                            showActions={true}
+                        />
                     </ListItem>
                 </List>
             </Grid>
