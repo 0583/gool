@@ -45,7 +45,6 @@ function HomeView() {
                                 placeholder="Input here"
                                 value={kokkoText}
                                 onChange={(e) => {setKokkoText(e.target.value)}}
-                                helperText={kokkoText ? kokkoText.length.toString() + " / 140" : undefined}
                                 multiline
                             />
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -107,7 +106,10 @@ function HomeView() {
                                         </MenuItem>
                                     </Menu>
                                 </Stack>
-                                <Stack spacing={1} direction="row" justifyContent="flex-end">
+                                <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
+                                    <Typography fontSize={12} color="text.secondary">
+                                        {kokkoText ? kokkoText.length.toString() + " / 140" : undefined}
+                                    </Typography>
                                     <Button size="small" variant="outlined">Post</Button>
                                 </Stack>
                             </Stack>
