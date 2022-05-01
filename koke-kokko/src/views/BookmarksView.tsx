@@ -7,7 +7,6 @@ import {
     Grid,
     IconButton,
     Link,
-    List,
     ListItem,
     Stack,
     Typography
