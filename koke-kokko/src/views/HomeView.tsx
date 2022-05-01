@@ -35,7 +35,6 @@ function HomeView() {
 
     return (
         <Grid container justifyContent={"center"}>
-        <Grid container md={7}>
             <Grid item xs={7}>
                 <List sx={{ height: '100%' }}>
                     <ListItem key="send_kokko">
@@ -254,7 +253,6 @@ function HomeView() {
                     </ListItem>
                 </List>
             </Grid>
-        </Grid>
         </Grid>
     )
 }
