@@ -110,7 +110,7 @@ function HomeView() {
                                     <Typography fontSize={12} color="text.secondary">
                                         {kokkoText ? kokkoText.length.toString() + " / 140" : undefined}
                                     </Typography>
-                                    <Button size="small" variant="outlined">Post</Button>
+                                    <Button disabled={!(kokkoText.trim())} size="small" variant="outlined">Post</Button>
                                 </Stack>
                             </Stack>
                         </Stack>
