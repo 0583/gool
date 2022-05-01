@@ -80,9 +80,9 @@ function TopicsView() {
     }
 
     return (
-        <Box sx={{width: '100%'}} marginTop={-2}>
+        <Box marginTop={-2}>
             <Stack>
-                <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered >
+                <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered>
                     {
                         topicTypes.map(({icon, key, name}) => {
                             return (<Tab key={key} icon={icon} label={name} />);

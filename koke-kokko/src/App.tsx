@@ -198,7 +198,7 @@ export default function PersistentDrawerLeft() {
             <Main open={open}>
                 <DrawerHeader />
                 <Stack direction="column" justifyContent="center" alignItems="center">
-                    <Box sx={{ maxWidth: 1280 }}>
+                    <Box sx={{ width: '100%', maxWidth: 1280 }}>
                         {menuItems[selectedIndex].view}
                     </Box>
                 </Stack>
