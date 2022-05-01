@@ -13,6 +13,7 @@ import React from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 
 function HomeView() {
+    const [kokkoText, setKokkoText] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [visibility, setVisibility] = React.useState<string>('Public');
 
@@ -38,9 +39,13 @@ function HomeView() {
                     <ListItem key="send_kokko">
                         <Stack spacing={2} sx={{ width: '100%' }}>
                             <TextField
+                                inputProps={{ maxLength: 140 }}
                                 id="outlined-textarea"
                                 label="What's happening?"
                                 placeholder="Input here"
+                                value={kokkoText}
+                                onChange={(e) => {setKokkoText(e.target.value)}}
+                                helperText={kokkoText ? kokkoText.length.toString() + " / 140" : undefined}
                                 multiline
                             />
                             <Stack direction="row" justifyContent="space-between" alignItems="center">
