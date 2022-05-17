@@ -2,7 +2,7 @@ import React from "react";
 import {Avatar, Card, ListItem, Stack, Typography, ListItemAvatar, ListItemText} from "@mui/material";
 
 
-interface NotificationItemProps{
+interface NotificationItemProps {
     Username: string,
     UserAvatar: any,
     NoticeContext: string,
@@ -18,7 +18,7 @@ function NotificationItem(props: NotificationItemProps){
     //     setNewscontext(false)
     // }
 
-    let ShowPicOrText = (props.NewsAva == '')?
+    let ShowPicOrText = (props.NewsAva === '')?
         <Typography sx={{width: 56, height: 56 ,
             wordBreak: "break-all",
             overflow: "hidden",
