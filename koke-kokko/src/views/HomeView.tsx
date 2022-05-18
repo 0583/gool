@@ -1,16 +1,18 @@
 import {
+    alpha,
     Button,
     Card, CardActions, CardContent,
     CardMedia, Chip,
     Grid,
     InputAdornment, Link,
-    List, ListItem, Menu, MenuItem,
+    List, ListItem, Menu, MenuItem, MenuProps,
     Stack,
     TextField, Typography
 } from "@mui/material";
 import { Photo, PinDrop, Search, Tag } from "@mui/icons-material";
 import React from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
+import {styled} from "@mui/material/styles";
 
 function HomeView() {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -31,6 +33,47 @@ function HomeView() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const StyledMenu = styled((props: MenuProps) => (
+        <Menu
+            elevation={0}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+            }}
+            {...props}
+        />
+    ))(({ theme }) => ({
+        '& .MuiPaper-root': {
+            borderRadius: 6,
+            marginTop: theme.spacing(1),
+            minWidth: 180,
+            color:
+                theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+            boxShadow:
+                'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+            '& .MuiMenu-list': {
+                padding: '4px 0',
+            },
+            '& .MuiMenuItem-root': {
+                '& .MuiSvgIcon-root': {
+                    fontSize: 18,
+                    color: theme.palette.text.secondary,
+                    marginRight: theme.spacing(1.5),
+                },
+                '&:active': {
+                    backgroundColor: alpha(
+                        theme.palette.primary.main,
+                        theme.palette.action.selectedOpacity,
+                    ),
+                },
+            },
+        },
+    }));
 
     return (
         <Grid container justifyContent={"center"}>
@@ -77,14 +120,14 @@ function HomeView() {
                                     >
                                         Visibility: {visibility}
                                     </Button>
-                                    <Menu
-                                        id="basic-menu"
+                                    <StyledMenu
+                                        id="demo-customized-menu"
                                         anchorEl={anchorEl}
+                                        MenuListProps={{
+                                            'aria-labelledby': 'demo-customized-button',
+                                        }}
                                         open={visibilityMenuOpen}
                                         onClose={handleClose}
-                                        MenuListProps={{
-                                            'aria-labelledby': 'basic-button',
-                                        }}
                                     >
                                         <MenuItem onClick={closeEvent("Public")} selected={visibility === "Public"}>
                                             <Stack>
@@ -104,7 +147,7 @@ function HomeView() {
                                                 <Typography variant="body2" color="gray">Only yourself can see this post.</Typography>
                                             </Stack>
                                         </MenuItem>
-                                    </Menu>
+                                    </StyledMenu>
                                 </Stack>
                                 <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
                                     <Typography fontSize={12} color="text.secondary">
