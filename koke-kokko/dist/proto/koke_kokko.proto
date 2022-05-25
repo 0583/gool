@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package csdi;
+import 'record_metadata_options.proto';
+
+message User {
+    string username = 1 [ (webaas.db.record.field).primary_key = true ];
+    string password = 2;
+    repeated string follow_tag_arr = 3;  // get following tag by follow_tag
+    repeated string article_id_arr = 4;    // get published article by article_id
+}
+
+message Article {
+    string article_id =1 [ (webaas.db.record.field).primary_key = true ];   // uuid
+    string title = 2;
+    string author = 3;
+    string content = 4;
+    string post_time = 5;
+    repeated string related_tag_arr = 6;    // get related tag by related_tag
+}
+
+message Tag {
+    string tagname = 1 [ (webaas.db.record.field).primary_key = true ];
+    repeated string article_id_arr = 2;    // foreign key
+}

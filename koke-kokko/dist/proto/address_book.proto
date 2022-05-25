@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package example;
+import 'record_metadata_options.proto';
+
+message Person {
+  int32 id = 1 [ (webaas.db.record.field).primary_key = true ];
+  string name = 2 [ (webaas.db.record.field).index = {} ];
+  string email = 3;
+
+  enum PhoneType {
+    NONE = 0;
+    MOBILE = 1;
+    HOME = 2;
+    WORK = 3;
+  }
+
+  message PhoneNumber {
+    string number = 1;
+    PhoneType type = 2;
+  }
+
+  repeated PhoneNumber phones = 4;
+}
+
+message AddressBook {
+  string id = 1 [ (webaas.db.record.field).primary_key = true ];
+  repeated Person people = 2;
+}
