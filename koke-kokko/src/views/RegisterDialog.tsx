@@ -17,6 +17,7 @@ function RegisterDialog(props: RegisterDialogProps) {
                     To register a Koke-kokko account, please provide some required information.
                 </DialogContentText>
                 <TextField
+                    required
                     autoFocus
                     margin="dense"
                     id="name"
@@ -26,6 +27,7 @@ function RegisterDialog(props: RegisterDialogProps) {
                     sx={{ marginY: 2}}
                 />
                 <TextField
+                    required
                     autoFocus
                     margin="dense"
                     id="email"
@@ -37,6 +39,7 @@ function RegisterDialog(props: RegisterDialogProps) {
                 />
 
                 <TextField
+                    required
                     autoFocus
                     margin="dense"
                     id="password"
@@ -48,6 +51,7 @@ function RegisterDialog(props: RegisterDialogProps) {
                 />
 
                 <TextField
+                    required
                     autoFocus
                     margin="dense"
                     id="confirmPassword"
