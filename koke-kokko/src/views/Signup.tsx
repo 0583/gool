@@ -14,6 +14,7 @@ import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
 import RegisterDialog from "./RegisterDialog";
 import {Service} from "../services/service";
 import {LSConfig} from "../widgets/ConifgLocalstorageUtil";
+import {Redirect} from "react-router-dom";
 
 function Copyright(props: any) {
     return (
@@ -27,25 +28,25 @@ function Copyright(props: any) {
 
 function Signup() {
 
-    const init = () => {
-        if (LSConfig.getConfig()!=null){
-            return
-        }else{
-        const  app_name = "S"
-        const  endpoint = "endpoint"
-        const  fullpath = "fullpath"
-        const  filename =  "filename"
-        const  version  = "version"
-        Service.init_config(app_name, endpoint, fullpath, filename, version).then((value)=>{
-            LSConfig.SetConfig(value);//把init的value放进localstorage
-        });
+    const init = async () => {
+        if (LSConfig.GetConfig() != null || LSConfig.GetUser() != null) {
+            return  <Redirect to="/app"></Redirect>
+        } else {
+            const app_name = "S"
+            const endpoint = "endpoint"
+            const fullpath = "fullpath"
+            const filename = "filename"
+            const version = "version"
+            await Service.init_config(app_name, endpoint, fullpath, filename, version).then((value) => {
+                LSConfig.SetConfig(value);//把init的value放进localstorage
+            });
         }
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        Service.login(LSConfig.getConfig(),data.get("email") as string,data.get("password") as string)
+        await Service.login(LSConfig.GetConfig(), data.get("email") as string, data.get("password") as string)
 
     };
     const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
