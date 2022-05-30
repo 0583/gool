@@ -1,30 +1,19 @@
 import React from "react";
 import {
     Avatar,
-    Card,
-    ListItem,
-    Stack,
     Typography,
-    ListItemAvatar,
-    ListItemText,
-    ThemeProvider,
     Grid,
     CssBaseline,
     Paper,
     TextField,
-    FormControl,
-    InputLabel,
-    OutlinedInput,
-    InputAdornment,
-    IconButton,
     Divider,
     Button,
-    Link
 } from "@mui/material";
 import Box from "@mui/material/Box";
-import SendIcon from '@mui/icons-material/Send';
 import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
 import RegisterDialog from "./RegisterDialog";
+import {Service} from "../services/service";
+import {LSConfig} from "../widgets/ConifgLocalstorageUtil";
 
 function Copyright(props: any) {
     return (
@@ -38,10 +27,30 @@ function Copyright(props: any) {
 
 function Signup() {
 
-    const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
+    const init = () => {
+        if (LSConfig.getConfig()!=null){
+            return
+        }else{
+        const  app_name = "S"
+        const  endpoint = "endpoint"
+        const  fullpath = "fullpath"
+        const  filename =  "filename"
+        const  version  = "version"
+        Service.init_config(app_name, endpoint, fullpath, filename, version).then((value)=>{
+            LSConfig.SetConfig(value);//把init的value放进localstorage
+        });
+        }
+    }
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        Service.login(LSConfig.getConfig(),data.get("email") as string,data.get("password") as string)
+
+    };
+    const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
     return(
-        <div>
+        <div onLoad={init}>
             <RegisterDialog
                 isOpen={registerDialogOpen}
                 setOpen={setRegisterDialogOpen}
@@ -69,22 +78,25 @@ function Signup() {
                             <Avatar src={"icon.png"} variant={"square"} sx={{ width: 42, height: 42 }}/>
                             <Typography sx={{mt:6,mb:6,fontWeight:800, fontSize:64 }}>What's happening</Typography>
                             <Typography sx={{fontWeight:700 ,fontSize:31, mb:4}}>Join Now</Typography>
-                            <Box component={"form"} width={300} sx={{mb:3}}>
+                            <Box component={"form"}  onSubmit={handleSubmit} width={300} sx={{mb:3}}>
                             <TextField
                                 required
                                 fullWidth
+                                name="email"
                                 label={"Email address"} variant={"outlined"}
                                 sx={{mb:2}}
                             />
                             <TextField
                                 required
                                 fullWidth
+                                name="password"
                                 label="Password"
                                 type="password"
                                 autoComplete="current-password"
                                 sx={{mb:2}}
                             />
-                            <Button variant="contained" fullWidth>
+                            <Button variant="contained" fullWidth
+                                    type="submit">
                                 Sign in
                             </Button>
                             </Box>

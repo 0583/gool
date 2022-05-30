@@ -12,10 +12,10 @@ export interface Config {
     filename: string,
     version: string,
     app_id: string,
-    user: csdi.User,
+    user: csdi.User
 }
 
-namespace Util {
+    namespace Util {
     export enum SchemaName {
         User = "csdi.User",
         Article = "csdi.Article",
@@ -50,11 +50,9 @@ export namespace Service {
         } as Config;
 
         await Request.register_app(config);
-
         const content = await readFile(config.fullpath);
         await Request.upload_schema(config, content);
         await Request.update_schema(config);
-
         return config;
     }
 
