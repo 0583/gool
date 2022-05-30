@@ -26,20 +26,23 @@ function RegisterDialog(props: RegisterDialogProps) {
             <DialogTitle>
                 Get a Koke-kokko Account
             </DialogTitle>
-            <DialogContent>
+            <DialogContent sx={{ marginX: 2, marginTop: 2, marginBottom: -2 }}>
                 <DialogContentText>
                     To register a Koke-kokko account, please provide some required information.
                 </DialogContentText>
                 <Box component={"form"} onSubmit={handleSubmit} >
                 <TextField
+                    required
                     autoFocus
                     margin="dense"
                     name="name"
                     label="Your Name"
                     fullWidth
                     variant="outlined"
+                    sx={{ marginY: 2}}
                 />
                 <TextField
+                    required
                     autoFocus
                     margin="dense"
                     name="email"
@@ -47,9 +50,11 @@ function RegisterDialog(props: RegisterDialogProps) {
                     type="email"
                     fullWidth
                     variant="outlined"
+                    sx={{ marginY: 2}}
                 />
 
                 <TextField
+                    required
                     autoFocus
                     margin="dense"
                     name="password"
@@ -57,9 +62,11 @@ function RegisterDialog(props: RegisterDialogProps) {
                     type="password"
                     fullWidth
                     variant="outlined"
+                    sx={{ marginY: 2}}
                 />
 
                 <TextField
+                    required
                     autoFocus
                     margin="dense"
                     name="confirmPassword"
@@ -67,10 +74,11 @@ function RegisterDialog(props: RegisterDialogProps) {
                     type="password"
                     fullWidth
                     variant="outlined"
+                    sx={{ marginTop: 2 }}
                 />
                 </Box>
             </DialogContent>
-            <DialogActions>
+            <DialogActions sx={{ margin: 4 }}>
                 <Button color="error" onClick={ () => { props.setOpen(false) }}>Cancel</Button>
                 <Button variant="outlined" onClick={ () => { props.setOpen(false) }} type="submit">Register</Button>
             </DialogActions>
