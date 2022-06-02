@@ -1,6 +1,7 @@
 
 import {Config} from "../services/service";
 import {csdi} from "../services/proto/koke_kokko";
+
 export namespace LSConfig{
     var store = require('store')
 

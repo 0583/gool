@@ -8,10 +8,10 @@ export interface Config {
     filename: string,
     version: string,
     app_id: string,
-    user: csdi.User,
+    user: csdi.User
 }
 
-namespace Util {
+    namespace Util {
     export enum SchemaName {
         User = "csdi.User",
         Article = "csdi.Article",
