@@ -25,6 +25,10 @@ import Box from "@mui/material/Box";
 import SendIcon from '@mui/icons-material/Send';
 import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
 import RegisterDialog from "./RegisterDialog";
+import {Service} from "../services/service";
+// import {LSConfig} from "../widgets/ConifgLocalstorageUtil";
+import {Redirect} from "react-router-dom";
+import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
 
 function Copyright(props: any) {
     return (
@@ -38,10 +42,29 @@ function Copyright(props: any) {
 
 function Signup() {
 
+    const init = async () => {
+
+        let app_name: string = 'kobe_kokko-v0.1.1';
+        let endpoint: string = 'http://202.120.40.82:11233';
+        let fullpath: string = 'dist/proto/koke_kokko.proto';
+        let filename: string = 'koke_kokko.proto';
+        let version: string = 'v0.1.0';
+
+        await Service.init_config(app_name, endpoint, fullpath, filename, version).then((value) => {
+            LSConfig.SetConfig(value)
+            // LSConfig.SetConfig(value);
+            //把init的value放进localstorage
+            console.log(LSConfig.GetConfig())
+        }).catch((reason) => {
+            console.log(reason);
+        });
+        
+    }
+
     const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
 
     return(
-        <div>
+        <div onLoad={init}>
             <RegisterDialog
                 isOpen={registerDialogOpen}
                 setOpen={setRegisterDialogOpen}

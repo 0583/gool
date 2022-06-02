@@ -1,10 +1,6 @@
 import { Request } from "./request";
 import { csdi } from "./proto/koke_kokko";
-import { readFile } from 'fs/promises';
-import { Logger } from "tslog";
 import { v4 as uuidv4 } from 'uuid';
-const log: Logger = new Logger();
-
 export interface Config {
     app_name: string,
     endpoint: string,
@@ -28,6 +24,35 @@ namespace Util {
             return element != value;
         });
     }
+
+    
+    export const proto_content=
+`syntax = "proto3";
+
+package csdi;
+import 'record_metadata_options.proto';
+
+message User {
+    string username = 1 [ (webaas.db.record.field).primary_key = true ];
+    string password = 2;
+    repeated string follow_tag_arr = 3;  // get following tag by follow_tag
+    repeated string article_id_arr = 4;    // get published article by article_id
+}
+
+message Article {
+    string article_id =1 [ (webaas.db.record.field).primary_key = true ];   // uuid
+    string title = 2;
+    string author = 3;
+    string content = 4;
+    string post_time = 5;
+    repeated string related_tag_arr = 6;    // get related tag by related_tag
+}
+
+message Tag {
+    string tagname = 1 [ (webaas.db.record.field).primary_key = true ];
+    repeated string article_id_arr = 2;    // foreign key
+}
+`;
 }
 
 // init_config
@@ -50,11 +75,10 @@ export namespace Service {
         } as Config;
 
         await Request.register_app(config);
-
-        const content = await readFile(config.fullpath);
-        await Request.upload_schema(config, content);
+        await Request.upload_schema(config, Util.proto_content);
         await Request.update_schema(config);
 
+        
         return config;
     }
 
@@ -76,16 +100,16 @@ export namespace Service {
                 let user = csdi.User.deserializeBinary(value);
                 if (user.password == password) {
                     config.user = user;
-                    log.silly("login successful");
+                    console.log("login successful");
                 } else {
-                    log.silly("login failed");
+                    console.log("login failed");
                 }
             });
     }
 
     export function logout(config: Config) {
         config.user = {} as csdi.User;
-        log.silly("logout");
+        console.log("logout");
     }
 
     // cancel account when logged in
@@ -114,7 +138,7 @@ export namespace Service {
                 tag.article_id_arr.push(article.article_id);
                 await Request.put_record(config, tag.serializeBinary(), Util.SchemaName.Tag);
             }).catch((reason) => {
-                log.silly(reason);
+                console.log(reason);
             });
         }
     }
@@ -139,11 +163,11 @@ export namespace Service {
                             .then((value) => {
                                 res.push(csdi.Article.deserializeBinary(value));
                             }).catch((reason) => {
-                                log.silly(reason);
+                                console.log(reason);
                             });
                     }
                 }).catch((reason) => {
-                    log.silly(reason);
+                    console.log(reason);
                 });
         }
 
@@ -155,7 +179,7 @@ export namespace Service {
         let related_tag_arr = article.related_tag_arr;
 
         if (!config.user.article_id_arr.includes(article_id)) {
-            log.silly("permission denied");
+            console.log("permission denied");
             return;
         }
 
@@ -170,7 +194,7 @@ export namespace Service {
                 tag.article_id_arr = Util.remove_string_element(tag.article_id_arr, article_id);
                 await Request.put_record(config, tag.serializeBinary(), Util.SchemaName.Tag);
             }).catch((reason) => {
-                log.silly(reason);
+                console.log(reason);
             });
         }
     }
@@ -199,12 +223,12 @@ export namespace Service {
                         }
                         integrity = true;
                     } catch (_) {
-                        log.silly(res);
-                        log.silly("retry");
+                        console.log(res);
+                        console.log("retry");
                         res = [];
                     }
                 }).catch((reason) => {
-                    log.silly(reason);
+                    console.log(reason);
                 });
         }
 
@@ -223,12 +247,12 @@ export namespace Service {
                         }
                         integrity = true;
                     } catch (_) {
-                        log.silly("retry");
+                        console.log("retry");
                         res = [];
                     }
 
                 }).catch((reason) => {
-                    log.silly(reason);
+                    console.log(reason);
                 });
         }
 
@@ -247,11 +271,11 @@ export namespace Service {
                         }
                         integrity = true;
                     } catch (_) {
-                        log.silly("retry");
+                        console.log("retry");
                         res = [];
                     }
                 }).catch((reason) => {
-                    log.silly(reason);
+                    console.log(reason);
                 });
         }
 

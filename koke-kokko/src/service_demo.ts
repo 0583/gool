@@ -1,6 +1,4 @@
 import { Config, Service } from './services/service';
-import { Logger } from "tslog";
-const log: Logger = new Logger();
 
 
 let app_name: string = 'kobe_kokko-v0.0.9';
@@ -46,10 +44,10 @@ let articles: ArticleData[] = [
 async function app_init(): Promise<Config> {
     let config = {} as Config;
     await Service.init_config(app_name, endpoint, fullpath, filename, version).then((value) => {
-        log.silly(value);
+        console.log(value);
         config = value;
     }).catch((reason) => {
-        log.silly(reason);
+        console.log(reason);
     });
 
     for (let user of users) {
@@ -83,7 +81,7 @@ async function track_article(config: Config) {
 
     // await Service.list_article_for_user(config).then((articles) => {
     //     for (let article of articles) {
-    //         log.silly(article);
+    //         console.log(article);
     //         // await Service.remove_article
     //     }
     // });
@@ -97,7 +95,7 @@ async function track_tag(config: Config) {
 
     await Service.list_article_for_user(config).then((articles) => {
         for (let article of articles) {
-            log.silly(article);
+            console.log(article);
         }
     });
 
@@ -105,14 +103,14 @@ async function track_tag(config: Config) {
     await Service.follow_tag(config, tags[4]);
     await Service.list_article_for_user(config).then((articles) => {
         for (let article of articles) {
-            log.silly(article);
+            console.log(article);
         }
     });
 
     await Service.unfollow_tag(config, tags[0]);
     await Service.list_article_for_user(config).then((articles) => {
         for (let article of articles) {
-            log.silly(article);
+            console.log(article);
         }
     });
 }
@@ -123,19 +121,19 @@ async function track_tag(config: Config) {
 async function admin_query(config: Config) {
     await Service.list_user(config).then((users) => {
         for (let user of users) {
-            log.silly(user);
+            console.log(user);
         }
     });
 
     await Service.list_article(config).then((articles) => {
         for (let article of articles) {
-            log.silly(article);
+            console.log(article);
         }
     });
 
     await Service.list_tag(config).then((tags) => {
         for (let tag of tags) {
-            log.silly(tag);
+            console.log(tag);
         }
     });
 }
@@ -148,7 +146,7 @@ app_init().then((config) => {
     });
 
 }).catch((reason) => {
-    log.silly(reason);
+    console.log(reason);
 });
 
 // let config = {

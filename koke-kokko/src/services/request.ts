@@ -1,8 +1,14 @@
 import axios from 'axios';
 import { Config } from './service';
-import { Logger } from "tslog";
-import { TextEncoder } from 'util';
-const log: Logger = new Logger();
+
+// axios.defaults.withCredentials = true;
+
+// axios.defaults.baseURL='http://202.120.40.82:11233';
+
+//  var instance = axios.create({
+//     baseURL:'http://202.120.40.82:11233',
+//     withCredentials: true
+//   });
 
 namespace Util {
     export type RegisterAppResponseDTO = {
@@ -23,12 +29,21 @@ namespace Util {
         begin_key = "0",
         end_key = "z",
     }
+
+    export function string2binary(str: string): Uint8Array {
+        var bufView = new Uint8Array(str.length);
+        for (var i=0, strLen=str.length; i<strLen; i++) {
+          bufView[i] = str.charCodeAt(i);
+        }
+        return bufView;
+    }
 }
+
 
 export namespace Request {
     export async function register_app(config: Config) {
         const { data } = await axios.post<Util.RegisterAppResponseDTO>(
-            config.endpoint + "/app",
+             "/api/app",
             {},
             {
                 params: {
@@ -39,9 +54,9 @@ export namespace Request {
         config.app_id = data.appID;
     }
 
-    export async function upload_schema(config: Config, content: Buffer) {
+    export async function upload_schema(config: Config, content: string) {
         const { data } = await axios.put<Util.StringDTO>(
-            config.endpoint + "/schema",
+             "/api/schema",
             content,
             {
                 params: {
@@ -52,13 +67,14 @@ export namespace Request {
                 headers: {
                     'Content-Type': 'application/octet-stream',
                 },
+                withCredentials: true,
             },
         );
     }
 
     export async function update_schema(config: Config) {
         const { data } = await axios.post<Util.StringDTO>(
-            config.endpoint + "/schema",
+            "/api/schema",
             {},
             {
                 params: {
@@ -72,7 +88,7 @@ export namespace Request {
     export async function put_record
         (config: Config, content: Uint8Array, schema_name: string) {
         const { data } = await axios.post<Util.RecordDTO>(
-            config.endpoint + "/record",
+            "/api/record",
             content,
             {
                 params: {
@@ -89,7 +105,7 @@ export namespace Request {
     export async function delete_record
         (config: Config, key: string, schema_name: string) {
         const { data } = await axios.delete<Util.RecordDTO>(
-            config.endpoint + "/record",
+            "/api/record",
             {
                 params: {
                     appID: config.app_id,
@@ -103,7 +119,7 @@ export namespace Request {
     export async function get_record_by_key
         (config: Config, key: string, schema_name: string): Promise<Uint8Array> {
         const { data } = await axios.get<Util.StringDTO>(
-            config.endpoint + "/query",
+            "/api/query",
             {
                 params: {
                     appID: config.app_id,
@@ -116,14 +132,14 @@ export namespace Request {
             },
         );
 
-        return new TextEncoder().encode(data);
+        return Util.string2binary(data);
     }
 
     export async function get_range_record_by_key
         (config: Config, schema_name: string,
             begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<Uint8Array[]> {
         const { data } = await axios.get<Util.StringDTO>(
-            config.endpoint + "/query",
+            "/api/query",
             {
                 params: {
                     appID: config.app_id,
@@ -141,7 +157,7 @@ export namespace Request {
 
         let res: Uint8Array[] = [];
 
-        const raw_content = new TextEncoder().encode(data);
+        const raw_content = Util.string2binary(data);;
         let buffer = Buffer.from(raw_content);
 
         const length = buffer.length;
