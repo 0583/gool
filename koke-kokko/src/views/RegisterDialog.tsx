@@ -9,29 +9,32 @@ interface RegisterDialogProps {
 }
 
 function RegisterDialog(props: RegisterDialogProps) {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         if (data.get("password") == data.get("confirmPassword")) {
-            Service.signup(LSConfig.GetConfig(), data.get("email") as string, data.get("password") as string).then(() => {
-                return <Alert severity="success">registration succeeded</Alert>
+            await Service.signup(LSConfig.GetConfig(), data.get("email") as string, data.get("password") as string).then(() => {
+                props.setOpen(false);
+            }).catch((reason) => {
+                console.log(reason);
             })
         }
         else {
+            console.log("false")
             return <Alert severity="success">Confirm password is inconsistent</Alert>
         }
     };
 
     return (
         <Dialog open={props.isOpen} onClose={() => { props.setOpen(false) }}>
-            <DialogTitle>
-                Get a Koke-kokko Account
-            </DialogTitle>
-            <DialogContent sx={{ marginX: 2, marginTop: 2, marginBottom: -2 }}>
-                <DialogContentText>
-                    To register a Koke-kokko account, please provide some required information.
-                </DialogContentText>
-                <Box component={"form"} onSubmit={handleSubmit} >
+            <Box component={"form"} onSubmit={handleSubmit} >
+                <DialogTitle>
+                    Get a Koke-kokko Account
+                </DialogTitle>
+                <DialogContent sx={{ marginX: 2, marginTop: 2, marginBottom: -2 }}>
+                    <DialogContentText>
+                        To register a Koke-kokko account, please provide some required information.
+                    </DialogContentText>
                     <TextField
                         required
                         autoFocus
@@ -77,12 +80,13 @@ function RegisterDialog(props: RegisterDialogProps) {
                         variant="outlined"
                         sx={{ marginTop: 2 }}
                     />
-                </Box>
-            </DialogContent>
-            <DialogActions sx={{ margin: 4 }}>
-                <Button color="error" onClick={() => { props.setOpen(false) }}>Cancel</Button>
-                <Button variant="outlined" onClick={() => { props.setOpen(false) }} type="submit">Register</Button>
-            </DialogActions>
+
+                </DialogContent>
+                <DialogActions sx={{ margin: 4 }}>
+                    <Button color="error" onClick={() => { props.setOpen(false) }}>Cancel</Button>
+                    <Button variant="outlined" type="submit">Register</Button>
+                </DialogActions>
+            </Box>
         </Dialog>
     )
 }

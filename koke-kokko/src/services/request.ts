@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Config } from './service';
-
+import qs from 'qs';
 // axios.defaults.withCredentials = true;
 
 // axios.defaults.baseURL='http://202.120.40.82:11233';
@@ -126,6 +126,7 @@ export namespace Request {
                     schemaName: schema_name,
                     recordKey: key,
                 },
+                paramsSerializer: (params) => qs.stringify(params, { encode: false }),
                 headers: {
                     'Content-Type': 'application/octet-stream',
                 },

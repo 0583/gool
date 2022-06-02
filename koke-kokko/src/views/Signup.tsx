@@ -15,6 +15,7 @@ import RegisterDialog from "./RegisterDialog";
 import { Service } from "../services/service";
 import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
 import { Redirect } from "react-router-dom";
+import { Config } from "../services/service";
 
 function Copyright(props: any) {
     return (
@@ -29,7 +30,7 @@ function Copyright(props: any) {
 function Signup() {
 
     const init = async () => {
-        if (LSConfig.GetConfig() != null || LSConfig.GetUser() != null) {
+        if (LSConfig.GetUser() != null) {
             return <Redirect to="/app"></Redirect>
         } else {
             let app_name: string = 'kobe_kokko-v0.1.1';
@@ -52,7 +53,12 @@ function Signup() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        await Service.login(LSConfig.GetConfig(), data.get("email") as string, data.get("password") as string)
+        let config: Config = LSConfig.GetConfig();
+        console.log(data.get("email") as string)
+        await Service.login(config, data.get("email") as string, data.get("password") as string).then(() => {
+            LSConfig.SetConfig(config)
+            LSConfig.SetUser(config.user)
+        })
 
     };
     const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
