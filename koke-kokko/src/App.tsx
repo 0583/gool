@@ -16,10 +16,25 @@ import TopicsView from "./views/TopicsView";
 import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
-import { Menu, Home, Tag, Notifications, Bookmark, Person } from "@mui/icons-material";
+import {Menu, Home, Tag, Notifications, Bookmark, Person, Close} from "@mui/icons-material";
 import { useEffect } from "react";
-import { Avatar, Stack } from "@mui/material";
+import {Avatar, Stack, Snackbar, Alert} from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
+
+export interface SnackBarSenderProps {
+    sender: (message: string) => void;
+}
+
+export interface SnackbarMessage {
+    message: string;
+    key: number;
+}
+
+export interface State {
+    open: boolean;
+    snackPack: readonly SnackbarMessage[];
+    messageInfo?: SnackbarMessage;
+}
 
 const drawerWidth = 240;
 
@@ -73,9 +88,47 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
-    const theme = useTheme();
+    const [snackPack, setSnackPack] = React.useState<readonly SnackbarMessage[]>([]);
+    const [open, setOpen] = React.useState(false);
+    const [severity, setSeverity] = React.useState<string>('info');
+    const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(
+        undefined,
+    );
 
-    const [open, setOpen] = React.useState<boolean>(true);
+    React.useEffect(() => {
+        if (snackPack.length && !messageInfo) {
+            // Set a new snack when we don't have an active one
+            setMessageInfo({ ...snackPack[0] });
+            setSnackPack((prev) => prev.slice(1));
+            setOpen(true);
+        } else if (snackPack.length && messageInfo && open) {
+            // Close an active snack when a new one is added
+            setOpen(false);
+        }
+    }, [snackPack, messageInfo, open]);
+
+    const handleClick = (message: string) => () => {
+        setSnackPack((prev) => [...prev, { message, key: new Date().getTime() }]);
+    };
+
+    const sendMessage = (message: string) => {
+        setSeverity(severity);
+        setSnackPack((prev) => [...prev, { message, key: new Date().getTime() }]);
+    }
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
+    const handleExited = () => {
+        setMessageInfo(undefined);
+    };
+
+    const theme = useTheme();
+    const [drawerOpen, setDrawerOpen] = React.useState<boolean>(true);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [toolBarHeader, setToolBarHeader] = React.useState<string>("Home");
     const menuItems = [
@@ -83,31 +136,31 @@ export default function PersistentDrawerLeft() {
             index: 0,
             title: "Home",
             icon: (<Home />),
-            view: (<HomeView />)
+            view: (<HomeView sender={sendMessage} />)
         },
         {
             index: 1,
             title: "Topics",
             icon: (<Tag />),
-            view: (<TopicsView />)
+            view: (<TopicsView sender={sendMessage} />)
         },
         {
             index: 2,
             title: "Notifications",
             icon: (<Notifications />),
-            view: (<NotificationsView />)
+            view: (<NotificationsView sender={sendMessage} />)
         },
         {
             index: 3,
             title: "Bookmarks",
             icon: (<Bookmark />),
-            view: (<BookmarksView />)
+            view: (<BookmarksView sender={sendMessage} />)
         },
         {
             index: 4,
             title: "Profile",
             icon: (<Person />),
-            view: (<ProfileView />)
+            view: (<ProfileView sender={sendMessage} />)
         },
     ]
 
@@ -117,17 +170,38 @@ export default function PersistentDrawerLeft() {
 
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setDrawerOpen(true);
     };
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        setDrawerOpen(false);
     };
 
     return (
+        <div>
+            <Snackbar
+                key={messageInfo ? messageInfo.key : undefined}
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                TransitionProps={{ onExited: handleExited }}
+                message={messageInfo ? messageInfo.message : undefined}
+                action={
+                    <React.Fragment>
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            sx={{ p: 0.5 }}
+                            onClick={handleClose}
+                        >
+                            <Close />
+                        </IconButton>
+                    </React.Fragment>
+                }
+            />
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar position="fixed" open={open} elevation={0}
+            <AppBar position="fixed" open={drawerOpen} elevation={0}
                 sx={{
                     borderBottom: 1,
                     borderColor: 'rgba(0, 0, 0, 0.12)',
@@ -140,7 +214,7 @@ export default function PersistentDrawerLeft() {
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
-                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                        sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}
                     >
                         <Menu />
                     </IconButton>
@@ -168,7 +242,7 @@ export default function PersistentDrawerLeft() {
                 }}
                 variant="persistent"
                 anchor="left"
-                open={open}
+                open={drawerOpen}
             >
                 <DrawerHeader>
                     <Stack direction="row" height={64} alignItems="center" sx={{ width: '100%' }}>
@@ -196,7 +270,7 @@ export default function PersistentDrawerLeft() {
                     }
                 </List>
             </Drawer>
-            <Main open={open}>
+            <Main open={drawerOpen}>
                 <DrawerHeader />
                 <Stack direction="column" justifyContent="center" alignItems="center">
                     <Box sx={{ width: '100%', maxWidth: 1280 }}>
@@ -205,5 +279,6 @@ export default function PersistentDrawerLeft() {
                 </Stack>
             </Main>
         </Box>
+        </div>
     );
 }

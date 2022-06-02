@@ -13,11 +13,24 @@ import { Photo, PinDrop, Search, Tag } from "@mui/icons-material";
 import React from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 import { styled } from "@mui/material/styles";
+import {SnackBarSenderProps} from "../App";
+import { Service } from "../services/service";
+import {LSConfig} from "../widgets/ConifgLocalstorageUtil";
 
-function HomeView() {
+function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [visibility, setVisibility] = React.useState<string>('Public');
+
+    function sendKokko() {
+        Service.publish_article(LSConfig.GetConfig(), "", kokkoText, [])
+            .then(() => {
+                props.sender("Done!");
+            }
+            ).catch((err) => {
+            props.sender(`Failed to Kokko: ${err.toString()}`);
+            })
+    }
 
     function closeEvent(visibility: string) {
         return () => {
@@ -153,7 +166,7 @@ function HomeView() {
                                     <Typography fontSize={12} color="text.secondary">
                                         {kokkoText ? kokkoText.length.toString() + " / 140" : undefined}
                                     </Typography>
-                                    <Button disabled={!(kokkoText.trim())} size="small" variant="outlined">Post</Button>
+                                    <Button disabled={!(kokkoText.trim())} onClick={sendKokko} size="small" variant="outlined">Post</Button>
                                 </Stack>
                             </Stack>
                         </Stack>

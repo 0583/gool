@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, Card, ListItem, Stack, Typography, ListItemAvatar, ListItemText } from "@mui/material";
+import { Avatar, ListItem, Typography, ListItemAvatar, ListItemText } from "@mui/material";
 
 
 interface NotificationItemProps {
