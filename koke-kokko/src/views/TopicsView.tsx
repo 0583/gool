@@ -7,8 +7,9 @@ import {
     Newspaper,
     PhoneAndroid, TrendingUp,
 } from "@mui/icons-material";
+import {SnackBarSenderProps} from "../App";
 
-function TopicsView() {
+function TopicsView(props: SnackBarSenderProps) {
     const [panelIndex, setPanelIndex] = React.useState<number>(0);
 
     const topicTypes = [

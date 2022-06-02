@@ -2,13 +2,14 @@ import React from "react";
 import { Button, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Alert } from "@mui/material";
 import { Service } from "../services/service";
 import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
+import {SnackBarSenderProps} from "../App";
 
 interface RegisterDialogProps {
     isOpen: boolean,
     setOpen: (isOpen: boolean) => void
 }
 
-function RegisterDialog(props: RegisterDialogProps) {
+function RegisterDialog(props: RegisterDialogProps & SnackBarSenderProps) {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);

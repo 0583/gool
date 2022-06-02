@@ -4,8 +4,9 @@ import {
 } from "@mui/material";
 import React from "react";
 import NotificationItem from "../widgets/NotificationItem";
+import {SnackBarSenderProps} from "../App";
 
-function NotificationsView() {
+function NotificationsView(props: SnackBarSenderProps) {
 
     const notificationItems = [
         {

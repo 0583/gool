@@ -12,6 +12,7 @@ import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import React from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
+import {SnackBarSenderProps} from "../App";
 
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -43,7 +44,7 @@ function getProperties(itemName: string, content: string, description: string) {
     </Accordion>);
 }
 
-function ProfileView() {
+function ProfileView(props: SnackBarSenderProps) {
     return (
         <Grid container spacing={2}>
             <Grid item xs={7}>
