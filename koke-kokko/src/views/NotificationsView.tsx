@@ -1,10 +1,6 @@
 import {
-    Grid, IconButton,
-    InputAdornment, Link,
-    List, ListItem, Menu, MenuItem,
-    Stack,
-    Switch,
-    TextField, Typography
+    Grid,
+    List,
 } from "@mui/material";
 import React from "react";
 import NotificationItem from "../widgets/NotificationItem";

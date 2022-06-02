@@ -1,9 +1,8 @@
 import * as React from "react"
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
-    Link, HashRouter
+    HashRouter
 } from "react-router-dom";
 import App from "../App"
 import Login from "../views/Signup"

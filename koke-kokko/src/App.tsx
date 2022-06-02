@@ -21,6 +21,17 @@ import { useEffect } from "react";
 import { Avatar, Stack } from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 
+export interface SnackbarMessage {
+    message: string;
+    key: number;
+}
+
+export interface State {
+    open: boolean;
+    snackPack: readonly SnackbarMessage[];
+    messageInfo?: SnackbarMessage;
+}
+
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
@@ -73,9 +84,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+    
+    
     const theme = useTheme();
 
-    const [open, setOpen] = React.useState<boolean>(true);
+    const [drawerOpen, setDrawerOpen] = React.useState<boolean>(true);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [toolBarHeader, setToolBarHeader] = React.useState<string>("Home");
     const menuItems = [
@@ -117,17 +130,17 @@ export default function PersistentDrawerLeft() {
 
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setDrawerOpen(true);
     };
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        setDrawerOpen(false);
     };
 
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar position="fixed" open={open} elevation={0}
+            <AppBar position="fixed" open={drawerOpen} elevation={0}
                 sx={{
                     borderBottom: 1,
                     borderColor: 'rgba(0, 0, 0, 0.12)',
@@ -140,7 +153,7 @@ export default function PersistentDrawerLeft() {
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
-                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
+                        sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}
                     >
                         <Menu />
                     </IconButton>
@@ -168,7 +181,7 @@ export default function PersistentDrawerLeft() {
                 }}
                 variant="persistent"
                 anchor="left"
-                open={open}
+                open={drawerOpen}
             >
                 <DrawerHeader>
                     <Stack direction="row" height={64} alignItems="center" sx={{ width: '100%' }}>
@@ -196,7 +209,7 @@ export default function PersistentDrawerLeft() {
                     }
                 </List>
             </Drawer>
-            <Main open={open}>
+            <Main open={drawerOpen}>
                 <DrawerHeader />
                 <Stack direction="column" justifyContent="center" alignItems="center">
                     <Box sx={{ width: '100%', maxWidth: 1280 }}>

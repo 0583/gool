@@ -21,7 +21,7 @@ namespace Util {
 
     export function remove_string_element(array: string[], value: string) {
         return array.filter((element) => {
-            return element != value;
+            return element !== value;
         });
     }
 
@@ -98,7 +98,7 @@ export namespace Service {
         await Request.get_record_by_key(config, username, Util.SchemaName.User)
             .then((value) => {
                 let user = csdi.User.deserializeBinary(value);
-                if (user.password == password) {
+                if (user.password === password) {
                     config.user = user;
                     console.log("login successful");
                 } else {
@@ -145,7 +145,7 @@ export namespace Service {
 
     export async function list_article_for_user(config: Config): Promise<csdi.Article[]> {
         // no follow tag, just list all
-        if (config.user.follow_tag_arr.length == 0) {
+        if (config.user.follow_tag_arr.length === 0) {
             return list_article(config);
         }
 

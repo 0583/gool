@@ -12,7 +12,7 @@ function RegisterDialog(props: RegisterDialogProps) {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        if (data.get("password") == data.get("confirmPassword")) {
+        if (data.get("password") === data.get("confirmPassword")) {
             Service.signup(LSConfig.GetConfig(), data.get("email") as string, data.get("password") as string).then(() => {
                 return <Alert severity="success">registration succeeded</Alert>
             })
