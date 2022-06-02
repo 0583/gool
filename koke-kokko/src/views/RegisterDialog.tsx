@@ -9,7 +9,7 @@ interface RegisterDialogProps {
     setOpen: (isOpen: boolean) => void
 }
 
-function RegisterDialog(props: RegisterDialogProps) {
+function RegisterDialog(props: RegisterDialogProps & SnackBarSenderProps) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
