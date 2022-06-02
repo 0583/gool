@@ -11,7 +11,7 @@ import {
     Stack,
     Typography
 } from "@mui/material";
-import {Edit, Tag} from "@mui/icons-material";
+import { Edit, Tag } from "@mui/icons-material";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 
 function BookmarksView() {
@@ -25,7 +25,7 @@ function BookmarksView() {
                                 Pinned Kokkos
                             </Typography>
                             <IconButton>
-                                <Edit/>
+                                <Edit />
                             </IconButton>
                         </Stack>
                         <KokkoMessageCard
@@ -53,7 +53,7 @@ function BookmarksView() {
                                     Pinned Topics
                                 </Typography>
                                 <IconButton>
-                                    <Edit/>
+                                    <Edit />
                                 </IconButton>
                             </Stack>
                             <Stack spacing={1} direction="column" alignItems="flex-start">
@@ -61,29 +61,29 @@ function BookmarksView() {
                                     4 Topics
                                 </Typography>
                                 <Chip variant="outlined"
-                                      icon={<Tag/>}
-                                      label="#iPhone3GS"
-                                      onClick={() => {}}
+                                    icon={<Tag />}
+                                    label="#iPhone3GS"
+                                    onClick={() => { }}
                                 />
                                 <Chip variant="outlined"
-                                      icon={<Tag/>}
-                                      label="#Picasso"
-                                      onClick={() => {}}
+                                    icon={<Tag />}
+                                    label="#Picasso"
+                                    onClick={() => { }}
                                 />
                                 <Chip variant="outlined"
-                                      icon={<Tag/>}
-                                      label="#LDR"
-                                      onClick={() => {}}
+                                    icon={<Tag />}
+                                    label="#LDR"
+                                    onClick={() => { }}
                                 />
                                 <Chip variant="outlined"
-                                      icon={<Tag/>}
-                                      label="#Yemen"
-                                      onClick={() => {}}
+                                    icon={<Tag />}
+                                    label="#Yemen"
+                                    onClick={() => { }}
                                 />
                             </Stack>
                         </Stack>
                     </ListItem>
-                    <Divider/>
+                    <Divider />
                     <ListItem>
                         <Stack spacing={1}>
                             <Typography variant="h4">
@@ -102,7 +102,7 @@ function BookmarksView() {
                             </Stack>
                         </Stack>
                     </ListItem>
-                    <Divider/>
+                    <Divider />
                     <ListItem>
                         <Stack spacing={1}>
                             <Typography variant="h4">
@@ -120,7 +120,7 @@ function BookmarksView() {
                             </Stack>
                         </Stack>
                     </ListItem>
-                    <Divider/>
+                    <Divider />
                 </Stack>
             </Grid>
         </Grid>

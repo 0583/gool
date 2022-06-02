@@ -8,7 +8,7 @@ import {
     CardMedia, Divider,
     IconButton,
 } from "@mui/material";
-import {Favorite, Share} from "@mui/icons-material";
+import { Favorite, Share } from "@mui/icons-material";
 
 interface KokkoMessageCardProps {
     username: string,
@@ -26,11 +26,11 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
     return (
         <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
             <CardHeader
-                avatar={<Avatar src={props.avatar}/>}
+                avatar={<Avatar src={props.avatar} />}
                 title={props.username}
                 subheader={props.date}
             />
-            <Divider/>
+            <Divider />
             <CardContent>
                 {props.content}
             </CardContent>
@@ -49,7 +49,7 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
                             }
                         }
                     }>
-                        <Favorite/>
+                        <Favorite />
                     </IconButton>
                     <IconButton aria-label="share" onClick={
                         (e) => {
@@ -58,7 +58,7 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
                             }
                         }
                     }>
-                        <Share/>
+                        <Share />
                     </IconButton>
                 </CardActions>
             }

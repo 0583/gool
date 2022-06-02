@@ -7,7 +7,7 @@ import {
     ListItem, Stack,
     Typography
 } from "@mui/material";
-import {Edit, ExpandMore} from "@mui/icons-material";
+import { Edit, ExpandMore } from "@mui/icons-material";
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import React from "react";
@@ -32,7 +32,7 @@ function getProperties(itemName: string, content: string, description: string) {
             aria-controls="panel1a-content"
             id="panel1a-header"
         >
-            <Typography sx={{ width: "33%"}} fontWeight="bold">{itemName}</Typography>
+            <Typography sx={{ width: "33%" }} fontWeight="bold">{itemName}</Typography>
             <Typography sx={{ color: "text.secondary" }}>{content}</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -63,7 +63,7 @@ function ProfileView() {
                                     can't believe what i've just seen...
                                 </Typography>
                             }
-                            showActions={false}/>
+                            showActions={false} />
                     </ListItem>
                     <ListItem key="my_kokko_2">
                         <KokkoMessageCard
@@ -75,7 +75,7 @@ function ProfileView() {
                                     The worst day ever.
                                 </Typography>
                             }
-                            showActions={false}/>
+                            showActions={false} />
                     </ListItem>
                     <ListItem key="my_kokko_3">
                         <KokkoMessageCard
@@ -87,9 +87,9 @@ function ProfileView() {
                                     Why? Why? Why?
                                 </Typography>
                             }
-                            showActions={false}/>
+                            showActions={false} />
                     </ListItem>
-                    <Divider sx={{ margin: 2, fontSize: 13, color: 'gray'}}>3 Kokkos</Divider>
+                    <Divider sx={{ margin: 2, fontSize: 13, color: 'gray' }}>3 Kokkos</Divider>
                 </List>
             </Grid>
             <Grid item xs={5}>
@@ -99,7 +99,7 @@ function ProfileView() {
                             Personal Info
                         </Typography>
                         <IconButton>
-                            <Edit/>
+                            <Edit />
                         </IconButton>
                     </Stack>
 
@@ -139,13 +139,13 @@ function ProfileView() {
                     )}
                 </Box>
                 <Stack direction="row" spacing={1}>
-                <Button sx={{ marginLeft: 2 }}>
-                    Export All
-                </Button>
+                    <Button sx={{ marginLeft: 2 }}>
+                        Export All
+                    </Button>
 
-                <Button sx={{ marginLeft: 2 }} variant="outlined" color="error">
-                    Delete Account
-                </Button>
+                    <Button sx={{ marginLeft: 2 }} variant="outlined" color="error">
+                        Delete Account
+                    </Button>
                 </Stack>
             </Grid>
         </Grid>

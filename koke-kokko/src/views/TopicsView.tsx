@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Divider, Grid, List, Stack, Tab, Tabs, Typography} from "@mui/material";
+import { Box, Divider, Grid, List, Stack, Tab, Tabs, Typography } from "@mui/material";
 import TopicItem from "../widgets/TopicItem";
 import {
     AssuredWorkload, DirectionsRun,
@@ -15,37 +15,37 @@ function TopicsView() {
         {
             "key": 0,
             "name": "Trending",
-            "icon": (<TrendingUp/>)
+            "icon": (<TrendingUp />)
         },
         {
             "key": 1,
             "name": "Health",
-            "icon": (<HealthAndSafety/>)
+            "icon": (<HealthAndSafety />)
         },
         {
             "key": 2,
             "name": "News",
-            "icon": (<Newspaper/>)
+            "icon": (<Newspaper />)
         },
         {
             "key": 3,
             "name": "Entertainment",
-            "icon": (<Mic/>)
+            "icon": (<Mic />)
         },
         {
             "key": 4,
             "name": "Technology",
-            "icon": (<PhoneAndroid/>)
+            "icon": (<PhoneAndroid />)
         },
         {
             "key": 5,
             "name": "Politics",
-            "icon": (<AssuredWorkload/>)
+            "icon": (<AssuredWorkload />)
         },
         {
             "key": 6,
             "name": "Sports",
-            "icon": (<DirectionsRun/>)
+            "icon": (<DirectionsRun />)
         }
     ]
 
@@ -69,7 +69,7 @@ function TopicsView() {
                 aria-labelledby={`simple-tab-${index}`}
                 {...other}
             >
-                <Divider sx={{ marginX: -2 }}/>
+                <Divider sx={{ marginX: -2 }} />
                 {panelIndex === index && (
                     <Box>
                         <Typography>{children}</Typography>
@@ -84,16 +84,16 @@ function TopicsView() {
             <Stack>
                 <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered>
                     {
-                        topicTypes.map(({icon, key, name}) => {
+                        topicTypes.map(({ icon, key, name }) => {
                             return (<Tab key={key} icon={icon} label={name} />);
                         })
                     }
                 </Tabs>
                 {
-                    topicTypes.map(({icon, key, name}) => {
+                    topicTypes.map(({ icon, key, name }) => {
                         return (
                             <TabPanel category={name} index={key}>
-                                <List sx={{ marginTop: 1}}>
+                                <List sx={{ marginTop: 1 }}>
                                     <TopicItem
                                         topicName="新型コロナウイルスワクチンの基本情報"
                                         category="COVID-19 · LIVE"
@@ -127,7 +127,7 @@ function TopicsView() {
                                         viewCount={61104}
                                     />
                                 </List>
-                                <Divider sx={{ fontSize: 13, color: 'gray', marginX: -2}}>5 Topics</Divider>
+                                <Divider sx={{ fontSize: 13, color: 'gray', marginX: -2 }}>5 Topics</Divider>
                             </TabPanel>
                         )
                     })

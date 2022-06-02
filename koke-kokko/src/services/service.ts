@@ -11,7 +11,7 @@ export interface Config {
     user: csdi.User
 }
 
-    namespace Util {
+namespace Util {
     export enum SchemaName {
         User = "csdi.User",
         Article = "csdi.Article",
@@ -25,9 +25,9 @@ export interface Config {
         });
     }
 
-    
-    export const proto_content=
-`syntax = "proto3";
+
+    export const proto_content =
+        `syntax = "proto3";
 
 package csdi;
 import 'record_metadata_options.proto';
@@ -78,7 +78,7 @@ export namespace Service {
         await Request.upload_schema(config, Util.proto_content);
         await Request.update_schema(config);
 
-        
+
         return config;
     }
 

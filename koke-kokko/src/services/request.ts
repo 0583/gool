@@ -32,8 +32,8 @@ namespace Util {
 
     export function string2binary(str: string): Uint8Array {
         var bufView = new Uint8Array(str.length);
-        for (var i=0, strLen=str.length; i<strLen; i++) {
-          bufView[i] = str.charCodeAt(i);
+        for (var i = 0, strLen = str.length; i < strLen; i++) {
+            bufView[i] = str.charCodeAt(i);
         }
         return bufView;
     }
@@ -43,7 +43,7 @@ namespace Util {
 export namespace Request {
     export async function register_app(config: Config) {
         const { data } = await axios.post<Util.RegisterAppResponseDTO>(
-             "/api/app",
+            "/api/app",
             {},
             {
                 params: {
@@ -56,7 +56,7 @@ export namespace Request {
 
     export async function upload_schema(config: Config, content: string) {
         const { data } = await axios.put<Util.StringDTO>(
-             "/api/schema",
+            "/api/schema",
             content,
             {
                 params: {

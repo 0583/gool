@@ -16,9 +16,9 @@ import TopicsView from "./views/TopicsView";
 import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
-import {Menu, Home, Tag, Notifications, Bookmark, Person} from "@mui/icons-material";
-import {useEffect} from "react";
-import {Avatar, Stack} from "@mui/material";
+import { Menu, Home, Tag, Notifications, Bookmark, Person } from "@mui/icons-material";
+import { useEffect } from "react";
+import { Avatar, Stack } from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 
 const drawerWidth = 240;
@@ -82,32 +82,32 @@ export default function PersistentDrawerLeft() {
         {
             index: 0,
             title: "Home",
-            icon: (<Home/>),
-            view: (<HomeView/>)
+            icon: (<Home />),
+            view: (<HomeView />)
         },
         {
             index: 1,
             title: "Topics",
-            icon: (<Tag/>),
-            view: (<TopicsView/>)
+            icon: (<Tag />),
+            view: (<TopicsView />)
         },
         {
             index: 2,
             title: "Notifications",
-            icon: (<Notifications/>),
-            view: (<NotificationsView/>)
+            icon: (<Notifications />),
+            view: (<NotificationsView />)
         },
         {
             index: 3,
             title: "Bookmarks",
-            icon: (<Bookmark/>),
-            view: (<BookmarksView/>)
+            icon: (<Bookmark />),
+            view: (<BookmarksView />)
         },
         {
             index: 4,
             title: "Profile",
-            icon: (<Person/>),
-            view: (<ProfileView/>)
+            icon: (<Person />),
+            view: (<ProfileView />)
         },
     ]
 
@@ -128,11 +128,12 @@ export default function PersistentDrawerLeft() {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar position="fixed" open={open} elevation={0}
-                    sx={{
-                        borderBottom: 1,
-                        borderColor: 'rgba(0, 0, 0, 0.12)',
-                        backdropFilter: 'blur(50px)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.7)' }}>
+                sx={{
+                    borderBottom: 1,
+                    borderColor: 'rgba(0, 0, 0, 0.12)',
+                    backdropFilter: 'blur(50px)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)'
+                }}>
                 <Toolbar>
                     <IconButton
                         color="primary"
@@ -141,17 +142,17 @@ export default function PersistentDrawerLeft() {
                         edge="start"
                         sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
-                        <Menu/>
+                        <Menu />
                     </IconButton>
                     <Stack sx={{ width: '100%' }} direction="row" justifyContent="space-between" alignItems="center">
                         <Stack direction="row" justifyContent="flex-start">
                             <Typography variant="h5" noWrap component="div" fontWeight="bold" color="black">
-                                { toolBarHeader }
+                                {toolBarHeader}
                             </Typography>
                         </Stack>
 
                         <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
-                            <Avatar src="avatars/xiqyu.png"/>
+                            <Avatar src="avatars/xiqyu.png" />
                         </Stack>
                     </Stack>
                 </Toolbar>
@@ -184,13 +185,13 @@ export default function PersistentDrawerLeft() {
                     aria-label="contacts"
                 >
                     {
-                        menuItems.map(({index, icon, title}) => {
+                        menuItems.map(({ index, icon, title }) => {
                             return (<DrawerMenuItem key={index}
-                                                    selectedIndex={selectedIndex}
-                                                    setSelectedIndex={setSelectedIndex}
-                                                    index={index}
-                                                    MenuIcon={icon}
-                                                    title={title}/>);
+                                selectedIndex={selectedIndex}
+                                setSelectedIndex={setSelectedIndex}
+                                index={index}
+                                MenuIcon={icon}
+                                title={title} />);
                         })
                     }
                 </List>

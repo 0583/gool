@@ -1,4 +1,4 @@
-import {ListItem, ListItemButton, ListItemIcon, ListItemText, Typography} from "@mui/material";
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import React from "react";
 
 interface DrawerMenuItemProps {

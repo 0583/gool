@@ -1,6 +1,6 @@
 import React from "react";
-import {Avatar, ListItem, ListItemButton, Stack, Typography} from "@mui/material";
-import {ChatBubbleOutline, Visibility} from "@mui/icons-material";
+import { Avatar, ListItem, ListItemButton, Stack, Typography } from "@mui/material";
+import { ChatBubbleOutline, Visibility } from "@mui/icons-material";
 
 interface TopicItemProps {
     topicName: string,
@@ -34,7 +34,7 @@ function TopicItem(props: TopicItemProps) {
                             </Typography>
                         </Stack>
                     </Stack>
-                    {props.image && <Avatar variant="rounded" sx={{ width: 64, height: 64 }} src={props.image}/>}
+                    {props.image && <Avatar variant="rounded" sx={{ width: 64, height: 64 }} src={props.image} />}
                 </Stack>
             </ListItemButton>
         </ListItem>

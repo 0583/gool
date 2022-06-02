@@ -12,7 +12,7 @@ import {
 import { Photo, PinDrop, Search, Tag } from "@mui/icons-material";
 import React from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
-import {styled} from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 function HomeView() {
     const [kokkoText, setKokkoText] = React.useState<string>('');
