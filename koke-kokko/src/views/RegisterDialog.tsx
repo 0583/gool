@@ -1,7 +1,7 @@
 import React from "react";
-import { Button, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Alert } from "@mui/material";
-import { Service } from "../services/service";
-import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
+import { Button, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Alert, snackbarContentClasses } from "@mui/material";
+import { Config, Service } from "../services/service";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 import { SnackBarSenderProps } from "../App";
 
 interface RegisterDialogProps {
@@ -9,12 +9,13 @@ interface RegisterDialogProps {
     setOpen: (isOpen: boolean) => void
 }
 
-function RegisterDialog(props: RegisterDialogProps) {
+function RegisterDialog(props: RegisterDialogProps & SnackBarSenderProps) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         if (data.get("password") == data.get("confirmPassword")) {
-            await Service.signup(LSConfig.GetConfig(), data.get("email") as string, data.get("password") as string).then(() => {
+            await Service.signup(LocalStoreConfig.get_config() as Config, data.get("email") as string, data.get("password") as string).then(() => {
+                props.sender("register success!");
                 props.setOpen(false);
             }).catch((reason) => {
                 console.log(reason);
@@ -22,7 +23,7 @@ function RegisterDialog(props: RegisterDialogProps) {
         }
         else {
             console.log("false")
-            return <Alert severity="success">Confirm password is inconsistent</Alert>
+            props.sender("inconsistent password!")
         }
     };
 

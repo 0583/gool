@@ -13,9 +13,9 @@ import { Photo, PinDrop, Search, Tag } from "@mui/icons-material";
 import React from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 import { styled } from "@mui/material/styles";
-import {SnackBarSenderProps} from "../App";
-import { Service } from "../services/service";
-import {LSConfig} from "../widgets/ConifgLocalstorageUtil";
+import { SnackBarSenderProps } from "../App";
+import { Config, Service } from "../services/service";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 
 function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -23,12 +23,12 @@ function HomeView(props: SnackBarSenderProps) {
     const [visibility, setVisibility] = React.useState<string>('Public');
 
     function sendKokko() {
-        Service.publish_article(LSConfig.GetConfig(), "", kokkoText, [])
+        Service.publish_article(LocalStoreConfig.get_config() as Config, "", kokkoText, [])
             .then(() => {
                 props.sender("Done!");
             }
             ).catch((err) => {
-            props.sender(`Failed to Kokko: ${err.toString()}`);
+                props.sender(`Failed to Kokko: ${err.toString()}`);
             })
     }
 

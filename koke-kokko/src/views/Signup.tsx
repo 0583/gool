@@ -13,10 +13,11 @@ import Box from "@mui/material/Box";
 import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
 import RegisterDialog from "./RegisterDialog";
 import { Service } from "../services/service";
-import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 import { Redirect } from "react-router-dom";
 import { Config } from "../services/service";
 import { SnackBarSenderProps } from "../App";
+import { PowerInputSharp } from "@mui/icons-material";
 
 function Copyright(props: any) {
     return (
@@ -31,8 +32,9 @@ function Copyright(props: any) {
 function Signup(props: SnackBarSenderProps) {
 
     const init = async () => {
-        if (LSConfig.GetUser() != null) {
-            return <Redirect to="/app"></Redirect>
+        let config = LocalStoreConfig.get_config();
+        if (config != null && config.user != null) {
+            window.location.href = "/#/app"
         } else {
             let app_name: string = 'kobe_kokko-v0.1.1';
             let endpoint: string = 'http://202.120.40.82:11233';
@@ -41,10 +43,9 @@ function Signup(props: SnackBarSenderProps) {
             let version: string = 'v0.1.0';
 
             await Service.init_config(app_name, endpoint, fullpath, filename, version).then((value) => {
-                LSConfig.SetConfig(value)
-                // LSConfig.SetConfig(value);
+                LocalStoreConfig.set_config(value)
+                // LocalStoreConfig.SetConfig(value);
                 //把init的value放进localstorage
-                console.log(LSConfig.GetConfig())
             }).catch((reason) => {
                 console.log(reason);
             });
@@ -54,11 +55,11 @@ function Signup(props: SnackBarSenderProps) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        let config: Config = LSConfig.GetConfig();
-        console.log(data.get("email") as string)
+        let config = LocalStoreConfig.get_config() as Config;
         await Service.login(config, data.get("email") as string, data.get("password") as string).then(() => {
-            LSConfig.SetConfig(config)
-            LSConfig.SetUser(config.user)
+            LocalStoreConfig.set_config(config);
+            props.sender("login success!");
+            window.location.href = "/#/app";
         })
 
     };

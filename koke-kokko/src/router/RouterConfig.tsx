@@ -8,13 +8,13 @@ import App from "../App"
 import Login from "../views/Signup"
 
 
-export default class RouterConfig extends React.Component{
-    public render(){
-        return(
+export default class RouterConfig extends React.Component {
+    public render() {
+        return (
             <HashRouter>
                 <Switch>
-                    <Route path={'/'} exact component={Login}/>
-                    <Route path={'/app'} exact={true} component={App}/>
+                    <Route path={'/'} exact component={Login} />
+                    <Route path={'/app'} exact={true} component={App} />
                 </Switch>
             </HashRouter>
         )
