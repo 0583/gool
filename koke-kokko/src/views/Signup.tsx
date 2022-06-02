@@ -16,6 +16,7 @@ import { Service } from "../services/service";
 import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
 import { Redirect } from "react-router-dom";
 import { Config } from "../services/service";
+import { SnackBarSenderProps } from "../App";
 
 function Copyright(props: any) {
     return (
@@ -27,7 +28,7 @@ function Copyright(props: any) {
     );
 }
 
-function Signup() {
+function Signup(props: SnackBarSenderProps) {
 
     const init = async () => {
         if (LSConfig.GetUser() != null) {
@@ -65,6 +66,7 @@ function Signup() {
     return (
         <div onLoad={init}>
             <RegisterDialog
+                sender={props.sender}
                 isOpen={registerDialogOpen}
                 setOpen={setRegisterDialogOpen}
             />

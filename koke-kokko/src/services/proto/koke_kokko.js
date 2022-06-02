@@ -6,16 +6,16 @@ export var csdi;
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [3, 4], []);
             if (!Array.isArray(data) && typeof data == "object") {
-                if ("username" in data && data.username != undefined) {
+                if ("username" in data && data.username !== undefined) {
                     this.username = data.username;
                 }
-                if ("password" in data && data.password != undefined) {
+                if ("password" in data && data.password !== undefined) {
                     this.password = data.password;
                 }
-                if ("follow_tag_arr" in data && data.follow_tag_arr != undefined) {
+                if ("follow_tag_arr" in data && data.follow_tag_arr !== undefined) {
                     this.follow_tag_arr = data.follow_tag_arr;
                 }
-                if ("article_id_arr" in data && data.article_id_arr != undefined) {
+                if ("article_id_arr" in data && data.article_id_arr !== undefined) {
                     this.article_id_arr = data.article_id_arr;
                 }
             }
@@ -125,22 +125,22 @@ export var csdi;
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [6], []);
             if (!Array.isArray(data) && typeof data == "object") {
-                if ("article_id" in data && data.article_id != undefined) {
+                if ("article_id" in data && data.article_id !== undefined) {
                     this.article_id = data.article_id;
                 }
-                if ("title" in data && data.title != undefined) {
+                if ("title" in data && data.title !== undefined) {
                     this.title = data.title;
                 }
-                if ("author" in data && data.author != undefined) {
+                if ("author" in data && data.author !== undefined) {
                     this.author = data.author;
                 }
-                if ("content" in data && data.content != undefined) {
+                if ("content" in data && data.content !== undefined) {
                     this.content = data.content;
                 }
-                if ("post_time" in data && data.post_time != undefined) {
+                if ("post_time" in data && data.post_time !== undefined) {
                     this.post_time = data.post_time;
                 }
-                if ("related_tag_arr" in data && data.related_tag_arr != undefined) {
+                if ("related_tag_arr" in data && data.related_tag_arr !== undefined) {
                     this.related_tag_arr = data.related_tag_arr;
                 }
             }
@@ -284,10 +284,10 @@ export var csdi;
             super();
             pb_1.Message.initialize(this, Array.isArray(data) ? data : [], 0, -1, [2], []);
             if (!Array.isArray(data) && typeof data == "object") {
-                if ("tagname" in data && data.tagname != undefined) {
+                if ("tagname" in data && data.tagname !== undefined) {
                     this.tagname = data.tagname;
                 }
-                if ("article_id_arr" in data && data.article_id_arr != undefined) {
+                if ("article_id_arr" in data && data.article_id_arr !== undefined) {
                     this.article_id_arr = data.article_id_arr;
                 }
             }

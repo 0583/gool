@@ -13,8 +13,9 @@ import {
 } from "@mui/material";
 import { Edit, Tag } from "@mui/icons-material";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
+import {SnackBarSenderProps} from "../App";
 
-function BookmarksView() {
+function BookmarksView(props: SnackBarSenderProps) {
     return (
         <Grid container spacing={2}>
             <Grid item xs={6}>

@@ -1,15 +1,12 @@
 import {
-    Grid, IconButton,
-    InputAdornment, Link,
-    List, ListItem, Menu, MenuItem,
-    Stack,
-    Switch,
-    TextField, Typography
+    Grid,
+    List,
 } from "@mui/material";
 import React from "react";
 import NotificationItem from "../widgets/NotificationItem";
+import {SnackBarSenderProps} from "../App";
 
-function NotificationsView() {
+function NotificationsView(props: SnackBarSenderProps) {
 
     const notificationItems = [
         {

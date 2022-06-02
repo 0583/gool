@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Alert } from "@mui/material";
 import { Service } from "../services/service";
 import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
+import { SnackBarSenderProps } from "../App";
 
 interface RegisterDialogProps {
     isOpen: boolean,
