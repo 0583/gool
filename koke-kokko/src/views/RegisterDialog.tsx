@@ -13,16 +13,18 @@ function RegisterDialog(props: RegisterDialogProps & SnackBarSenderProps) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        if (data.get("password") == data.get("confirmPassword")) {
+        if (data.get("password") === data.get("confirmPassword")) {
             await Service.signup(LSConfig.GetConfig(), data.get("email") as string, data.get("password") as string).then(() => {
+                props.sender("Success!")
                 props.setOpen(false);
             }).catch((reason) => {
+                props.sender("Failure")
                 console.log(reason);
             })
         }
         else {
+            props.sender("Confirm password is inconsistent")
             console.log("false")
-            return <Alert severity="success">Confirm password is inconsistent</Alert>
         }
     };
 

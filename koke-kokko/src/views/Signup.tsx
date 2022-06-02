@@ -7,7 +7,7 @@ import {
     Paper,
     TextField,
     Divider,
-    Button,
+    Button, Snackbar,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
@@ -16,7 +16,9 @@ import { Service } from "../services/service";
 import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
 import { Redirect } from "react-router-dom";
 import { Config } from "../services/service";
-import { SnackBarSenderProps } from "../App";
+import {SnackbarMessage, SnackBarSenderProps} from "../App";
+import IconButton from "@mui/material/IconButton";
+import {Close} from "@mui/icons-material";
 
 function Copyright(props: any) {
     return (
@@ -28,7 +30,46 @@ function Copyright(props: any) {
     );
 }
 
-function Signup(props: SnackBarSenderProps) {
+function Signup() {
+
+    const [snackPack, setSnackPack] = React.useState<readonly SnackbarMessage[]>([]);
+    const [open, setOpen] = React.useState(false);
+    const [severity, setSeverity] = React.useState<string>('info');
+    const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(
+        undefined,
+    );
+
+    React.useEffect(() => {
+        if (snackPack.length && !messageInfo) {
+            // Set a new snack when we don't have an active one
+            setMessageInfo({ ...snackPack[0] });
+            setSnackPack((prev) => prev.slice(1));
+            setOpen(true);
+        } else if (snackPack.length && messageInfo && open) {
+            // Close an active snack when a new one is added
+            setOpen(false);
+        }
+    }, [snackPack, messageInfo, open]);
+
+    const handleClick = (message: string) => () => {
+        setSnackPack((prev) => [...prev, { message, key: new Date().getTime() }]);
+    };
+
+    const sendMessage = (message: string) => {
+        setSeverity(severity);
+        setSnackPack((prev) => [...prev, { message, key: new Date().getTime() }]);
+    }
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
+    const handleExited = () => {
+        setMessageInfo(undefined);
+    };
 
     const init = async () => {
         if (LSConfig.GetUser() != null) {
@@ -65,8 +106,28 @@ function Signup(props: SnackBarSenderProps) {
     const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
     return (
         <div onLoad={init}>
+            <Snackbar
+                key={messageInfo ? messageInfo.key : undefined}
+                open={open}
+                autoHideDuration={6000}
+                onClose={handleClose}
+                TransitionProps={{ onExited: handleExited }}
+                message={messageInfo ? messageInfo.message : undefined}
+                action={
+                    <React.Fragment>
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            sx={{ p: 0.5 }}
+                            onClick={handleClose}
+                        >
+                            <Close />
+                        </IconButton>
+                    </React.Fragment>
+                }
+            />
             <RegisterDialog
-                sender={props.sender}
+                sender={sendMessage}
                 isOpen={registerDialogOpen}
                 setOpen={setRegisterDialogOpen}
             />

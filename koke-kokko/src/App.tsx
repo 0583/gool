@@ -16,10 +16,11 @@ import TopicsView from "./views/TopicsView";
 import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
-import {Menu, Home, Tag, Notifications, Bookmark, Person, Close} from "@mui/icons-material";
+import {Home, Tag, Notifications, Bookmark, Person, Close, Menu as MenuIcon} from "@mui/icons-material";
 import { useEffect } from "react";
-import {Avatar, Stack, Snackbar, Alert} from "@mui/material";
+import {Avatar, Stack, Snackbar, Menu, MenuItem, Button} from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
+import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -216,7 +217,7 @@ export default function PersistentDrawerLeft() {
                         edge="start"
                         sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}
                     >
-                        <Menu />
+                        <MenuIcon />
                     </IconButton>
                     <Stack sx={{ width: '100%' }} direction="row" justifyContent="space-between" alignItems="center">
                         <Stack direction="row" justifyContent="flex-start">
@@ -226,7 +227,29 @@ export default function PersistentDrawerLeft() {
                         </Stack>
 
                         <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
-                            <Avatar src="avatars/xiqyu.png" />
+                            <PopupState variant="popover" popupId="demo-popup-menu">
+                                {(popupState) => (
+                                    <React.Fragment>
+                                        <Button {...bindTrigger(popupState)}>
+                                            <Avatar src="avatars/xiqyu.png" />
+                                        </Button>
+                                        <Menu {...bindMenu(popupState)}
+                                              elevation={1}
+                                              anchorOrigin={{
+                                                  vertical: 'bottom',
+                                                  horizontal: 'right',
+                                              }}
+                                              transformOrigin={{
+                                                  vertical: 'top',
+                                                  horizontal: 'right',
+                                              }}>
+                                            <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                                            <MenuItem onClick={popupState.close}>My account</MenuItem>
+                                            <MenuItem onClick={popupState.close}>Logout</MenuItem>
+                                        </Menu>
+                                    </React.Fragment>
+                                )}
+                            </PopupState>
                         </Stack>
                     </Stack>
                 </Toolbar>

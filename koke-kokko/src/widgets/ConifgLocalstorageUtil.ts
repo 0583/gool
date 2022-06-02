@@ -20,7 +20,7 @@ export namespace LSConfig {
     export function SetUser(user: csdi.User) {
         store.set("user", user)
     }
-    export function GetUser() {
+    export function GetUser(): csdi.User {
         return store.get("user")
     }
 
