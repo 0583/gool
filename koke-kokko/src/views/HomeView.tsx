@@ -17,7 +17,7 @@ import {SnackBarSenderProps} from "../App";
 import {Config, Service} from "../services/service";
 import {LSConfig} from "../widgets/ConifgLocalstorageUtil";
 import {csdi} from "../services/proto/koke_kokko";
-import {parseHashTag} from "../utils/hashTagParser";
+import {parseHashTag, renderTypographyWithTags} from "../utils/hashTagParser";
 
 function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -176,6 +176,18 @@ function HomeView(props: SnackBarSenderProps) {
                                 </Stack>
                             </Stack>
                         </Stack>
+                    </ListItem>
+
+                    <ListItem key="kokko_0">
+                        <KokkoMessageCard
+                            username="${whoami}"
+                            avatar="avatars/74477599.png"
+                            date="Jun 3, 2022"
+                            content={
+                                renderTypographyWithTags(kokkoText)
+                            }
+                            showActions={true}
+                        />
                     </ListItem>
 
                     <ListItem key="kokko_1">
