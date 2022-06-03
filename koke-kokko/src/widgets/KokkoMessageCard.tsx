@@ -9,12 +9,13 @@ import {
     IconButton,
 } from "@mui/material";
 import { Favorite, Share } from "@mui/icons-material";
+import {renderTypographyWithTags} from "../utils/hashTagParser";
 
 interface KokkoMessageCardProps {
     username: string,
     avatar: string,
     date: string,
-    content: any,
+    content: string,
     image?: string,
     showActions: boolean,
     isLiked?: boolean,
@@ -32,7 +33,7 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
             />
             <Divider />
             <CardContent>
-                {props.content}
+                {renderTypographyWithTags(props.content)}
             </CardContent>
             {props.image &&
                 <CardMedia

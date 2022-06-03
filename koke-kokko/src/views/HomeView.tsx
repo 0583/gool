@@ -183,9 +183,7 @@ function HomeView(props: SnackBarSenderProps) {
                             username="${whoami}"
                             avatar="avatars/74477599.png"
                             date="Jun 3, 2022"
-                            content={
-                                renderTypographyWithTags(kokkoText)
-                            }
+                            content={kokkoText}
                             showActions={true}
                         />
                     </ListItem>
@@ -195,16 +193,7 @@ function HomeView(props: SnackBarSenderProps) {
                             username="XU Jiahao"
                             avatar="avatars/ianhui.png"
                             date="April 28, 2022"
-                            content={
-                                <>
-                                    <Typography variant="body1">
-                                        Thanks to the Bipartisan Infrastructure Law, we’re going to start replacing 100% of the lead pipes and water lines that go into homes and schools in this country.
-                                    </Typography>
-                                    <Typography variant="body1">
-                                        Every American, every child, should be able to turn on a faucet and drink water that’s clean.
-                                    </Typography>
-                                </>
-                            }
+                            content={`Thanks to the Bipartisan Infrastructure Law, we’re going to start replacing 100% of the lead pipes and water lines that go into homes and schools in this country.\nEvery American, every child, should be able to turn on a faucet and drink water that’s clean.`}
                             showActions={true}
                         />
                     </ListItem>
@@ -214,11 +203,7 @@ function HomeView(props: SnackBarSenderProps) {
                             username="YUAN Zhuo"
                             avatar="avatars/yzhuo.png"
                             date="April 13, 2022"
-                            content={
-                                <Typography variant="body1">
-                                    The adorable pink hero <Link href="#">#Kirby</Link> made his debut in Kirby's Dream Land on Game Boy in Japan 30 years ago today! What is your favorite Kirby memory?
-                                </Typography>
-                            }
+                            content="The adorable pink hero #Kirby made his debut in Kirby's Dream Land on Game Boy in Japan 30 years ago today! What is your favorite Kirby memory?"
                             image="examples/FRXaiWUWUAIMXEO.jpeg"
                             isLiked={true}
                             showActions={true}
@@ -230,11 +215,7 @@ function HomeView(props: SnackBarSenderProps) {
                             username="YU Xiqian"
                             avatar="avatars/xiqyu.png"
                             date="April 28, 2022"
-                            content={
-                                <Typography variant="body1">
-                                    can't believe what i've just seen...
-                                </Typography>
-                            }
+                            content="can't believe what i've just seen..."
                             showActions={true}
                         />
                     </ListItem>

@@ -59,11 +59,7 @@ function ProfileView(props: SnackBarSenderProps) {
                             username="YU Xiqian"
                             avatar="avatars/xiqyu.png"
                             date="April 28, 2022"
-                            content={
-                                <Typography variant="body1">
-                                    can't believe what i've just seen...
-                                </Typography>
-                            }
+                            content="can't believe what i've just seen..."
                             showActions={false} />
                     </ListItem>
                     <ListItem key="my_kokko_2">
@@ -71,11 +67,7 @@ function ProfileView(props: SnackBarSenderProps) {
                             username="YU Xiqian"
                             avatar="avatars/xiqyu.png"
                             date="April 21, 2022"
-                            content={
-                                <Typography variant="body1">
-                                    The worst day ever.
-                                </Typography>
-                            }
+                            content="The worst day ever."
                             showActions={false} />
                     </ListItem>
                     <ListItem key="my_kokko_3">
@@ -83,11 +75,7 @@ function ProfileView(props: SnackBarSenderProps) {
                             username="YU Xiqian"
                             avatar="avatars/xiqyu.png"
                             date="March 3, 2022"
-                            content={
-                                <Typography variant="body1">
-                                    Why? Why? Why?
-                                </Typography>
-                            }
+                            content="Why? Why? Why?"
                             showActions={false} />
                     </ListItem>
                     <Divider sx={{ margin: 2, fontSize: 13, color: 'gray' }}>3 Kokkos</Divider>
