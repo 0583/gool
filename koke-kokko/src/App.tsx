@@ -16,11 +16,13 @@ import TopicsView from "./views/TopicsView";
 import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
-import {Home, Tag, Notifications, Bookmark, Person, Close, Menu as MenuIcon} from "@mui/icons-material";
+import {Home, Tag, Notifications, Bookmark, Person, Close, Menu as MenuIcon, Logout} from "@mui/icons-material";
 import { useEffect } from "react";
-import {Avatar, Stack, Snackbar, Menu, MenuItem, Button} from "@mui/material";
+import {Avatar, Stack, Snackbar, Menu, MenuItem, Button, ListItemIcon} from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import {Service} from "./services/service";
+import {LSConfig} from "./widgets/ConifgLocalstorageUtil";
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -243,9 +245,26 @@ export default function PersistentDrawerLeft() {
                                                   vertical: 'top',
                                                   horizontal: 'right',
                                               }}>
-                                            <MenuItem onClick={popupState.close}>Profile</MenuItem>
-                                            <MenuItem onClick={popupState.close}>My account</MenuItem>
-                                            <MenuItem onClick={popupState.close}>Logout</MenuItem>
+                                            <MenuItem disableRipple>
+                                                <Typography variant='h5'>
+                                                    YUAN Zhuo
+                                                </Typography>
+                                            </MenuItem>
+                                            <MenuItem disableRipple>
+                                                zhuoyuan@sjtu.edu.cn
+                                            </MenuItem>
+                                            <Divider/>
+                                            <MenuItem onClick={
+                                                () => {
+                                                    popupState.close();
+                                                    Service.logout(LSConfig.GetConfig());
+                                                }
+                                            }>
+                                                <ListItemIcon>
+                                                    <Logout/>
+                                                </ListItemIcon>
+                                                Logout
+                                            </MenuItem>
                                         </Menu>
                                     </React.Fragment>
                                 )}
