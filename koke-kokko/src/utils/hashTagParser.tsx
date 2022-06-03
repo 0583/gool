@@ -41,6 +41,14 @@ export function renderTypographyWithTags(s: string) {
         )
     }
 
+    const escapeEnter = (chr: string) => {
+        if (chr === '\n') {
+            return (<br />)
+        } else {
+            return chr
+        }
+    }
+
     let hashTags: string[] = [];
 
     let tmp: string = "";
@@ -58,7 +66,7 @@ export function renderTypographyWithTags(s: string) {
                             return (
                                 <>
                                 {buildTag(c)}
-                                {chr}
+                                {escapeEnter(chr)}
                                 </>
                             )
                         } else if (chr === '#') {
@@ -74,7 +82,7 @@ export function renderTypographyWithTags(s: string) {
                         isActivate = true;
                         return ""
                     } else {
-                        return chr
+                        return escapeEnter(chr)
                     }
                 })
             }
