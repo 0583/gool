@@ -11,11 +11,15 @@ export function parseHashTag(s: string): string[] {
         if (isActivate) {
             if (' \n\t，。！？；,.!?\'"…~～-+【】{}[]「」、\\'.includes(chr)) {
                 isActivate = false
-                hashTags.push(tmp)
-                tmp = ""
+                if (tmp.length > 0) {
+                    hashTags.push(tmp)
+                    tmp = ""
+                }
             } else if (chr === '#') {
-                hashTags.push(tmp)
-                tmp = ""
+                if (tmp.length > 0) {
+                    hashTags.push(tmp)
+                    tmp = ""
+                }
             } else {
                 tmp += chr
             }
@@ -25,12 +29,11 @@ export function parseHashTag(s: string): string[] {
     }
 
     if (isActivate) {
-        hashTags.push(tmp);
+        if (tmp.length > 0) {
+            hashTags.push(tmp);
+        }
     }
-
-    return hashTags.map((v: string) => {
-        return v.charAt(0).toUpperCase() + v.slice(1).toLowerCase()
-    })
+    return hashTags
 }
 
 export function renderTypographyWithTags(s: string) {
@@ -63,17 +66,30 @@ export function renderTypographyWithTags(s: string) {
                             isActivate = false
                             const c = tmp
                             tmp = ""
-                            return (
-                                <>
-                                {buildTag(c)}
-                                {escapeEnter(chr)}
-                                </>
-                            )
+                            if (c.length > 0) {
+                                return (
+                                    <>
+                                        {buildTag(c)}
+                                        {escapeEnter(chr)}
+                                    </>
+                                )
+                            } else {
+                                return (
+                                    <>
+                                        {'#' + c}
+                                        {escapeEnter(chr)}
+                                    </>
+                                )
+                            }
                         } else if (chr === '#') {
                             hashTags.push(tmp)
                             const c = tmp
                             tmp = ""
-                            return buildTag(c);
+                            if (c.length > 0) {
+                                return buildTag(c)
+                            } else {
+                                return '#' + c
+                            }
                         } else {
                             tmp += chr
                             return ""
@@ -87,8 +103,8 @@ export function renderTypographyWithTags(s: string) {
                 })
             }
             {
-                ( !isActivate ||
-                    buildTag(tmp)
+                ( isActivate &&
+                    (tmp.length > 0 ? buildTag(tmp) : '#' + tmp)
                 )
             }
         </Typography>
