@@ -17,6 +17,7 @@ import {SnackBarSenderProps} from "../App";
 import {Config, Service} from "../services/service";
 import {LSConfig} from "../widgets/ConifgLocalstorageUtil";
 import {csdi} from "../services/proto/koke_kokko";
+import {parseHashTag} from "../utils/hashTagParser";
 
 function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -24,12 +25,16 @@ function HomeView(props: SnackBarSenderProps) {
     const [visibility, setVisibility] = React.useState<string>('Public');
 
     function sendKokko() {
-        Service.publish_article(LSConfig.GetConfig(), "", kokkoText, [])
+        const tags = parseHashTag(kokkoText)
+
+        props.sender(`Send tags: ${ JSON.stringify(tags) }`)
+
+        Service.publish_article(LSConfig.GetConfig(), "", kokkoText, tags)
             .then(() => {
-                props.sender("Done!");
+                // props.sender("Done!");
             }
             ).catch((err) => {
-                props.sender(`Failed to Kokko: ${err.toString()}`);
+                // props.sender(`Failed to Kokko: ${err.toString()}`);
             })
     }
 
