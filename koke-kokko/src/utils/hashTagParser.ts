@@ -6,7 +6,7 @@ export function parseHashTag(s: string): string[] {
 
     for (const chr of s) {
         if (isActivate) {
-            if (chr === ' ' || chr === '\n' || chr === ' ' || chr === '\t') {
+            if (' \n\t，。！？；,.!?\'"…~～-+【】{}[]「」、\\'.includes(chr)) {
                 isActivate = false
                 hashTags.push(tmp)
                 tmp = ""
@@ -25,5 +25,7 @@ export function parseHashTag(s: string): string[] {
         hashTags.push(tmp);
     }
 
-    return hashTags;
+    return hashTags.map((v: string) => {
+        return v.charAt(0).toUpperCase() + v.slice(1).toLowerCase()
+    })
 }
