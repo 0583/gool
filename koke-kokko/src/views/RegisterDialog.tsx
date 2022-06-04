@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Alert, snackbarContentClasses } from "@mui/material";
+import { Button, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import { Config, Service } from "../services/service";
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 import { SnackBarSenderProps } from "../App";
@@ -13,7 +13,7 @@ function RegisterDialog(props: RegisterDialogProps & SnackBarSenderProps) {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        if (data.get("password") == data.get("confirmPassword")) {
+        if (data.get("password") === data.get("confirmPassword")) {
             await Service.signup(LocalStoreConfig.get_config() as Config, data.get("email") as string, data.get("password") as string).then(() => {
                 props.sender("register success!");
                 props.setOpen(false);

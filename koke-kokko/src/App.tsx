@@ -238,7 +238,7 @@ export default function PersistentDrawerLeft() {
 
                             <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
                                 <PopupState variant="popover" popupId="demo-popup-menu">
-                                    {(popupState) => (
+                                    {(popupState: any) => (
                                         <React.Fragment>
                                             <Button {...bindTrigger(popupState)}>
                                                 <Avatar src="avatars/xiqyu.png" />

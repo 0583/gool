@@ -4,19 +4,19 @@ import {
     Card, CardActions, CardContent,
     CardMedia, Chip,
     Grid,
-    InputAdornment, Link,
+    InputAdornment,
     List, ListItem, Menu, MenuItem, MenuProps,
     Stack,
     TextField, Typography
 } from "@mui/material";
 import { Photo, PinDrop, Search, Tag } from "@mui/icons-material";
-import React from "react";
+import React, {useEffect} from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 import { styled } from "@mui/material/styles";
 import { SnackBarSenderProps } from "../App";
 import { Config, Service } from "../services/service";
 import { csdi } from "../services/proto/koke_kokko";
-import { parseHashTag, renderTypographyWithTags } from "../utils/hashTagParser";
+import { parseHashTag } from "../utils/hashTagParser";
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 
 function HomeView(props: SnackBarSenderProps) {
@@ -31,11 +31,26 @@ function HomeView(props: SnackBarSenderProps) {
 
         Service.publish_article(LocalStoreConfig.get_config() ?? new Config(), "", kokkoText, tags)
             .then(() => {
-                // props.sender("Done!");
+                props.sender("Done!");
+                refreshKokko()
             }
             ).catch((err) => {
-                // props.sender(`Failed to Kokko: ${err.toString()}`);
+                props.sender(`Failed to Kokko: ${err.toString()}`);
             })
+    }
+
+    const [articles, setArticles] = React.useState<csdi.Article[]>([]);
+
+    function refreshKokko() {
+        Service.list_article(LocalStoreConfig.get_config() ?? new Config())
+            .then((articles) => {
+                setArticles(articles)
+                articles.forEach((article) => {
+                    console.log(article.article_id, article.author)
+                })
+        }).catch((err) => {
+            props.sender(`Failed to list kokkos: ${err.toString()}`);
+        })
     }
 
     function closeEvent(visibility: string) {
@@ -44,6 +59,10 @@ function HomeView(props: SnackBarSenderProps) {
             handleClose();
         }
     }
+
+    useEffect(() => {
+        refreshKokko()
+    }, [])
 
     const visibilityMenuOpen = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -178,8 +197,9 @@ function HomeView(props: SnackBarSenderProps) {
                         </Stack>
                     </ListItem>
 
-                    <ListItem key="kokko_0">
+                    <ListItem key="preview_kokko">
                         <KokkoMessageCard
+                            key={"template"}
                             username="${whoami}"
                             avatar="avatars/74477599.png"
                             date="Jun 3, 2022"
@@ -187,38 +207,19 @@ function HomeView(props: SnackBarSenderProps) {
                             showActions={true}
                         />
                     </ListItem>
-
-                    <ListItem key="kokko_1">
-                        <KokkoMessageCard
-                            username="XU Jiahao"
-                            avatar="avatars/ianhui.png"
-                            date="April 28, 2022"
-                            content={`Thanks to the Bipartisan Infrastructure Law, we’re going to start replacing 100% of the lead pipes and water lines that go into homes and schools in this country.\nEvery American, every child, should be able to turn on a faucet and drink water that’s clean.`}
-                            showActions={true}
-                        />
-                    </ListItem>
-
-                    <ListItem key="kokko_2">
-                        <KokkoMessageCard
-                            username="YUAN Zhuo"
-                            avatar="avatars/yzhuo.png"
-                            date="April 13, 2022"
-                            content="The adorable pink hero #Kirby made his debut in Kirby's Dream Land on Game Boy in Japan 30 years ago today! What is your favorite Kirby memory?"
-                            image="examples/FRXaiWUWUAIMXEO.jpeg"
-                            isLiked={true}
-                            showActions={true}
-                        />
-                    </ListItem>
-
-                    <ListItem key="kokko_3">
-                        <KokkoMessageCard
-                            username="YU Xiqian"
-                            avatar="avatars/xiqyu.png"
-                            date="April 28, 2022"
-                            content="can't believe what i've just seen..."
-                            showActions={true}
-                        />
-                    </ListItem>
+                    {
+                        articles.map((article: csdi.Article) => {
+                           return (<ListItem key={article.article_id}>
+                                <KokkoMessageCard
+                                    key={article.article_id}
+                                    username={article.author}
+                                    avatar={article.author}
+                                    date={article.post_time}
+                                    content={article.content}
+                                    showActions={true}/>
+                            </ListItem>)
+                        })
+                    }
                 </List>
             </Grid>
             <Grid item xs={5}>

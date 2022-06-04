@@ -1,6 +1,7 @@
 import { Request } from "./request";
 import { csdi } from "./proto/koke_kokko";
 import { v4 as uuidv4 } from 'uuid';
+import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
 export class Config {
     app_name: string | undefined
     endpoint: string | undefined
@@ -109,13 +110,14 @@ export namespace Service {
 
     export function logout(config: Config) {
         config.user = {} as csdi.User;
+        LocalStoreConfig.remove_config()
         console.log("logout");
     }
 
     // cancel account when logged in
     export async function cancel(config: Config) {
         await Request.delete_record(config, config.user.username, Util.SchemaName.User);
-        config.user = {} as csdi.User;
+        logout(config)
     }
 
     export async function publish_article(config: Config, title: string, content: string, related_tag_arr: string[]) {

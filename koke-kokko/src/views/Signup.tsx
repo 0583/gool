@@ -14,10 +14,8 @@ import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
 import RegisterDialog from "./RegisterDialog";
 import { Service } from "../services/service";
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
-import { Redirect } from "react-router-dom";
 import { Config } from "../services/service";
 import { SnackBarSenderProps } from "../App";
-import { PowerInputSharp } from "@mui/icons-material";
 
 function Copyright(props: any) {
     return (
