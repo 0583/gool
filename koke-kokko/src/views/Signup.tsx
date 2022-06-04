@@ -7,18 +7,17 @@ import {
     Paper,
     TextField,
     Divider,
-    Button, Snackbar,
+    Button,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
 import RegisterDialog from "./RegisterDialog";
 import { Service } from "../services/service";
-import { LSConfig } from "../widgets/ConifgLocalstorageUtil";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 import { Redirect } from "react-router-dom";
 import { Config } from "../services/service";
-import {SnackbarMessage, SnackBarSenderProps} from "../App";
-import IconButton from "@mui/material/IconButton";
-import {Close} from "@mui/icons-material";
+import { SnackBarSenderProps } from "../App";
+import { PowerInputSharp } from "@mui/icons-material";
 
 function Copyright(props: any) {
     return (
@@ -30,50 +29,12 @@ function Copyright(props: any) {
     );
 }
 
-function Signup() {
-
-    const [snackPack, setSnackPack] = React.useState<readonly SnackbarMessage[]>([]);
-    const [open, setOpen] = React.useState(false);
-    const [severity, setSeverity] = React.useState<string>('info');
-    const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(
-        undefined,
-    );
-
-    React.useEffect(() => {
-        if (snackPack.length && !messageInfo) {
-            // Set a new snack when we don't have an active one
-            setMessageInfo({ ...snackPack[0] });
-            setSnackPack((prev) => prev.slice(1));
-            setOpen(true);
-        } else if (snackPack.length && messageInfo && open) {
-            // Close an active snack when a new one is added
-            setOpen(false);
-        }
-    }, [snackPack, messageInfo, open]);
-
-    const handleClick = (message: string) => () => {
-        setSnackPack((prev) => [...prev, { message, key: new Date().getTime() }]);
-    };
-
-    const sendMessage = (message: string) => {
-        setSeverity(severity);
-        setSnackPack((prev) => [...prev, { message, key: new Date().getTime() }]);
-    }
-
-    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
-
-    const handleExited = () => {
-        setMessageInfo(undefined);
-    };
+function Signup(props: SnackBarSenderProps) {
 
     const init = async () => {
-        if (LSConfig.GetUser() != null) {
-            return <Redirect to="/app"></Redirect>
+        let config = LocalStoreConfig.get_config();
+        if (config != null && config.user != null) {
+            window.location.href = "/#/app"
         } else {
             let app_name: string = 'kobe_kokko-v0.1.1';
             let endpoint: string = 'http://202.120.40.82:11233';
@@ -82,10 +43,9 @@ function Signup() {
             let version: string = 'v0.1.0';
 
             await Service.init_config(app_name, endpoint, fullpath, filename, version).then((value) => {
-                LSConfig.SetConfig(value)
-                // LSConfig.SetConfig(value);
+                LocalStoreConfig.set_config(value)
+                // LocalStoreConfig.SetConfig(value);
                 //把init的value放进localstorage
-                console.log(LSConfig.GetConfig())
             }).catch((reason) => {
                 console.log(reason);
             });
@@ -95,39 +55,19 @@ function Signup() {
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        let config: Config = LSConfig.GetConfig();
-        console.log(data.get("email") as string)
+        let config = LocalStoreConfig.get_config() as Config;
         await Service.login(config, data.get("email") as string, data.get("password") as string).then(() => {
-            LSConfig.SetConfig(config)
-            LSConfig.SetUser(config.user)
+            LocalStoreConfig.set_config(config);
+            props.sender("login success!");
+            window.location.href = "/#/app";
         })
 
     };
     const [registerDialogOpen, setRegisterDialogOpen] = React.useState<boolean>(false);
     return (
         <div onLoad={init}>
-            <Snackbar
-                key={messageInfo ? messageInfo.key : undefined}
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                TransitionProps={{ onExited: handleExited }}
-                message={messageInfo ? messageInfo.message : undefined}
-                action={
-                    <React.Fragment>
-                        <IconButton
-                            aria-label="close"
-                            color="inherit"
-                            sx={{ p: 0.5 }}
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
-                    </React.Fragment>
-                }
-            />
             <RegisterDialog
-                sender={sendMessage}
+                sender={props.sender}
                 isOpen={registerDialogOpen}
                 setOpen={setRegisterDialogOpen}
             />

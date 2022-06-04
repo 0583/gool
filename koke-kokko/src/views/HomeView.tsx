@@ -13,11 +13,11 @@ import { Photo, PinDrop, Search, Tag } from "@mui/icons-material";
 import React from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 import { styled } from "@mui/material/styles";
-import {SnackBarSenderProps} from "../App";
-import {Config, Service} from "../services/service";
-import {LSConfig} from "../widgets/ConifgLocalstorageUtil";
-import {csdi} from "../services/proto/koke_kokko";
-import {parseHashTag, renderTypographyWithTags} from "../utils/hashTagParser";
+import { SnackBarSenderProps } from "../App";
+import { Config, Service } from "../services/service";
+import { csdi } from "../services/proto/koke_kokko";
+import { parseHashTag, renderTypographyWithTags } from "../utils/hashTagParser";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 
 function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -27,9 +27,9 @@ function HomeView(props: SnackBarSenderProps) {
     function sendKokko() {
         const tags = parseHashTag(kokkoText)
 
-        props.sender(`Send tags: ${ JSON.stringify(tags) }`)
+        props.sender(`Send tags: ${JSON.stringify(tags)}`)
 
-        Service.publish_article(LSConfig.GetConfig(), "", kokkoText, tags)
+        Service.publish_article(LocalStoreConfig.get_config() ?? new Config(), "", kokkoText, tags)
             .then(() => {
                 // props.sender("Done!");
             }

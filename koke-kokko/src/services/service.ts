@@ -1,14 +1,14 @@
 import { Request } from "./request";
 import { csdi } from "./proto/koke_kokko";
 import { v4 as uuidv4 } from 'uuid';
-export interface Config {
-    app_name: string,
-    endpoint: string,
-    fullpath: string,
-    filename: string,
-    version: string,
-    app_id: string,
-    user: csdi.User
+export class Config {
+    app_name: string | undefined
+    endpoint: string | undefined
+    fullpath: string | undefined
+    filename: string | undefined
+    version: string | undefined
+    app_id: string | undefined
+    user: csdi.User = new csdi.User()
 }
 
 namespace Util {
