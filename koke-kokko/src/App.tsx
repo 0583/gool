@@ -16,10 +16,11 @@ import TopicsView from "./views/TopicsView";
 import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
-import {Menu, Home, Tag, Notifications, Bookmark, Person, Close} from "@mui/icons-material";
+import { Menu, Home, Tag, Notifications, Bookmark, Person, Close } from "@mui/icons-material";
 import { useEffect } from "react";
-import {Avatar, Stack, Snackbar, Alert} from "@mui/material";
+import { Avatar, Stack, Snackbar, Alert } from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
+import { LocalStoreConfig } from './widgets/ConifgLocalstorageUtil';
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -177,8 +178,16 @@ export default function PersistentDrawerLeft() {
         setDrawerOpen(false);
     };
 
+    const test = () => {
+        console.log(LocalStoreConfig.get_config()?.user)
+        let data = LocalStoreConfig.get_config()
+        if (data != null) {
+            let data1 = data.user.article_id_arr
+            console.log(data1)
+        }
+    }
     return (
-        <div>
+        <div onLoad={test}>
             <Snackbar
                 key={messageInfo ? messageInfo.key : undefined}
                 open={open}
@@ -199,86 +208,86 @@ export default function PersistentDrawerLeft() {
                     </React.Fragment>
                 }
             />
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar position="fixed" open={drawerOpen} elevation={0}
-                sx={{
-                    borderBottom: 1,
-                    borderColor: 'rgba(0, 0, 0, 0.12)',
-                    backdropFilter: 'blur(50px)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.7)'
-                }}>
-                <Toolbar>
-                    <IconButton
-                        color="primary"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}
-                    >
-                        <Menu />
-                    </IconButton>
-                    <Stack sx={{ width: '100%' }} direction="row" justifyContent="space-between" alignItems="center">
-                        <Stack direction="row" justifyContent="flex-start">
-                            <Typography variant="h5" noWrap component="div" fontWeight="bold" color="black">
-                                {toolBarHeader}
-                            </Typography>
-                        </Stack>
-
-                        <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
-                            <Avatar src="avatars/xiqyu.png" />
-                        </Stack>
-                    </Stack>
-                </Toolbar>
-            </AppBar>
-            <Drawer
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
-                variant="persistent"
-                anchor="left"
-                open={drawerOpen}
-            >
-                <DrawerHeader>
-                    <Stack direction="row" height={64} alignItems="center" sx={{ width: '100%' }}>
-                        <IconButton color="primary" onClick={handleDrawerClose}>
-                            {theme.direction === 'ltr' ? <ChevronLeftIcon color="primary" /> : <ChevronRightIcon color="primary" />}
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+                <AppBar position="fixed" open={drawerOpen} elevation={0}
+                    sx={{
+                        borderBottom: 1,
+                        borderColor: 'rgba(0, 0, 0, 0.12)',
+                        backdropFilter: 'blur(50px)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.7)'
+                    }}>
+                    <Toolbar>
+                        <IconButton
+                            color="primary"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{ mr: 2, ...(drawerOpen && { display: 'none' }) }}
+                        >
+                            <Menu />
                         </IconButton>
-                        <img width="24" height="24" src="icon.png" alt="Koke-kokko Icon"></img>
-                        <Typography sx={{ marginLeft: 2 }} variant="h5" color="primary">Koke-kokko</Typography>
-                    </Stack>
-                </DrawerHeader>
-                <Divider />
-                <List
-                    sx={{ width: '100%', maxWidth: 360 }}
-                    aria-label="contacts"
+                        <Stack sx={{ width: '100%' }} direction="row" justifyContent="space-between" alignItems="center">
+                            <Stack direction="row" justifyContent="flex-start">
+                                <Typography variant="h5" noWrap component="div" fontWeight="bold" color="black">
+                                    {toolBarHeader}
+                                </Typography>
+                            </Stack>
+
+                            <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
+                                <Avatar src="avatars/xiqyu.png" />
+                            </Stack>
+                        </Stack>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    sx={{
+                        width: drawerWidth,
+                        flexShrink: 0,
+                        '& .MuiDrawer-paper': {
+                            width: drawerWidth,
+                            boxSizing: 'border-box',
+                        },
+                    }}
+                    variant="persistent"
+                    anchor="left"
+                    open={drawerOpen}
                 >
-                    {
-                        menuItems.map(({ index, icon, title }) => {
-                            return (<DrawerMenuItem key={index}
-                                selectedIndex={selectedIndex}
-                                setSelectedIndex={setSelectedIndex}
-                                index={index}
-                                MenuIcon={icon}
-                                title={title} />);
-                        })
-                    }
-                </List>
-            </Drawer>
-            <Main open={drawerOpen}>
-                <DrawerHeader />
-                <Stack direction="column" justifyContent="center" alignItems="center">
-                    <Box sx={{ width: '100%', maxWidth: 1280 }}>
-                        {menuItems[selectedIndex].view}
-                    </Box>
-                </Stack>
-            </Main>
-        </Box>
+                    <DrawerHeader>
+                        <Stack direction="row" height={64} alignItems="center" sx={{ width: '100%' }}>
+                            <IconButton color="primary" onClick={handleDrawerClose}>
+                                {theme.direction === 'ltr' ? <ChevronLeftIcon color="primary" /> : <ChevronRightIcon color="primary" />}
+                            </IconButton>
+                            <img width="24" height="24" src="icon.png" alt="Koke-kokko Icon"></img>
+                            <Typography sx={{ marginLeft: 2 }} variant="h5" color="primary">Koke-kokko</Typography>
+                        </Stack>
+                    </DrawerHeader>
+                    <Divider />
+                    <List
+                        sx={{ width: '100%', maxWidth: 360 }}
+                        aria-label="contacts"
+                    >
+                        {
+                            menuItems.map(({ index, icon, title }) => {
+                                return (<DrawerMenuItem key={index}
+                                    selectedIndex={selectedIndex}
+                                    setSelectedIndex={setSelectedIndex}
+                                    index={index}
+                                    MenuIcon={icon}
+                                    title={title} />);
+                            })
+                        }
+                    </List>
+                </Drawer>
+                <Main open={drawerOpen}>
+                    <DrawerHeader />
+                    <Stack direction="column" justifyContent="center" alignItems="center">
+                        <Box sx={{ width: '100%', maxWidth: 1280 }}>
+                            {menuItems[selectedIndex].view}
+                        </Box>
+                    </Stack>
+                </Main>
+            </Box>
         </div>
     );
 }
