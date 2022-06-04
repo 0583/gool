@@ -200,7 +200,7 @@ function HomeView(props: SnackBarSenderProps) {
                     <ListItem key="preview_kokko">
                         <KokkoMessageCard
                             key={"template"}
-                            username="${whoami}"
+                            username="<Preview>"
                             avatar="avatars/74477599.png"
                             date="Jun 3, 2022"
                             content={kokkoText}
