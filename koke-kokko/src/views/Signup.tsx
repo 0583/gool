@@ -76,11 +76,11 @@ function Signup() {
         if (config && config.user.username) {
             window.location.href = "/#/app"
         } else {
-            let app_name: string = 'kobe_kokko-v0.1.1';
+            let app_name: string = 'kobe_kokko-v0.1.2';
             let endpoint: string = 'http://202.120.40.82:11233';
             let fullpath: string = 'dist/proto/koke_kokko.proto';
             let filename: string = 'koke_kokko.proto';
-            let version: string = 'v0.1.0';
+            let version: string = 'v0.1.1';
 
             await Service.init_config(app_name, endpoint, fullpath, filename, version).then((value) => {
                 LocalStoreConfig.set_config(value)

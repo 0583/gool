@@ -20,7 +20,7 @@ import { Config, Service } from "../services/service";
 import { csdi } from "../services/proto/koke_kokko";
 import { parseHashTag } from "../utils/hashTagParser";
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
-import ImageUploading, {ImageListType, ImageType} from "react-images-uploading";
+import ImageUploading, { ImageListType, ImageType } from "react-images-uploading";
 import { Box } from "@mui/system";
 // import PicUploadDialog from "./PicUploadDialog";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -61,7 +61,9 @@ function HomeView(props: SnackBarSenderProps) {
 
         props.sender(`Send tags: ${JSON.stringify(tags)}`)
 
-        Service.publish_article(LocalStoreConfig.get_config() ?? new Config(), "", kokkoText, tags)
+        Service.publish_article(LocalStoreConfig.get_config() ?? new Config(), kokkoText, "", images.map((e) => {
+            return e.dataURL ?? ""
+        }), tags)
             .then(() => {
                 props.sender("Done!");
                 refreshKokko()
@@ -181,26 +183,26 @@ function HomeView(props: SnackBarSenderProps) {
                                             minRows={3}
                                         />
                                         <Stack direction="row" spacing={2}>
-                                        {(loading ? Array.from(new Array(1)) : imageList).map((image, index) => (
-                                            // { (
-                                            <Box key={index} className="image-item">
-                                                {image && time ? (
-                                                    <Box className="image-item__btn-wrapper" sx={{
-                                                        width: "96px", height: "96px", borderRadius: "4px", backgroundImage: "url(" + image.dataURL + ")", backgroundSize: "cover",
-                                                        backgroundPosition: "center", backgroundRepeat: "no-repeat"
-                                                    }} >
-                                                        <Box sx={{ background: "rgb(255, 255, 255, 0.7)", display: "flex", width: "24px", height: "24px", borderRadius: "12px", alignItems: "center", justifyContent: "center" }}>
-                                                            <a onClick={() => { onImageRemove(index) }}>
-                                                                <ClearIcon sx={{ color: "#737373", width: "12px", height: "12px" }} />
-                                                            </a>
+                                            {(loading ? Array.from(new Array(1)) : imageList).map((image, index) => (
+                                                // { (
+                                                <Box key={index} className="image-item">
+                                                    {image && time ? (
+                                                        <Box className="image-item__btn-wrapper" sx={{
+                                                            width: "96px", height: "96px", borderRadius: "4px", backgroundImage: "url(" + image.dataURL + ")", backgroundSize: "cover",
+                                                            backgroundPosition: "center", backgroundRepeat: "no-repeat"
+                                                        }} >
+                                                            <Box sx={{ background: "rgb(255, 255, 255, 0.7)", display: "flex", width: "24px", height: "24px", borderRadius: "12px", alignItems: "center", justifyContent: "center" }}>
+                                                                <a onClick={() => { onImageRemove(index) }}>
+                                                                    <ClearIcon sx={{ color: "#737373", width: "12px", height: "12px" }} />
+                                                                </a>
+                                                            </Box>
                                                         </Box>
-                                                    </Box>
 
-                                                ) : (
-                                                    <Skeleton variant="rectangular" width={96} height={96} />
-                                                )}
-                                            </Box>
-                                        ))}
+                                                    ) : (
+                                                        <Skeleton variant="rectangular" width={96} height={96} />
+                                                    )}
+                                                </Box>
+                                            ))}
                                         </Stack>
 
                                     </Box>

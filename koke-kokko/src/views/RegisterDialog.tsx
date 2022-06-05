@@ -14,7 +14,7 @@ function RegisterDialog(props: RegisterDialogProps & SnackBarSenderProps) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         if (data.get("password") === data.get("confirmPassword")) {
-            await Service.signup(LocalStoreConfig.get_config() as Config, data.get("email") as string, data.get("password") as string).then(() => {
+            await Service.signup(LocalStoreConfig.get_config() as Config, data.get("email") as string, data.get("name") as string, data.get("password") as string).then(() => {
                 props.sender("register success!");
                 props.setOpen(false);
             }).catch((reason) => {

@@ -21,7 +21,7 @@ import { useEffect } from "react";
 import { Avatar, Stack, Snackbar, Menu, MenuItem, Button, ListItemIcon } from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-import {Config, Service} from "./services/service";
+import { Config, Service } from "./services/service";
 import { LocalStoreConfig } from './widgets/ConifgLocalstorageUtil';
 
 export interface SnackBarSenderProps {
@@ -184,7 +184,7 @@ export default function PersistentDrawerLeft() {
         console.log(LocalStoreConfig.get_config()?.user)
         let data = LocalStoreConfig.get_config()
         if (data != null) {
-            let data1 = data.user.article_id_arr
+            let data1 = data.user.published_article_arr
             console.log(data1)
         }
     }

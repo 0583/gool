@@ -5,14 +5,6 @@ import { Buffer } from 'buffer';
 
 // @ts-ignore
 window.Buffer = Buffer;
-// axios.defaults.withCredentials = true;
-
-// axios.defaults.baseURL='http://202.120.40.82:11233';
-
-//  var instance = axios.create({
-//     baseURL:'http://202.120.40.82:11233',
-//     withCredentials: true
-//   });
 
 namespace Util {
     export type RegisterAppResponseDTO = {

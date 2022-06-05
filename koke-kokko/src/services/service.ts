@@ -1,15 +1,16 @@
 import { Request } from "./request";
 import { csdi } from "./proto/koke_kokko";
 import { v4 as uuidv4 } from 'uuid';
-import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
+
 export class Config {
-    app_name: string | undefined
-    endpoint: string | undefined
-    fullpath: string | undefined
-    filename: string | undefined
-    version: string | undefined
-    app_id: string | undefined
-    user: csdi.User = new csdi.User()
+    app_name: string | undefined;
+    endpoint: string | undefined;
+    fullpath: string | undefined;
+    filename: string | undefined;
+    version: string | undefined;
+    app_id: string | undefined;
+    user: csdi.User = new csdi.User();
 }
 
 namespace Util {
@@ -27,33 +28,40 @@ namespace Util {
     }
 
 
-    export const proto_content =
-        `syntax = "proto3";
+    export const proto_content = `
+        syntax = "proto3";
 
-package csdi;
-import 'record_metadata_options.proto';
+        package csdi;
+        import 'record_metadata_options.proto';
 
-message User {
-    string username = 1 [ (webaas.db.record.field).primary_key = true ];
-    string password = 2;
-    repeated string follow_tag_arr = 3;  // get following tag by follow_tag
-    repeated string article_id_arr = 4;    // get published article by article_id
-}
+        message User {
+            string email = 1 [ (webaas.db.record.field).primary_key = true ];
+            string username = 2;
+            string password = 3;
+            string profile_photo = 4;
+            repeated string follow_tag_arr = 5;  // get following tag by follow_tag
+            repeated string published_article_arr = 6;  // get published article by article_id
+            repeated string bookmark_article_arr = 7;  // get bookmarded article by article_id
+        }
 
-message Article {
-    string article_id =1 [ (webaas.db.record.field).primary_key = true ];   // uuid
-    string title = 2;
-    string author = 3;
-    string content = 4;
-    string post_time = 5;
-    repeated string related_tag_arr = 6;    // get related tag by related_tag
-}
+        message Article {
+            string article_id =1 [ (webaas.db.record.field).primary_key = true ];   // uuid
+            string email = 2;
+            string author = 3;
+            string user_photo = 4;
+            string location = 5;
+            repeated string article_photo = 6;
+            string content = 7;
+            string post_time = 8;
+            repeated string related_tag_arr = 9;    // get related tag by related_tag
+        }
 
-message Tag {
-    string tagname = 1 [ (webaas.db.record.field).primary_key = true ];
-    repeated string article_id_arr = 2;    // foreign key
-}
-`;
+        message Tag {
+            string tagname = 1 [ (webaas.db.record.field).primary_key = true ];
+            repeated string article_arr = 2;    // foreign key
+        }`;
+
+    export const profile_photo = `data:image/jpeg;base64,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`;
 }
 
 // init_config
@@ -75,28 +83,30 @@ export namespace Service {
             version: version,
         } as Config;
 
-        await Request.register_app(config);
+        config.app_id = "24b6079a-1063-42c3-b690-dedde69fc139";
         await Request.upload_schema(config, Util.proto_content);
         await Request.update_schema(config);
-
 
         return config;
     }
 
-    export async function signup(config: Config, username: string, password: string) {
+    export async function signup(config: Config, email: string, username: string, password: string) {
         const user_content = new csdi.User({
+            email: email,
             username: username,
             password: password,
+            profile_photo: Util.profile_photo,
             follow_tag_arr: [],
-            article_id_arr: [],
+            published_article_arr: [],
+            bookmark_article_arr: [],
         }).serializeBinary();
 
         await Request.put_record(config, user_content, Util.SchemaName.User);
     }
 
-    export async function login(config: Config, username: string, password: string) {
+    export async function login(config: Config, email: string, password: string) {
         config.user = {} as csdi.User;
-        await Request.get_record_by_key(config, username, Util.SchemaName.User)
+        await Request.get_record_by_key(config, email, Util.SchemaName.User)
             .then((value) => {
                 let user = csdi.User.deserializeBinary(value);
                 if (user.password === password) {
@@ -110,34 +120,37 @@ export namespace Service {
 
     export function logout(config: Config) {
         config.user = {} as csdi.User;
-        LocalStoreConfig.remove_config()
+        LocalStoreConfig.remove_config();
         console.log("logout");
     }
 
     // cancel account when logged in
     export async function cancel(config: Config) {
         await Request.delete_record(config, config.user.username, Util.SchemaName.User);
-        logout(config)
+        logout(config);
     }
 
-    export async function publish_article(config: Config, title: string, content: string, related_tag_arr: string[]) {
+    export async function publish_article(config: Config, content: string, location: string, article_photo: string[], related_tag_arr: string[]) {
         const article = new csdi.Article({
             article_id: uuidv4(),
-            title: title,
+            email: config.user.email,
             author: config.user.username,
+            user_photo: config.user.profile_photo,
+            location: location,
+            article_photo: article_photo,
             content: content,
             post_time: new Date().toUTCString(),
             related_tag_arr: related_tag_arr,
         });
 
-        config.user.article_id_arr.push(article.article_id);
+        config.user.published_article_arr.push(article.article_id);
 
         await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
         await Request.put_record(config, article.serializeBinary(), Util.SchemaName.Article);
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
                 let tag: csdi.Tag = csdi.Tag.deserializeBinary(value);
-                tag.article_id_arr.push(article.article_id);
+                tag.article_arr.push(article.article_id);
                 await Request.put_record(config, tag.serializeBinary(), Util.SchemaName.Tag);
             }).catch((reason) => {
                 console.log(reason);
@@ -160,7 +173,7 @@ export namespace Service {
                 .then(async (value) => {
                     let tag: csdi.Tag = csdi.Tag.deserializeBinary(value);
                     // get all article by article_id
-                    for (let article_id of tag.article_id_arr) {
+                    for (let article_id of tag.article_arr) {
                         await Request.get_record_by_key(config, article_id, Util.SchemaName.Article)
                             .then((value) => {
                                 res.push(csdi.Article.deserializeBinary(value));
@@ -180,12 +193,12 @@ export namespace Service {
         let article_id = article.article_id;
         let related_tag_arr = article.related_tag_arr;
 
-        if (!config.user.article_id_arr.includes(article_id)) {
+        if (!config.user.published_article_arr.includes(article_id)) {
             console.log("permission denied");
             return;
         }
 
-        config.user.article_id_arr = Util.remove_string_element(config.user.article_id_arr, article_id);
+        config.user.published_article_arr = Util.remove_string_element(config.user.published_article_arr, article_id);
         await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
 
         await Request.delete_record(config, article_id, Util.SchemaName.Article);
@@ -193,7 +206,7 @@ export namespace Service {
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
                 let tag: csdi.Tag = csdi.Tag.deserializeBinary(value);
-                tag.article_id_arr = Util.remove_string_element(tag.article_id_arr, article_id);
+                tag.article_arr = Util.remove_string_element(tag.article_arr, article_id);
                 await Request.put_record(config, tag.serializeBinary(), Util.SchemaName.Tag);
             }).catch((reason) => {
                 console.log(reason);
@@ -209,6 +222,18 @@ export namespace Service {
 
     export async function unfollow_tag(config: Config, tagname: string) {
         config.user.follow_tag_arr = Util.remove_string_element(config.user.follow_tag_arr, tagname);
+
+        await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
+    }
+
+    export async function mark_article(config: Config, article_id: string) {
+        config.user.bookmark_article_arr.push(article_id);
+
+        await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
+    }
+
+    export async function unmark_article(config: Config, article_id: string) {
+        config.user.follow_tag_arr = Util.remove_string_element(config.user.bookmark_article_arr, article_id);
 
         await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
     }
@@ -287,7 +312,7 @@ export namespace Service {
     export async function add_tag(config: Config, tagname: string) {
         const tag_content = new csdi.Tag({
             tagname: tagname,
-            article_id_arr: [],
+            article_arr: [],
         }).serializeBinary();
 
         await Request.put_record(config, tag_content, Util.SchemaName.Tag);
