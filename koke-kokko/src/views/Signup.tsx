@@ -73,7 +73,7 @@ function Signup() {
 
     const init = async () => {
         let config = LocalStoreConfig.get_config();
-        if (config != null && config.user != null) {
+        if (config && config.user.username) {
             window.location.href = "/#/app"
         } else {
             let app_name: string = 'kobe_kokko-v0.1.1';
@@ -98,7 +98,7 @@ function Signup() {
         let config = LocalStoreConfig.get_config() as Config;
         await Service.login(config, data.get("email") as string, data.get("password") as string).then(() => {
             LocalStoreConfig.set_config(config);
-            props.sender("login success!");
+            sendMessage("login success!");
             window.location.href = "/#/app";
         })
 
