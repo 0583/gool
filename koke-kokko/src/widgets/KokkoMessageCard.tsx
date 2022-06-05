@@ -16,7 +16,7 @@ interface KokkoMessageCardProps {
     avatar: string,
     date: string,
     content: string,
-    image?: string,
+    image?: string[],
     showActions: boolean,
     isLiked?: boolean,
     onLikeButtonClicked?: (props: KokkoMessageCardProps) => void,
@@ -35,11 +35,13 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
             <CardContent>
                 {renderTypographyWithTags(props.content)}
             </CardContent>
-            {props.image &&
-                <CardMedia
-                    component="img"
-                    image={props.image}
-                />
+            {
+                props.image?.map((imageUrl) => {
+                    return <CardMedia
+                        component="img"
+                        image={imageUrl}
+                        />
+                })
             }
             {props.showActions &&
                 <CardActions disableSpacing>

@@ -2,6 +2,9 @@ import React from "react";
 import {Link, Typography} from "@mui/material";
 
 export function parseHashTag(s: string): string[] {
+    if (!s) {
+        return []
+    }
     let hashTags: string[] = [];
 
     let tmp: string = "";
@@ -37,7 +40,9 @@ export function parseHashTag(s: string): string[] {
 }
 
 export function renderTypographyWithTags(s: string) {
-
+    if (!s) {
+        return <Typography/>
+    }
     const buildTag = (cont: string) => {
         return (
             <Link href={"#/tag?name=" + cont}>#{cont}</Link>

@@ -20,7 +20,7 @@ import { Config, Service } from "../services/service";
 import { csdi } from "../services/proto/koke_kokko";
 import { parseHashTag } from "../utils/hashTagParser";
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
-import ImageUploading, { ImageListType } from "react-images-uploading";
+import ImageUploading, {ImageListType, ImageType} from "react-images-uploading";
 import { Box } from "@mui/system";
 // import PicUploadDialog from "./PicUploadDialog";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -34,8 +34,8 @@ function HomeView(props: SnackBarSenderProps) {
     // const [Base64_Pic_Url, setBase64_Pic_Url] = React.useState<string>("");
 
     //设置图片最大上传数量
-    const [images, setImages] = React.useState([]);
-    const maxNumber = 1;
+    const [images, setImages] = React.useState<ImageType[]>([]);
+    const maxNumber = 5;
 
     //上传图片变动处理,骨架两秒显示
     const piconChange = (
@@ -43,15 +43,15 @@ function HomeView(props: SnackBarSenderProps) {
         addUpdateIndex: number[] | undefined
     ) => {
         // data for submit
-        if (imageList.length == 1) {
+        if (imageList.length > 0) {
             setTimeout(() => {
                 settime(true);
             }, 2000);
+            console.log(imageList, addUpdateIndex);
+            setImages(imageList);
         } else {
             settime(false);
         }
-        console.log(imageList, addUpdateIndex);
-        setImages(imageList as never[]);
     };
 
     const [loading, setloading] = React.useState(false)
@@ -180,7 +180,7 @@ function HomeView(props: SnackBarSenderProps) {
                                             sx={{ mb: "16px" }}
                                             minRows={3}
                                         />
-
+                                        <Stack direction="row" spacing={2}>
                                         {(loading ? Array.from(new Array(1)) : imageList).map((image, index) => (
                                             // { (
                                             <Box key={index} className="image-item">
@@ -201,7 +201,7 @@ function HomeView(props: SnackBarSenderProps) {
                                                 )}
                                             </Box>
                                         ))}
-
+                                        </Stack>
 
                                     </Box>
 
@@ -285,7 +285,7 @@ function HomeView(props: SnackBarSenderProps) {
                                     username="<Preview>"
                                     avatar="avatars/74477599.png"
                                     date="Jun 3, 2022"
-                                    image={imageList[0]?.dataURL}
+                                    image={imageList.map((e) => { return e.dataURL! })}
                                     content={kokkoText}
                                     showActions={true}
                                 />
@@ -297,6 +297,7 @@ function HomeView(props: SnackBarSenderProps) {
                                             key={article.article_id}
                                             username={article.author}
                                             avatar={article.author}
+                                            // image={article.article_photo}
                                             date={article.post_time}
                                             content={article.content}
                                             showActions={true} />
