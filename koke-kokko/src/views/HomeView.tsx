@@ -285,6 +285,7 @@ function HomeView(props: SnackBarSenderProps) {
                                     username="<Preview>"
                                     avatar="avatars/74477599.png"
                                     date="Jun 3, 2022"
+                                    image={imageList[0]?.dataURL}
                                     content={kokkoText}
                                     showActions={true}
                                 />
