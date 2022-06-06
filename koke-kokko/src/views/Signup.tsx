@@ -73,7 +73,7 @@ function Signup() {
 
     const init = async () => {
         let config = LocalStoreConfig.get_config();
-        if (config && config.user.username) {
+        if (config && config.user && config.user.username) {
             window.location.href = "/#/app"
         } else {
             let app_name: string = 'kobe_kokko-v4.1.2';
