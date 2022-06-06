@@ -32,7 +32,7 @@ function Copyright(props: any) {
 }
 
 function Signup() {
-    const [isWebaasOK, setIsWebaasOK] = React.useState<boolean>(false);
+    const [isWebaasOK, setIsWebaasOK] = React.useState<boolean | undefined>();
 
     const timer: any = useRef(null);
 
@@ -175,9 +175,12 @@ function Signup() {
                             <Box width={"100%"}>
                                 <Stack direction="row" spacing={2} marginY={-2}>
                                     <Avatar src={"icon.png"} variant={"square"} sx={{ width: 42, height: 42 }} />
-                                    <Button variant="outlined" color={isWebaasOK ? "success" : "error"}>
-                                        {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
-                                    </Button>
+                                    {
+                                        isWebaasOK === undefined ||
+                                        <Button variant="outlined" color={isWebaasOK ? "success" : "error"}>
+                                            {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
+                                        </Button>
+                                    }
                                 </Stack>
                                 <Typography sx={{ mt: 6, mb: 6, fontWeight: 800, fontSize: 64 }}>What's happening</Typography>
                                 <Typography sx={{ fontWeight: 700, fontSize: 31, mb: 4 }}>Join Now</Typography>

@@ -101,7 +101,7 @@ export default function PersistentDrawerLeft() {
     const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(
         undefined,
     );
-    const [isWebaasOK, setIsWebaasOK] = React.useState<boolean>(false);
+    const [isWebaasOK, setIsWebaasOK] = React.useState<boolean | undefined>();
 
     const timer: any = useRef(null);
 
@@ -273,9 +273,12 @@ export default function PersistentDrawerLeft() {
                             </Stack>
 
                             <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
-                                <Button variant="outlined" color={isWebaasOK ? "success" : "error"}>
-                                    {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
-                                </Button>
+                                {
+                                    isWebaasOK === undefined ||
+                                    <Button variant="outlined" color={isWebaasOK ? "success" : "error"}>
+                                        {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
+                                    </Button>
+                                }
                                 <PopupState variant="popover" popupId="demo-popup-menu">
                                     {(popupState: any) => (
                                         <React.Fragment>
