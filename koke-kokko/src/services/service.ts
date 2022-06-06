@@ -33,7 +33,6 @@ syntax = "proto3";
 
 package csdi;
 import 'record_metadata_options.proto';
-import { screen } from '@testing-library/react';
 
 message User {
     string email = 1 [ (webaas.db.record.field).primary_key = true ];
@@ -83,10 +82,10 @@ export namespace Service {
             filename: filename,
             version: version,
         } as Config;
-        // await Request.register_app(config);
-        config.app_id = "de421946-8e93-49e4-9ac7-dd1d4704bda9";
-        // await Request.upload_schema(config, Util.proto_content);
-        // await Request.update_schema(config);
+        await Request.register_app(config);
+        // config.app_id = "de421946-8e93-49e4-9ac7-dd1d4704bda9";
+        await Request.upload_schema(config, Util.proto_content);
+        await Request.update_schema(config);
 
         return config;
     }

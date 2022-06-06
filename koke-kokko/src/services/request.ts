@@ -64,7 +64,7 @@ export namespace Request {
                     version: config.version,
                 },
                 headers: {
-                    'Content-Type': 'application/octet-stream',
+                    'Content-Type': 'text/plain',
                 },
                 withCredentials: true,
             },
