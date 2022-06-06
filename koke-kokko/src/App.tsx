@@ -17,7 +17,7 @@ import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
 import { Home, Tag, Notifications, Bookmark, Person, Close, Menu as MenuIcon, Logout } from "@mui/icons-material";
-import {useEffect, useRef} from "react";
+import {useEffect, useLayoutEffect, useRef} from "react";
 import { Avatar, Stack, Snackbar, Menu, MenuItem, Button, ListItemIcon } from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
@@ -130,17 +130,28 @@ export default function PersistentDrawerLeft() {
         })
     }
 
+    const articlesRef = useRef(articles);
+
+    useEffect(() => {
+        articlesRef.current = articles
+        refreshBadge()
+    }, [articles])
+
+    const refreshBadge = () => {
+        Service.list_article(LocalStoreConfig.get_config()!).then(
+            (latestArticles) => {
+                console.log(latestArticles, articlesRef.current)
+                setUpdateNoti(latestArticles.filter((article) => {
+                    return !articlesRef.current.some(item => item.article_id === article.article_id)
+                }).length)
+            }
+        )
+    }
+
     React.useEffect(() => {
         makeWebSocket(( ev) => {
             console.log('callback function called! with', ev)
-
-            Service.list_article_for_tag(LocalStoreConfig.get_config()!, 'yuanzhuo').then(
-                (latestArticles) => {
-                    setUpdateNoti(latestArticles.filter((article) => {
-                        return !articles.some(item => item.article_id === article.article_id)
-                    }).length)
-                }
-            )
+            refreshBadge()
         })
     }, [])
 
