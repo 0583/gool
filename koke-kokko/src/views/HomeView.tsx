@@ -50,6 +50,7 @@ function HomeView(props: SnackBarSenderProps) {
             console.log(imageList, addUpdateIndex);
             setImages(imageList);
         } else {
+            setImages([]);
             settime(false);
         }
     };

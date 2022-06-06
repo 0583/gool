@@ -84,7 +84,7 @@ export namespace Request {
     export async function put_record
         (config: Config, content: string, schema_name: string) {
         const { data } = await axios.post<Util.RecordDTO>(
-            "url",
+            "/api/record",
             content,
             {
                 params: {
