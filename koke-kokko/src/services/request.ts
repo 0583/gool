@@ -4,6 +4,7 @@ import qs from 'qs';
 import { Buffer } from 'buffer';
 import { Schema } from "./schema/schema";
 
+
 // @ts-ignore
 window.Buffer = Buffer;
 
@@ -12,7 +13,12 @@ namespace Util {
         appID: string,
         appName: string,
     };
-
+    export type RegisterNotificationDTO = {
+        appID: string,
+        notificationID: string,
+        schemaName: string,
+        recordKeys: string[],
+    };
     export type RecordDTO = {
         appID: string,
         schema_name: string,
@@ -232,5 +238,23 @@ export namespace Request {
             },
         );
         return data.uuid;
+    }
+
+    export async function register_notification(config: Config, schema_name: string, recordKeys: string[], notificationID?: string): Promise<string> {
+        const { data } = await axios.post<Util.RegisterNotificationDTO>(
+            "/api/notification",
+            {
+                params: {
+                    appID: config.app_id,
+                    schemaName: schema_name,
+                    notificationID: notificationID,
+                    recordKeys: recordKeys,
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        );
+        return data.notificationID;
     }
 }
