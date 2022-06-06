@@ -272,7 +272,9 @@ function HomeView(props: SnackBarSenderProps) {
                                                                                 setKokkoText(kokkoText + ` #${tag}`)
                                                                                 popupState.close();
                                                                             }
-                                                                        }/>)
+                                                                        }>
+                                                                            #{tag}
+                                                                        </MenuItem>)
                                                                 })
                                                             }
                                                                 </Menu>
