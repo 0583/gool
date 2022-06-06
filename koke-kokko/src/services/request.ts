@@ -28,6 +28,10 @@ namespace Util {
         status: string,
         uuid: string
     }
+    export type ObjectArrayDTO = {
+        more: string,
+        entities: ObjectDTO[],
+    };
 
     export enum MaxRange {
         begin_key = "0",
@@ -146,7 +150,7 @@ export namespace Request {
     export async function get_range_record_by_key
         (config: Config, schema_name: string,
             begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<Util.ObjectDTO[]> {
-        const { data } = await axios.get<Util.ObjectDTO[]>(
+        const { data } = await axios.get<Util.ObjectArrayDTO>(
             "/api/query",
             {
                 params: {
@@ -162,8 +166,7 @@ export namespace Request {
                 },
             },
         );
-        // @ts-ignore
-        return data['entities'] as ObjectDTO[];
+        return data.entities;
     }
 
     export async function upload_image(content: string): Promise<string> {
