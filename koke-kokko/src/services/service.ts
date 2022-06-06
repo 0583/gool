@@ -2,6 +2,7 @@ import { Request } from "./request";
 import { v4 as uuidv4 } from 'uuid';
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 import { Schema } from './schema/schema';
+import {makeWebSocket} from "./websocket";
 
 
 export class Config {
@@ -94,8 +95,8 @@ export namespace Service {
             filename: filename,
             version: version,
         } as Config;
-        await Request.register_app(config);
-        // config.app_id = "de421946-8e93-49e4-9ac7-dd1d4704bda9";
+        // await Request.register_app(config);
+        config.app_id = "5b1c7e5a-9647-49e1-81e6-93b5683362ee";
         await Request.upload_schema(config, Util.proto_content);
         await Request.update_schema(config);
 
@@ -137,11 +138,12 @@ export namespace Service {
         await Request.register_notification(config, Util.SchemaName.Tag, config.user.follow_tag_arr).then((value) => {
             let notificationid = value;
             config.notificationID = notificationid;
+            LocalStoreConfig.set_config(config);
         })
 
-
-
-
+        makeWebSocket(( ev) => {
+            console.log('callback function called! with', ev)
+        })
     }
 
     export function logout(config: Config) {

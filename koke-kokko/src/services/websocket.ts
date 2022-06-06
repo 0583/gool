@@ -1,4 +1,5 @@
-import { WebsocketBuilder } from 'websocket-ts';
+import {WebsocketBuilder} from 'websocket-ts';
+import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
 
 export enum WebsocketEvents {
     open = 'open',          // Connection is opened or re-opened
@@ -8,9 +9,23 @@ export enum WebsocketEvents {
     retry = 'retry'         // A try to re-connect is made
 }
 
-const ws = new WebsocketBuilder('')
-    .onOpen((i, ev) => { console.log("opened") })
-    .onClose((i, ev) => { console.log("closed") })
-    .onError((i, ev) => { console.log("error") })
-    .onMessage((i, ev) => { console.log("message") })
-    .build();
+
+
+export function makeWebSocket(onMessage: (ev: MessageEvent) => void) {
+    const config = LocalStoreConfig.get_config()!
+    new WebsocketBuilder('ws://202.120.40.82:11233/notification?appID=' + config.app_id + "&notificationID=" + config.notificationID)
+        .onOpen((i, ev) => {
+            console.log("opened")
+        })
+        .onClose((i, ev) => {
+            console.log("closed")
+        })
+        .onError((i, ev) => {
+            console.log("error")
+        })
+        .onMessage((i, ev) => {
+            console.log("message", ev)
+            onMessage(ev)
+        })
+        .build();
+}
