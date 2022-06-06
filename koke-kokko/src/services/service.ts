@@ -112,7 +112,7 @@ export namespace Service {
         await Request.get_record_by_key(config, email, Util.SchemaName.User)
             .then((value) => {
                 console.log(value)
-                let user = JSON.parse(value);
+                let user = value as Schema.User;
                 console.log(user)
                 if (user.password === password) {
                     config.user = user;
@@ -154,7 +154,7 @@ export namespace Service {
         await Request.put_record(config, JSON.stringify(article), Util.SchemaName.Article);
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag: Schema.Tag = JSON.parse(value);
+                let tag = value as Schema.Tag;
                 tag.article_arr.push(article.article_id);
                 await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
             }).catch((reason) => {
@@ -176,12 +176,12 @@ export namespace Service {
         for (let follow_tag of config.user.follow_tag_arr) {
             await Request.get_record_by_key(config, follow_tag, Util.SchemaName.Tag)
                 .then(async (value) => {
-                    let tag: Schema.Tag = JSON.parse(value);
+                    let tag = value as Schema.Tag;
                     // get all article by article_id
                     for (let article_id of tag.article_arr) {
                         await Request.get_record_by_key(config, article_id, Util.SchemaName.Article)
                             .then((value) => {
-                                res.push(JSON.parse(value));
+                                res.push(value as Schema.Article);
                             }).catch((reason) => {
                                 console.log(reason);
                             });
@@ -210,7 +210,7 @@ export namespace Service {
 
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag: Schema.Tag = JSON.parse(value);
+                let tag = value as Schema.Tag;
                 tag.article_arr = Util.remove_string_element(tag.article_arr, article_id);
                 await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
             }).catch((reason) => {
@@ -245,71 +245,50 @@ export namespace Service {
 
     export async function list_user(config: Config): Promise<Schema.User[]> {
         let res: Schema.User[] = [];
-        let integrity: boolean = false;
-        while (!integrity) {
-            await Request.get_range_record_by_key(config, Util.SchemaName.User)
-                .then((users) => {
-                    try {
-                        for (let user of users) {
-                            res.push(JSON.parse(user));
-                        }
-                        integrity = true;
-                    } catch (_) {
-                        console.log(res);
-                        console.log("retry");
-                        res = [];
-                    }
-                }).catch((reason) => {
-                    console.log(reason);
-                });
-        }
+
+        await Request.get_range_record_by_key(config, Util.SchemaName.User)
+            .then((users) => {
+                for (let user of users) {
+                    res.push(JSON.parse(user));
+                }
+            }).catch((reason) => {
+                console.log(reason);
+            });
+
 
         return res;
     }
 
     export async function list_article(config: Config): Promise<Schema.Article[]> {
         let res: Schema.Article[] = [];
-        let integrity: boolean = false;
-        while (!integrity) {
-            await Request.get_range_record_by_key(config, Util.SchemaName.Article)
-                .then((articles) => {
-                    try {
-                        for (let article of articles) {
-                            res.push(JSON.parse(article));
-                        }
-                        integrity = true;
-                    } catch (_) {
-                        console.log("retry");
-                        res = [];
-                    }
 
-                }).catch((reason) => {
-                    console.log(reason);
-                });
-        }
+        await Request.get_range_record_by_key(config, Util.SchemaName.Article)
+            .then((articles) => {
+                for (let article of articles) {
+                    res.push(JSON.parse(article));
+                }
+            }).catch((reason) => {
+                console.log(reason);
+            });
+
 
         return res;
     }
 
     export async function list_tag(config: Config): Promise<Schema.Tag[]> {
         let res: Schema.Tag[] = [];
-        let integrity: boolean = false;
-        while (!integrity) {
-            await Request.get_range_record_by_key(config, Util.SchemaName.Tag)
-                .then((tags) => {
-                    try {
-                        for (let tag of tags) {
-                            res.push(JSON.parse(tag));
-                        }
-                        integrity = true;
-                    } catch (_) {
-                        console.log("retry");
-                        res = [];
-                    }
-                }).catch((reason) => {
-                    console.log(reason);
-                });
-        }
+
+        await Request.get_range_record_by_key(config, Util.SchemaName.Tag)
+            .then((tags) => {
+
+                for (let tag of tags) {
+                    res.push(JSON.parse(tag));
+                }
+
+            }).catch((reason) => {
+                console.log(reason);
+            });
+
 
         return res;
     }
