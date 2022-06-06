@@ -36,10 +36,10 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
                 {renderTypographyWithTags(props.content)}
             </CardContent>
             {
-                props.image?.map((imageUrl) => {
+                props.image?.map((imageUuid) => {
                     return <CardMedia
                         component="img"
-                        image={imageUrl}
+                        image={'/api/image?uuid=' + imageUuid}
                         />
                 })
             }

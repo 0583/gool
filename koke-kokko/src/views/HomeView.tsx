@@ -18,35 +18,35 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {Logout, Photo, PinDrop, Search, Tag,} from "@mui/icons-material";
-import React, {useEffect} from "react";
+import { Photo, PinDrop, Search, Tag, } from "@mui/icons-material";
+import React, { useEffect } from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
-import {styled} from "@mui/material/styles";
-import {ArticleTransferProps, SnackBarSenderProps} from "../App";
-import {Config, Service} from "../services/service";
-import {parseHashTag} from "../utils/hashTagParser";
-import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
-import ImageUploading, {ImageListType, ImageType} from "react-images-uploading";
-import {Box} from "@mui/system";
+import { styled } from "@mui/material/styles";
+import { ArticleTransferProps, SnackBarSenderProps } from "../App";
+import { Config, Service } from "../services/service";
+import { parseHashTag } from "../utils/hashTagParser";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
+import ImageUploading, { ImageListType, ImageType } from "react-images-uploading";
+import { Box } from "@mui/system";
 import ClearIcon from '@mui/icons-material/Clear';
-import {Schema} from "../services/schema/schema";
-import {Request} from "../services/request";
-import PopupState, {bindMenu, bindTrigger} from "material-ui-popup-state";
+import { Schema } from "../services/schema/schema";
+import { Request } from "../services/request";
+import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 
 function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [visibility, setVisibility] = React.useState<string>('Public');
-    // const [PicUploadDialogOpen, setPicUploadDialogOpen] = React.useState<boolean>(false);
-    // const [Base64_Pic_Url, setBase64_Pic_Url] = React.useState<string>("");
-
-    //设置图片最大上传数量
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [images, setImages] = React.useState<ImageType[]>([]);
-
     const [imageUuids, setImageUuids] = React.useState<string[]>([]);
-    const maxNumber = 5;
+    const [tagsList, setTagsList] = React.useState<string[]>()
+    const [time, settime] = React.useState(false)
+    const [loading, setLoading] = React.useState(false)
+    //设置图片最大上传数量
 
-    //上传图片变动处理,骨架两秒显示
+    const maxNumber = 7;
+
+    //上传图片变动处理
     const piconChange = async (
         imageList: ImageListType,
         addUpdateIndex: number[] | undefined
@@ -67,10 +67,6 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
             settime(false);
         }
     };
-
-    const [tagsList, setTagsList] = React.useState<string[]>();
-    const [loading, setloading] = React.useState(false)
-    const [time, settime] = React.useState(false)
 
     function sendKokko() {
         const tags = parseHashTag(kokkoText)
@@ -256,15 +252,15 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                                             {...bindTrigger(popupState)}
                                                         />
                                                         <Menu {...bindMenu(popupState)}
-                                                              elevation={1}
-                                                              anchorOrigin={{
-                                                                  vertical: 'bottom',
-                                                                  horizontal: 'left',
-                                                              }}
-                                                              transformOrigin={{
-                                                                  vertical: 'top',
-                                                                  horizontal: 'left',
-                                                              }}>
+                                                            elevation={1}
+                                                            anchorOrigin={{
+                                                                vertical: 'bottom',
+                                                                horizontal: 'left',
+                                                            }}
+                                                            transformOrigin={{
+                                                                vertical: 'top',
+                                                                horizontal: 'left',
+                                                            }}>
                                                             {
                                                                 tagsList?.map((tag) => {
                                                                     return (
@@ -278,7 +274,7 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                                                         </MenuItem>)
                                                                 })
                                                             }
-                                                                </Menu>
+                                                        </Menu>
                                                     </React.Fragment>
                                                 )}
                                             </PopupState>
@@ -343,7 +339,7 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                     username="<Preview>"
                                     avatar="avatars/74477599.png"
                                     date="Jun 3, 2022"
-                                    image={imageUuids.map((e) => { return '/api/image?uuid=' + e })}
+                                    image={imageUuids}
                                     content={kokkoText}
                                     showActions={true}
                                 />
@@ -355,7 +351,7 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                             key={article.article_id}
                                             username={article.author}
                                             avatar={article.author}
-                                            image={article.article_photo.map((e) => { return '/api/image?uuid=' + e })}
+                                            image={article.article_photo}
                                             date={article.post_time}
                                             content={article.content}
                                             showActions={true} />

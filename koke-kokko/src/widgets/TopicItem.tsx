@@ -7,13 +7,14 @@ interface TopicItemProps {
     category: string,
     author: string,
     time: string,
-    image?: string
+    image?: string,
+    onClick: () => void
 }
 
 function TopicItem(props: TopicItemProps) {
     return (
         <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={props.onClick}>
                 <Stack sx={{ width: '100%' }} direction="row" alignItems="center" justifyContent="space-between" margin={1}>
                     <Stack justifyContent="flex-start">
                         <Typography variant="body2">
