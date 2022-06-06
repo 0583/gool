@@ -74,6 +74,13 @@ message Tag {
         })
     }
 
+    export function sort_tag(articles: Schema.Tag[]): Schema.Tag[] {
+        return articles.sort((a: Schema.Tag, b: Schema.Tag) => {
+            if (a.article_arr.length > b.article_arr.length) return -1;
+            if (a.article_arr.length < b.article_arr.length) return 1;
+            return 0;
+        })
+    }
 }
 
 // init_config
@@ -348,7 +355,6 @@ export namespace Service {
 
         await Request.get_range_record_by_key(config, Util.SchemaName.Tag)
             .then((tags) => {
-
                 for (let tag of tags) {
                     res.push(tag as Schema.Tag);
                 }
@@ -357,8 +363,7 @@ export namespace Service {
                 console.log(reason);
             });
 
-
-        return res;
+        return Util.sort_tag(res);
     }
 
     export async function add_tag(config: Config, tagname: string) {

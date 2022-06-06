@@ -229,6 +229,7 @@ export namespace Request {
     export async function get_range_record_by_key
         (config: Config, schema_name: string,
             begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<Util.ObjectDTO[]> {
+
         const { data } = await axios.get<Util.ObjectArrayDTO>(
             "/api/query",
             {
@@ -238,7 +239,7 @@ export namespace Request {
                     range: true,
                     beginKey: begin_key,
                     endKey: end_key,
-                    iteration: 1,
+                    iteration: 255,
                 },
                 headers: {
                     'Content-Type': 'application/json',
@@ -246,6 +247,7 @@ export namespace Request {
             },
         );
         return data.entities;
+
     }
 
     export async function upload_image(image: File): Promise<string> {
