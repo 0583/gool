@@ -35,17 +35,19 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
             <CardContent>
                 {renderTypographyWithTags(props.content)}
             </CardContent>
-            <ImageList variant='masonry' sx={{ margin: 2 }}>
-                { props.image === undefined ||
-                    props.image!.map((imageUuid) => {
-                        return <ImageListItem key={imageUuid}>
-                            <Card elevation={2} sx={{ width: '100%' }}>
-                                <img width='100%' src={'/api/image?uuid=' + imageUuid}/>
-                            </Card>
-                        </ImageListItem>
-                    })
-                }
-            </ImageList>
+            { (props.image === undefined || props.image.length === 0) ||
+                <ImageList variant='masonry' sx={{ margin: 2 }}>
+                    {
+                        props.image!.map((imageUuid) => {
+                            return <ImageListItem key={imageUuid}>
+                                <Card elevation={2} sx={{ width: '100%' }}>
+                                    <img width='100%' src={'/api/image?uuid=' + imageUuid}/>
+                                </Card>
+                            </ImageListItem>
+                        })
+                    }
+                </ImageList>
+            }
             {props.showActions &&
                 <CardActions disableSpacing>
                     <IconButton color={props.isLiked === true ? "error" : "default"} aria-label="add to favorites" onClick={
