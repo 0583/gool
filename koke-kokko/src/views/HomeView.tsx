@@ -77,6 +77,7 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
             .then(() => {
                 props.sender("Done!");
                 refreshKokko()
+                refreshTags()
                 setKokkoText("")
                 setImages([])
                 setImageUuids([])
@@ -107,8 +108,7 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
         }
     }
 
-    useEffect(() => {
-        refreshKokko()
+    function refreshTags() {
         Service.list_tag(LocalStoreConfig.get_config() ?? new Config()).then(
             (tags) => {
                 setTagsList(tags.map((e) => { return e.tagname }))
@@ -116,6 +116,11 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
         ).catch(() => {
             setTagsList([])
         })
+    }
+
+    useEffect(() => {
+        refreshKokko()
+        refreshTags()
     }, [])
 
     const visibilityMenuOpen = Boolean(anchorEl);
