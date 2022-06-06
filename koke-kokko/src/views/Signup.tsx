@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import {
     Avatar,
     Typography,
@@ -34,10 +34,15 @@ function Copyright(props: any) {
 function Signup() {
     const [isWebaasOK, setIsWebaasOK] = React.useState<boolean>(false);
 
+    const timer: any = useRef(null);
+
     useEffect(() => {
-        setInterval(() => {
+        timer.current = setInterval(() => {
             refreshWebaas()
         }, 1000)
+        return () => {
+            clearInterval(timer.current)
+        }
     },[])
 
     const refreshWebaas = () => {

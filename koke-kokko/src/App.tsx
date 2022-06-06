@@ -17,7 +17,7 @@ import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
 import { Home, Tag, Notifications, Bookmark, Person, Close, Menu as MenuIcon, Logout } from "@mui/icons-material";
-import { useEffect } from "react";
+import {useEffect, useRef} from "react";
 import { Avatar, Stack, Snackbar, Menu, MenuItem, Button, ListItemIcon } from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
@@ -25,7 +25,6 @@ import { Config, Service } from "./services/service";
 import { LocalStoreConfig } from './widgets/ConifgLocalstorageUtil';
 import {makeWebSocket} from "./services/websocket";
 import {Request} from "./services/request";
-import {Schema} from "./services/schema/schema";
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -104,10 +103,15 @@ export default function PersistentDrawerLeft() {
     );
     const [isWebaasOK, setIsWebaasOK] = React.useState<boolean>(false);
 
+    const timer: any = useRef(null);
+
     useEffect(() => {
-        setInterval(() => {
+        timer.current = setInterval(() => {
             refreshWebaas()
         }, 1000)
+        return () => {
+            clearInterval(timer.current)
+        }
     },[])
 
     const refreshWebaas = () => {
