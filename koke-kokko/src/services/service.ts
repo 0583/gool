@@ -244,71 +244,50 @@ export namespace Service {
 
     export async function list_user(config: Config): Promise<Schema.User[]> {
         let res: Schema.User[] = [];
-        let integrity: boolean = false;
-        while (!integrity) {
-            await Request.get_range_record_by_key(config, Util.SchemaName.User)
-                .then((users) => {
-                    try {
-                        for (let user of users) {
-                            res.push(JSON.parse(user));
-                        }
-                        integrity = true;
-                    } catch (_) {
-                        console.log(res);
-                        console.log("retry");
-                        res = [];
-                    }
-                }).catch((reason) => {
-                    console.log(reason);
-                });
-        }
+
+        await Request.get_range_record_by_key(config, Util.SchemaName.User)
+            .then((users) => {
+                for (let user of users) {
+                    res.push(JSON.parse(user));
+                }
+            }).catch((reason) => {
+                console.log(reason);
+            });
+
 
         return res;
     }
 
     export async function list_article(config: Config): Promise<Schema.Article[]> {
         let res: Schema.Article[] = [];
-        let integrity: boolean = false;
-        while (!integrity) {
-            await Request.get_range_record_by_key(config, Util.SchemaName.Article)
-                .then((articles) => {
-                    try {
-                        for (let article of articles) {
-                            res.push(JSON.parse(article));
-                        }
-                        integrity = true;
-                    } catch (_) {
-                        console.log("retry");
-                        res = [];
-                    }
 
-                }).catch((reason) => {
-                    console.log(reason);
-                });
-        }
+        await Request.get_range_record_by_key(config, Util.SchemaName.Article)
+            .then((articles) => {
+                for (let article of articles) {
+                    res.push(JSON.parse(article));
+                }
+            }).catch((reason) => {
+                console.log(reason);
+            });
+
 
         return res;
     }
 
     export async function list_tag(config: Config): Promise<Schema.Tag[]> {
         let res: Schema.Tag[] = [];
-        let integrity: boolean = false;
-        while (!integrity) {
-            await Request.get_range_record_by_key(config, Util.SchemaName.Tag)
-                .then((tags) => {
-                    try {
-                        for (let tag of tags) {
-                            res.push(JSON.parse(tag));
-                        }
-                        integrity = true;
-                    } catch (_) {
-                        console.log("retry");
-                        res = [];
-                    }
-                }).catch((reason) => {
-                    console.log(reason);
-                });
-        }
+
+        await Request.get_range_record_by_key(config, Util.SchemaName.Tag)
+            .then((tags) => {
+
+                for (let tag of tags) {
+                    res.push(JSON.parse(tag));
+                }
+
+            }).catch((reason) => {
+                console.log(reason);
+            });
+
 
         return res;
     }
