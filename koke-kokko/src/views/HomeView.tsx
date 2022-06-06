@@ -71,9 +71,9 @@ function HomeView(props: SnackBarSenderProps) {
     };
 
     const [tagsList, setTagsList] = React.useState<string[]>();
-
     const [loading, setloading] = React.useState(false)
     const [time, settime] = React.useState(false)
+
     function sendKokko() {
         const tags = parseHashTag(kokkoText)
 

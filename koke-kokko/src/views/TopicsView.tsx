@@ -60,9 +60,17 @@ function TopicsView(props: SnackBarSenderProps) {
     }
 
     return (
-        <Box marginTop={-2}>
+        <div>
             <SpeedDial ariaLabel={"Favorite Topics"}
-                       sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                       sx={{ position: 'absolute', top: 64, right: 16 }}
+                       FabProps={{
+                           sx: {
+                               bgcolor: 'pink',
+                               '&:hover': {
+                                   bgcolor: 'pink',
+                               }
+                           }
+                       }}
                        icon={isFollowing ? <Favorite sx={{ color: 'red' }} /> : <Favorite sx={{ color: 'white' }}/>}
                        onClick={() => {
                            if (isFollowing) {
@@ -82,35 +90,37 @@ function TopicsView(props: SnackBarSenderProps) {
                            }
                        }}
             />
-            <Stack>
-                <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered>
+            <Box marginTop={-2}>
+                <Stack>
+                    <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered>
+                        {
+                            tagsList.map(( name, index ) => {
+                                return (<Tab key={index} label={'#' + name} />);
+                            })
+                        }
+                    </Tabs>
+                    <List sx={{ marginTop: 1 }}>
+                        {
+                            activeKokkos.map((kokko, index) => {
+                                return (
+                                    <TopicItem
+                                        key={index.toString()}
+                                        topicName={kokko.content}
+                                        category=""
+                                        author={kokko.author}
+                                        time={kokko.post_time}
+                                        image={kokko.article_photo[0]}
+                                    />
+                                )
+                            })
+                        }
+                    </List>
                     {
-                        tagsList.map(( name, index ) => {
-                            return (<Tab key={index} label={'#' + name} />);
-                        })
+                        activeKokkos.length > 0 && <Divider sx={{ fontSize: 13, color: 'gray', marginX: -2 }}>{activeKokkos.length} Topics</Divider>
                     }
-                </Tabs>
-                <List sx={{ marginTop: 1 }}>
-                    {
-                        activeKokkos.map((kokko, index) => {
-                            return (
-                                <TopicItem
-                                    key={index.toString()}
-                                    topicName={kokko.content}
-                                    category=""
-                                    author={kokko.author}
-                                    time={kokko.post_time}
-                                    image={kokko.article_photo[0]}
-                                />
-                            )
-                        })
-                    }
-                </List>
-                {
-                    activeKokkos.length > 0 && <Divider sx={{ fontSize: 13, color: 'gray', marginX: -2 }}>{activeKokkos.length} Topics</Divider>
-                }
-            </Stack>
-        </Box>
+                </Stack>
+            </Box>
+        </div>
     )
 }
 
