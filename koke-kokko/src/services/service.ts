@@ -397,4 +397,19 @@ export namespace Service {
 
         await Request.put_record(config, tag_content, Util.SchemaName.Tag);
     }
+
+    export async function update_user(config: Config) {
+        let user: Schema.User = {
+            email: config.user.email,
+            username: config.user.username,
+            password: config.user.password,
+            profile_photo: config.user.profile_photo,
+            follow_tag_arr: config.user.follow_tag_arr,
+            published_article_arr: config.user.published_article_arr,
+            bookmark_article_arr: config.user.published_article_arr,
+        };
+        let user_content = JSON.stringify(user);
+        await Request.put_record(config, user_content, Util.SchemaName.User);
+
+    }
 }
