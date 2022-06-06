@@ -169,10 +169,17 @@ export namespace Request {
         return data.entities;
     }
 
-    export async function upload_image(content: string): Promise<string> {
+    export async function upload_image(image: File): Promise<string> {
+        let formData = new FormData()
+        formData.append('image', image)
         const { data } = await axios.post<ImageDTO>(
             '/api/image',
-            content
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
         );
         return data.uuid;
     }

@@ -1,32 +1,37 @@
 import {
     alpha,
     Button,
-    Card, CardActions, CardContent,
-    CardMedia, Chip,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Chip,
     Grid,
     InputAdornment,
-    List, ListItem, Menu, MenuItem, MenuProps,
+    List,
+    ListItem,
+    Menu,
+    MenuItem,
+    MenuProps,
     Skeleton,
     Stack,
-    SvgIcon,
-    TextField, Typography
+    TextField,
+    Typography
 } from "@mui/material";
-import { Photo, PinDrop, Search, Tag, } from "@mui/icons-material";
-import React, { useEffect } from "react";
+import {Photo, PinDrop, Search, Tag,} from "@mui/icons-material";
+import React, {useEffect} from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
-import { styled } from "@mui/material/styles";
-import { SnackBarSenderProps } from "../App";
-import { Config, Service } from "../services/service";
-import { parseHashTag } from "../utils/hashTagParser";
-import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
-import ImageUploading, { ImageListType, ImageType } from "react-images-uploading";
-import { Box } from "@mui/system";
+import {styled} from "@mui/material/styles";
+import {SnackBarSenderProps} from "../App";
+import {Config, Service} from "../services/service";
+import {parseHashTag} from "../utils/hashTagParser";
+import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
+import ImageUploading, {ImageListType, ImageType} from "react-images-uploading";
+import {Box} from "@mui/system";
 // import PicUploadDialog from "./PicUploadDialog";
 import ClearIcon from '@mui/icons-material/Clear';
-import { url } from "inspector";
-import { Schema } from "../services/schema/schema";
+import {Schema} from "../services/schema/schema";
 import {Request} from "../services/request";
-import upload_image = Request.upload_image;
 
 function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -37,24 +42,28 @@ function HomeView(props: SnackBarSenderProps) {
 
     //设置图片最大上传数量
     const [images, setImages] = React.useState<ImageType[]>([]);
+
+    const [imageUuids, setImageUuids] = React.useState<string[]>([]);
     const maxNumber = 5;
 
     //上传图片变动处理,骨架两秒显示
-    const piconChange = (
+    const piconChange = async (
         imageList: ImageListType,
         addUpdateIndex: number[] | undefined
     ) => {
         // data for submit
         if (imageList.length > 0) {
+            settime(true);
+            const imageUuids = await Promise.all(imageList.map(async (imageObject) => {
+                return await Request.upload_image(imageObject.file!)
+            }));
 
-            const imageUuids = imageList.map((imageObject) => {
-                return upload_image(imageObject.dataURL!)
-            })
             console.log(imageList, imageUuids, addUpdateIndex);
-            setImages(imageUuids);
-            console.log(images)
+            setImages(imageList);
+            setImageUuids(imageUuids);
         } else {
             setImages([]);
+            setImageUuids([]);
             settime(false);
         }
     };
@@ -66,9 +75,7 @@ function HomeView(props: SnackBarSenderProps) {
 
         props.sender(`Send tags: ${JSON.stringify(tags)}`)
 
-        Service.publish_article(LocalStoreConfig.get_config() ?? new Config(), kokkoText, "", images.map((e) => {
-            return e.dataURL ?? ""
-        }), tags)
+        Service.publish_article(LocalStoreConfig.get_config() ?? new Config(), kokkoText, "", imageUuids, tags)
             .then(() => {
                 props.sender("Done!");
                 refreshKokko()
@@ -292,7 +299,7 @@ function HomeView(props: SnackBarSenderProps) {
                                     username="<Preview>"
                                     avatar="avatars/74477599.png"
                                     date="Jun 3, 2022"
-                                    image={imageList.map((e) => { return e.dataURL! })}
+                                    image={imageUuids.map((e) => { return '/api/image?uuid=' + e })}
                                     content={kokkoText}
                                     showActions={true}
                                 />
@@ -304,7 +311,7 @@ function HomeView(props: SnackBarSenderProps) {
                                             key={article.article_id}
                                             username={article.author}
                                             avatar={article.author}
-                                            image={article.article_photo}
+                                            image={article.article_photo.map((e) => { return '/api/image?uuid=' + e })}
                                             date={article.post_time}
                                             content={article.content}
                                             showActions={true} />

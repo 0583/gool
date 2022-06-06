@@ -135,6 +135,7 @@ export namespace Service {
     }
 
     export async function publish_article(config: Config, content: string, location: string, article_photo: string[], related_tag_arr: string[]) {
+        console.log(article_photo)
         const article: Schema.Article = {
             article_id: uuidv4(),
             email: config.user.email,
