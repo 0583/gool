@@ -1,11 +1,12 @@
 import React from "react";
 import { Avatar, ListItem, ListItemButton, Stack, Typography } from "@mui/material";
-import {AlternateEmail, ChatBubbleOutline, Visibility} from "@mui/icons-material";
+import {Alarm, AlternateEmail, ChatBubbleOutline, Visibility} from "@mui/icons-material";
 
 interface TopicItemProps {
     topicName: string,
     category: string,
     author: string,
+    time: string,
     image?: string
 }
 
@@ -25,6 +26,11 @@ function TopicItem(props: TopicItemProps) {
                             <AlternateEmail sx={{ fontSize: 17, color: "darkslategray" }} />
                             <Typography variant="body2" color="darkslategray">
                                 {props.author}
+                            </Typography>
+
+                            <Alarm sx={{ fontSize: 17, color: "darkslategray" }} />
+                            <Typography variant="body2" color="darkslategray">
+                                {props.time}
                             </Typography>
                         </Stack>
                     </Stack>

@@ -61,6 +61,14 @@ namespace Util {
 
 
 export namespace Request {
+
+    export async function say_hello() {
+        const { data } = await axios.get<string>(
+            "/api/hello"
+        );
+        return data;
+    }
+
     export async function register_app(config: Config) {
         const { data } = await axios.post<Util.RegisterAppResponseDTO>(
             "/api/app",

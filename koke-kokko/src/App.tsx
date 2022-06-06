@@ -23,6 +23,9 @@ import DrawerMenuItem from "./widgets/DrawerMenuItem";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Config, Service } from "./services/service";
 import { LocalStoreConfig } from './widgets/ConifgLocalstorageUtil';
+import {makeWebSocket} from "./services/websocket";
+import {Request} from "./services/request";
+import {Schema} from "./services/schema/schema";
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -91,6 +94,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function PersistentDrawerLeft() {
     //notification提示标
+
     const [UpdateNoti, setUpdateNoti] = React.useState<number>(0);
     const [snackPack, setSnackPack] = React.useState<readonly SnackbarMessage[]>([]);
     const [open, setOpen] = React.useState(false);
@@ -98,6 +102,29 @@ export default function PersistentDrawerLeft() {
     const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(
         undefined,
     );
+    const [isWebaasOK, setIsWebaasOK] = React.useState<boolean>(false);
+
+    const refreshWebaas = () => {
+        Request.say_hello().then((response: any) => {
+            setIsWebaasOK(response['message'] === "Hello World!")
+        }).catch((err) => {
+            setIsWebaasOK(false)
+        })
+    }
+
+    React.useEffect(() => {
+        makeWebSocket(( ev) => {
+            console.log('callback function called! with', ev)
+
+            Service.list_article_for_user(LocalStoreConfig.get_config()!).then(
+                (articles) => {
+
+                }
+            )
+            console.log(UpdateNoti)
+            setUpdateNoti(UpdateNoti + 1)
+        })
+    }, [])
 
     React.useEffect(() => {
         if (snackPack.length && !messageInfo) {
@@ -186,16 +213,9 @@ export default function PersistentDrawerLeft() {
         setDrawerOpen(false);
     };
 
-    const test = () => {
-        console.log(LocalStoreConfig.get_config()?.user)
-        let data = LocalStoreConfig.get_config()
-        if (data != null) {
-            let data1 = data.user.published_article_arr
-            console.log(data1)
-        }
-    }
+
     return (
-        <div onLoad={test}>
+        <div>
             <Snackbar
                 key={messageInfo ? messageInfo.key : undefined}
                 open={open}

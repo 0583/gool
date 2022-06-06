@@ -99,6 +99,7 @@ function TopicsView(props: SnackBarSenderProps) {
                                     topicName={kokko.content}
                                     category=""
                                     author={kokko.author}
+                                    time={kokko.post_time}
                                     image={kokko.article_photo[0]}
                                 />
                             )

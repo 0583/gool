@@ -2,7 +2,7 @@ import { Request } from "./request";
 import { v4 as uuidv4 } from 'uuid';
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 import { Schema } from './schema/schema';
-import {makeWebSocket} from "./websocket";
+
 
 
 export class Config {
@@ -97,8 +97,8 @@ export namespace Service {
         } as Config;
         // await Request.register_app(config);
         config.app_id = "5b1c7e5a-9647-49e1-81e6-93b5683362ee";
-        await Request.upload_schema(config, Util.proto_content);
-        await Request.update_schema(config);
+        // await Request.upload_schema(config, Util.proto_content);
+        // await Request.update_schema(config);
 
         return config;
     }
@@ -140,10 +140,6 @@ export namespace Service {
             config.notificationID = notificationid;
             LocalStoreConfig.set_config(config);
         })
-
-        makeWebSocket(( ev) => {
-            console.log('callback function called! with', ev)
-        })
     }
 
     export function logout(config: Config) {
@@ -172,6 +168,7 @@ export namespace Service {
         };
 
         config.user.published_article_arr.push(article.article_id);
+        LocalStoreConfig.set_config(config);
 
         let transaction_id: string = await Request.begin_transaction();
 
@@ -181,6 +178,7 @@ export namespace Service {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
                 let tag = value as Schema.Tag;
                 tag.article_arr.push(article.article_id);
+                LocalStoreConfig.set_config(config);
                 await Request.put_record_transactional(config, JSON.stringify(tag), Util.SchemaName.Tag, transaction_id);
             }).catch((reason) => {
                 console.log(reason);
@@ -205,6 +203,7 @@ export namespace Service {
         };
 
         config.user.published_article_arr.push(article.article_id);
+        LocalStoreConfig.set_config(config);
 
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
         await Request.put_record(config, JSON.stringify(article), Util.SchemaName.Article);
@@ -219,6 +218,7 @@ export namespace Service {
                 tag.article_arr = [article.article_id];
             });
             await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
+            LocalStoreConfig.set_config(config);
         }
     }
 

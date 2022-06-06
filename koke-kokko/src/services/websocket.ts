@@ -12,6 +12,7 @@ export enum WebsocketEvents {
 
 
 export function makeWebSocket(onMessage: (ev: MessageEvent) => void) {
+    console.log("makeWebSocket called!")
     const config = LocalStoreConfig.get_config()!
     new WebsocketBuilder('ws://202.120.40.82:11233/notification?appID=' + config.app_id + "&notificationID=" + config.notificationID)
         .onOpen((i, ev) => {
