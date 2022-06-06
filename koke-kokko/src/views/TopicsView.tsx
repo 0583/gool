@@ -1,54 +1,39 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Box, Divider, List, Stack, Tab, Tabs, Typography } from "@mui/material";
 import TopicItem from "../widgets/TopicItem";
 import {
+    Article,
     AssuredWorkload, DirectionsRun,
     HealthAndSafety, Mic,
     Newspaper,
     PhoneAndroid, TrendingUp,
 } from "@mui/icons-material";
 import {SnackBarSenderProps} from "../App";
+import {Config, Service} from "../services/service";
+import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
+import {Schema} from "../services/schema/schema";
 
 function TopicsView(props: SnackBarSenderProps) {
     const [panelIndex, setPanelIndex] = React.useState<number>(0);
+    const [tagsList, setTagsList] = React.useState<string[]>([]);
+    const [activeKokkos, setActiveKokkos] = React.useState<Schema.Article[]>([]);
 
-    const topicTypes = [
-        {
-            "key": 0,
-            "name": "Trending",
-            "icon": (<TrendingUp />)
-        },
-        {
-            "key": 1,
-            "name": "Health",
-            "icon": (<HealthAndSafety />)
-        },
-        {
-            "key": 2,
-            "name": "News",
-            "icon": (<Newspaper />)
-        },
-        {
-            "key": 3,
-            "name": "Entertainment",
-            "icon": (<Mic />)
-        },
-        {
-            "key": 4,
-            "name": "Technology",
-            "icon": (<PhoneAndroid />)
-        },
-        {
-            "key": 5,
-            "name": "Politics",
-            "icon": (<AssuredWorkload />)
-        },
-        {
-            "key": 6,
-            "name": "Sports",
-            "icon": (<DirectionsRun />)
-        }
-    ]
+    useEffect(() => {
+        // refreshKokko()
+        Service.list_tag(LocalStoreConfig.get_config() ?? new Config()).then(
+            (tags) => {
+                setTagsList(tags.map((e) => { return e.tagname }))
+            }
+        ).catch(() => {
+            setTagsList([])
+        })
+    }, [])
+
+    useEffect(() => {
+        // refreshActiveKokkos
+        setActiveKokkos([]);
+
+    }, [panelIndex])
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setPanelIndex(newValue);
@@ -85,15 +70,15 @@ function TopicsView(props: SnackBarSenderProps) {
             <Stack>
                 <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered>
                     {
-                        topicTypes.map(({ icon, key, name }) => {
-                            return (<Tab key={key} icon={icon} label={name} />);
+                        tagsList.map(( name, index ) => {
+                            return (<Tab key={index} label={'#' + name} />);
                         })
                     }
                 </Tabs>
                 {
-                    topicTypes.map(({ icon, key, name }) => {
+                    activeKokkos.map(( kokko, index ) => {
                         return (
-                            <TabPanel category={name} index={key}>
+                            <TabPanel category={index.toString()} index={index}>
                                 <List sx={{ marginTop: 1 }}>
                                     <TopicItem
                                         topicName="新型コロナウイルスワクチンの基本情報"

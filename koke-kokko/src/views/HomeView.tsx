@@ -1,5 +1,5 @@
 import {
-    alpha,
+    alpha, Avatar,
     Button,
     Card,
     CardActions,
@@ -9,7 +9,7 @@ import {
     Grid,
     InputAdornment,
     List,
-    ListItem,
+    ListItem, ListItemIcon,
     Menu,
     MenuItem,
     MenuProps,
@@ -18,7 +18,7 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-import {Photo, PinDrop, Search, Tag,} from "@mui/icons-material";
+import {Logout, Photo, PinDrop, Search, Tag,} from "@mui/icons-material";
 import React, {useEffect} from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 import {styled} from "@mui/material/styles";
@@ -32,6 +32,8 @@ import {Box} from "@mui/system";
 import ClearIcon from '@mui/icons-material/Clear';
 import {Schema} from "../services/schema/schema";
 import {Request} from "../services/request";
+import PopupState, {bindMenu, bindTrigger} from "material-ui-popup-state";
+import Divider from "@mui/material/Divider";
 
 function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -67,6 +69,8 @@ function HomeView(props: SnackBarSenderProps) {
             settime(false);
         }
     };
+
+    const [tagsList, setTagsList] = React.useState<string[]>();
 
     const [loading, setloading] = React.useState(false)
     const [time, settime] = React.useState(false)
@@ -108,6 +112,13 @@ function HomeView(props: SnackBarSenderProps) {
 
     useEffect(() => {
         refreshKokko()
+        Service.list_tag(LocalStoreConfig.get_config() ?? new Config()).then(
+            (tags) => {
+                setTagsList(tags.map((e) => { return e.tagname }))
+            }
+        ).catch(() => {
+            setTagsList([])
+        })
     }, [])
 
     const visibilityMenuOpen = Boolean(anchorEl);
@@ -232,12 +243,44 @@ function HomeView(props: SnackBarSenderProps) {
                                                 }}
 
                                             />
-                                            <Chip
-                                                icon={<Tag />}
-                                                size="small"
-                                                label="Topic"
-                                                variant="outlined"
-                                            />
+                                            <PopupState variant="popover" popupId="topics-popup-menu">
+                                                {(popupState: any) => (
+                                                    <React.Fragment>
+                                                        <Chip
+                                                            disabled={(tagsList?.length === 0) ?? false}
+                                                            icon={<Tag />}
+                                                            size="small"
+                                                            label="Topic"
+                                                            variant="outlined"
+                                                            {...bindTrigger(popupState)}
+                                                        />
+                                                        <Menu {...bindMenu(popupState)}
+                                                              elevation={1}
+                                                              anchorOrigin={{
+                                                                  vertical: 'bottom',
+                                                                  horizontal: 'left',
+                                                              }}
+                                                              transformOrigin={{
+                                                                  vertical: 'top',
+                                                                  horizontal: 'left',
+                                                              }}>
+                                                            {
+                                                                tagsList?.map((tag) => {
+                                                                    return (
+                                                                        <MenuItem onClick={
+                                                                            () => {
+                                                                                setKokkoText(kokkoText + ` #${tag}`)
+                                                                                popupState.close();
+                                                                            }
+                                                                        }>
+                                                                            #{tag}
+                                                                        </MenuItem>)
+                                                                })
+                                                            }
+                                                                </Menu>
+                                                    </React.Fragment>
+                                                )}
+                                            </PopupState>
                                             <Chip
                                                 icon={<PinDrop />}
                                                 size="small"
