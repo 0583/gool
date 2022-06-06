@@ -83,6 +83,10 @@ function HomeView(props: SnackBarSenderProps) {
             .then(() => {
                 props.sender("Done!");
                 refreshKokko()
+                setKokkoText("")
+                setImages([])
+                setImageUuids([])
+                props.sender("Kokko sent!")
             }
             ).catch((err) => {
                 props.sender(`Failed to Kokko: ${err.toString()}`);

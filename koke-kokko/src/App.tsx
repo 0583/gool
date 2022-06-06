@@ -148,7 +148,7 @@ export default function PersistentDrawerLeft() {
             title: "Topics",
             icon: (<Tag />),
             view: (<TopicsView sender={sendMessage} />),
-            update: 1
+            update: 0
         },
         {
             index: 2,

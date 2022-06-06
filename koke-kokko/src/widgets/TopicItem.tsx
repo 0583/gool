@@ -1,12 +1,11 @@
 import React from "react";
 import { Avatar, ListItem, ListItemButton, Stack, Typography } from "@mui/material";
-import { ChatBubbleOutline, Visibility } from "@mui/icons-material";
+import {AlternateEmail, ChatBubbleOutline, Visibility} from "@mui/icons-material";
 
 interface TopicItemProps {
     topicName: string,
     category: string,
-    viewCount: number,
-    kokkoCount: number,
+    author: string,
     image?: string
 }
 
@@ -20,21 +19,16 @@ function TopicItem(props: TopicItemProps) {
                             {props.category}
                         </Typography>
                         <Typography variant="body1" fontWeight="bold">
-                            #{props.topicName}
+                            {props.topicName}
                         </Typography>
                         <Stack direction="row" alignItems="center" spacing={1}>
-                            <ChatBubbleOutline sx={{ fontSize: 17, color: "darkslategray" }} />
+                            <AlternateEmail sx={{ fontSize: 17, color: "darkslategray" }} />
                             <Typography variant="body2" color="darkslategray">
-                                {props.kokkoCount}
-                            </Typography>
-
-                            <Visibility sx={{ fontSize: 17, color: "darkslategray" }} />
-                            <Typography variant="body2" color="darkslategray">
-                                {props.viewCount}
+                                {props.author}
                             </Typography>
                         </Stack>
                     </Stack>
-                    {props.image && <Avatar variant="rounded" sx={{ width: 64, height: 64 }} src={props.image} />}
+                    {props.image && <Avatar variant="rounded" sx={{ width: 64, height: 64 }} src={"/api/image?uuid=" + props.image} />}
                 </Stack>
             </ListItemButton>
         </ListItem>
