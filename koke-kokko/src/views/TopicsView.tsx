@@ -123,7 +123,9 @@ function TopicsView(props: SnackBarSenderProps) {
             />
             <Box marginTop={-2}>
                 <Stack>
-                    <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange} centered>
+                    <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange}
+                          variant="scrollable"
+                          scrollButtons="auto">
                         {
                             tagsList.map(( name, index ) => {
                                 return (<Tab key={index} label={'#' + name} />);
