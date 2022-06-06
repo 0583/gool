@@ -261,11 +261,11 @@ export default function PersistentDrawerLeft() {
                                                 }}>
                                                 <MenuItem disableRipple>
                                                     <Typography variant='h5'>
-                                                        YUAN Zhuo
+                                                        { LocalStoreConfig.get_config()?.user?.username ?? "?" }
                                                     </Typography>
                                                 </MenuItem>
                                                 <MenuItem disableRipple>
-                                                    zhuoyuan@sjtu.edu.cn
+                                                    { LocalStoreConfig.get_config()?.user?.email ?? "?" }
                                                 </MenuItem>
                                                 <Divider />
                                                 <MenuItem onClick={
