@@ -112,8 +112,7 @@ export namespace Service {
         await Request.get_record_by_key(config, email, Util.SchemaName.User)
             .then((value) => {
                 console.log(value)
-
-                let user = JSON.parse(value);
+                let user = value as Schema.User;
                 console.log(user)
                 if (user.password === password) {
                     config.user = user;
@@ -155,7 +154,7 @@ export namespace Service {
         await Request.put_record(config, JSON.stringify(article), Util.SchemaName.Article);
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag: Schema.Tag = JSON.parse(value);
+                let tag = value as Schema.Tag;
                 tag.article_arr.push(article.article_id);
                 await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
             }).catch((reason) => {
@@ -177,12 +176,12 @@ export namespace Service {
         for (let follow_tag of config.user.follow_tag_arr) {
             await Request.get_record_by_key(config, follow_tag, Util.SchemaName.Tag)
                 .then(async (value) => {
-                    let tag: Schema.Tag = JSON.parse(value);
+                    let tag = value as Schema.Tag;
                     // get all article by article_id
                     for (let article_id of tag.article_arr) {
                         await Request.get_record_by_key(config, article_id, Util.SchemaName.Article)
                             .then((value) => {
-                                res.push(JSON.parse(value));
+                                res.push(value as Schema.Article);
                             }).catch((reason) => {
                                 console.log(reason);
                             });
@@ -211,7 +210,7 @@ export namespace Service {
 
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag: Schema.Tag = JSON.parse(value);
+                let tag = value as Schema.Tag;
                 tag.article_arr = Util.remove_string_element(tag.article_arr, article_id);
                 await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
             }).catch((reason) => {

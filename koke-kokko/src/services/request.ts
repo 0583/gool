@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Config } from './service';
 import qs from 'qs';
 import { Buffer } from 'buffer';
-import {Schema} from "./schema/schema";
+import { Schema } from "./schema/schema";
 
 // @ts-ignore
 window.Buffer = Buffer;
@@ -21,8 +21,8 @@ namespace Util {
     };
 
     export type StringDTO = string;
-    
-    export type ObjectsDTO=Schema.User|Schema.Article|Schema.Tag;
+
+    export type ObjectDTO = Schema.User | Schema.Article | Schema.Tag;
 
     export enum MaxRange {
         begin_key = "0",
@@ -116,8 +116,8 @@ export namespace Request {
     }
 
     export async function get_record_by_key
-        (config: Config, key: string, schema_name: string): Promise<string> {
-        const { data } = await axios.get<Util.StringDTO>(
+        (config: Config, key: string, schema_name: string): Promise<Util.ObjectDTO> {
+        const { data } = await axios.get<Util.ObjectDTO>(
             "/api/query",
             {
                 params: {
