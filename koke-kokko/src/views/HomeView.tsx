@@ -22,20 +22,18 @@ import {Logout, Photo, PinDrop, Search, Tag,} from "@mui/icons-material";
 import React, {useEffect} from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 import {styled} from "@mui/material/styles";
-import {SnackBarSenderProps} from "../App";
+import {ArticleTransferProps, SnackBarSenderProps} from "../App";
 import {Config, Service} from "../services/service";
 import {parseHashTag} from "../utils/hashTagParser";
 import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
 import ImageUploading, {ImageListType, ImageType} from "react-images-uploading";
 import {Box} from "@mui/system";
-// import PicUploadDialog from "./PicUploadDialog";
 import ClearIcon from '@mui/icons-material/Clear';
 import {Schema} from "../services/schema/schema";
 import {Request} from "../services/request";
 import PopupState, {bindMenu, bindTrigger} from "material-ui-popup-state";
-import Divider from "@mui/material/Divider";
 
-function HomeView(props: SnackBarSenderProps) {
+function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [visibility, setVisibility] = React.useState<string>('Public');
@@ -93,12 +91,11 @@ function HomeView(props: SnackBarSenderProps) {
             })
     }
 
-    const [articles, setArticles] = React.useState<Schema.Article[]>([]);
 
     function refreshKokko() {
         Service.list_article(LocalStoreConfig.get_config() ?? new Config())
             .then((articles) => {
-                setArticles(articles)
+                props.setArticles(articles)
                 articles.forEach((article) => {
                     console.log(article.article_id, article.author)
                 })
@@ -352,7 +349,7 @@ function HomeView(props: SnackBarSenderProps) {
                                 />
                             </ListItem>
                             {
-                                articles.map((article: Schema.Article) => {
+                                props.articles.map((article: Schema.Article) => {
                                     return (<ListItem key={article.article_id}>
                                         <KokkoMessageCard
                                             key={article.article_id}

@@ -25,6 +25,7 @@ import { Config, Service } from "./services/service";
 import { LocalStoreConfig } from './widgets/ConifgLocalstorageUtil';
 import {makeWebSocket} from "./services/websocket";
 import {Request} from "./services/request";
+import {Schema} from "./services/schema/schema";
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -91,8 +92,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
+export interface ArticleTransferProps {
+    articles: Schema.Article[],
+    setArticles: (articles: Schema.Article[]) => void
+}
+
 export default function PersistentDrawerLeft() {
     //notification提示标
+
+    const [articles, setArticles] = React.useState<Schema.Article[]>([]);
 
     const [UpdateNoti, setUpdateNoti] = React.useState<number>(0);
     const [snackPack, setSnackPack] = React.useState<readonly SnackbarMessage[]>([]);
@@ -126,13 +134,13 @@ export default function PersistentDrawerLeft() {
         makeWebSocket(( ev) => {
             console.log('callback function called! with', ev)
 
-            Service.list_article_for_user(LocalStoreConfig.get_config()!).then(
-                (articles) => {
-
+            Service.list_article_for_tag(LocalStoreConfig.get_config()!, 'yuanzhuo').then(
+                (latestArticles) => {
+                    setUpdateNoti(latestArticles.filter((article) => {
+                        return !articles.some(item => item.article_id === article.article_id)
+                    }).length)
                 }
             )
-            console.log(UpdateNoti)
-            setUpdateNoti(UpdateNoti + 1)
         })
     }, [])
 
@@ -177,7 +185,9 @@ export default function PersistentDrawerLeft() {
             index: 0,
             title: "Home",
             icon: (<Home />),
-            view: (<HomeView sender={sendMessage} />),
+            view: (<HomeView sender={sendMessage}
+                             articles={articles}
+                             setArticles={setArticles}/>),
             update: 0
         },
         {
