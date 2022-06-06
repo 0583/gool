@@ -195,9 +195,8 @@ export namespace Service {
                 tag.tagname = related_tag;
                 tag.article_arr = [article.article_id];
             });
+            await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
         }
-
-        await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
     }
 
     export async function list_article_for_tag(config: Config, tagname: string): Promise<Schema.Article[]> {

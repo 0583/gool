@@ -20,7 +20,7 @@ function TopicItem(props: TopicItemProps) {
                             {props.category}
                         </Typography>
                         <Typography variant="body1" fontWeight="bold">
-                            #{props.topicName}
+                            {props.topicName}
                         </Typography>
                         <Stack direction="row" alignItems="center" spacing={1}>
                             <ChatBubbleOutline sx={{ fontSize: 17, color: "darkslategray" }} />
@@ -34,7 +34,7 @@ function TopicItem(props: TopicItemProps) {
                             </Typography>
                         </Stack>
                     </Stack>
-                    {props.image && <Avatar variant="rounded" sx={{ width: 64, height: 64 }} src={props.image} />}
+                    {props.image && <Avatar variant="rounded" sx={{ width: 64, height: 64 }} src={"/api/image?uuid=" + props.image} />}
                 </Stack>
             </ListItemButton>
         </ListItem>
