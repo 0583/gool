@@ -6,7 +6,7 @@ import {
     CardContent,
     CardHeader,
     CardMedia, Divider,
-    IconButton,
+    IconButton, ImageList, ImageListItem,
 } from "@mui/material";
 import { Favorite, Share } from "@mui/icons-material";
 import {renderTypographyWithTags} from "../utils/hashTagParser";
@@ -35,14 +35,17 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
             <CardContent>
                 {renderTypographyWithTags(props.content)}
             </CardContent>
-            {
-                props.image?.map((imageUuid) => {
-                    return <CardMedia
-                        component="img"
-                        image={'/api/image?uuid=' + imageUuid}
-                        />
-                })
-            }
+            <ImageList variant='masonry' sx={{ margin: 2 }}>
+                { props.image === undefined ||
+                    props.image!.map((imageUuid) => {
+                        return <ImageListItem key={imageUuid}>
+                            <Card elevation={2} sx={{ width: '100%' }}>
+                                <img width='100%' src={'/api/image?uuid=' + imageUuid}/>
+                            </Card>
+                        </ImageListItem>
+                    })
+                }
+            </ImageList>
             {props.showActions &&
                 <CardActions disableSpacing>
                     <IconButton color={props.isLiked === true ? "error" : "default"} aria-label="add to favorites" onClick={
