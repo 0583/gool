@@ -24,6 +24,11 @@ namespace Util {
 
     export type ObjectDTO = Schema.User | Schema.Article | Schema.Tag;
 
+    export type ObjectArrayDTO = {
+        more: string,
+        entities: ObjectDTO[],
+    };
+
     export enum MaxRange {
         begin_key = "0",
         end_key = "z",
@@ -138,7 +143,7 @@ export namespace Request {
     export async function get_range_record_by_key
         (config: Config, schema_name: string,
             begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<Util.ObjectDTO[]> {
-        const { data } = await axios.get<Util.ObjectDTO[]>(
+        const { data } = await axios.get<Util.ObjectArrayDTO>(
             "/api/query",
             {
                 params: {
@@ -154,6 +159,6 @@ export namespace Request {
                 },
             },
         );
-        return data;
+        return data.entities;
     }
 }
