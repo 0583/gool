@@ -1,5 +1,17 @@
 import React, {useEffect} from 'react';
-import {Box, Divider, List, SpeedDial, Stack, Tab, Tabs, Typography} from "@mui/material";
+import {
+    Box,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Divider,
+    List,
+    SpeedDial,
+    Stack,
+    Tab,
+    Tabs,
+    Typography
+} from "@mui/material";
 import TopicItem from "../widgets/TopicItem";
 import {
     Article,
@@ -12,6 +24,7 @@ import {SnackBarSenderProps} from "../App";
 import {Config, Service} from "../services/service";
 import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
 import {Schema} from "../services/schema/schema";
+import KokkoMessageCard from "../widgets/KokkoMessageCard";
 
 function TopicsView(props: SnackBarSenderProps) {
     const [panelIndex, setPanelIndex] = React.useState<number>(0);
@@ -59,8 +72,26 @@ function TopicsView(props: SnackBarSenderProps) {
         category: string;
     }
 
+    const [activeKokko, setActiveKokko] = React.useState<Schema.Article | undefined>();
     return (
         <div>
+            <Dialog open={activeKokko !== undefined} onClose={() => { setActiveKokko(undefined) }}>
+                {activeKokko === undefined ||
+                    <>
+                    <DialogTitle>
+                    Kokko from {activeKokko!.author}
+                    </DialogTitle>
+                    <DialogContent>
+                    <KokkoMessageCard username={activeKokko!.author}
+                    avatar={activeKokko!.user_photo}
+                    date={activeKokko!.post_time}
+                    content={activeKokko!.content}
+                    image={activeKokko.article_photo}
+                    showActions={true}/>
+                    </DialogContent>
+                    </>
+                }
+            </Dialog>
             <SpeedDial ariaLabel={"Favorite Topics"}
                        sx={{ position: 'absolute', top: 64, right: 16 }}
                        FabProps={{
@@ -110,6 +141,7 @@ function TopicsView(props: SnackBarSenderProps) {
                                         author={kokko.author}
                                         time={kokko.post_time}
                                         image={kokko.article_photo[0]}
+                                        onClick={() => { setActiveKokko(kokko) }}
                                     />
                                 )
                             })
