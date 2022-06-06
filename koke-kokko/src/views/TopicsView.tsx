@@ -4,7 +4,7 @@ import TopicItem from "../widgets/TopicItem";
 import {
     Article,
     AssuredWorkload, DirectionsRun, Favorite, FavoriteOutlined,
-    HealthAndSafety, Mic,
+    HealthAndSafety, Info, Mic,
     Newspaper,
     PhoneAndroid, TrendingUp,
 } from "@mui/icons-material";
@@ -18,10 +18,15 @@ function TopicsView(props: SnackBarSenderProps) {
     const [tagsList, setTagsList] = React.useState<string[]>([]);
     const [activeKokkos, setActiveKokkos] = React.useState<Schema.Article[]>([]);
     const [followingTags, setFollowingTags] = React.useState<string[]>([]);
+    const [isFollowing, setIsFollowing] = React.useState<boolean>(false);
 
     const refreshFollowingTags = () => {
         setFollowingTags(LocalStoreConfig.get_config()?.user?.follow_tag_arr?.splice(0) ?? []);
     }
+
+    useEffect(() => {
+        setIsFollowing(followingTags.includes(tagsList[panelIndex]))
+    }, [tagsList, panelIndex, followingTags])
 
     useEffect(() => {
         refreshFollowingTags()
@@ -58,13 +63,23 @@ function TopicsView(props: SnackBarSenderProps) {
         <Box marginTop={-2}>
             <SpeedDial ariaLabel={"Favorite Topics"}
                        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                       icon={followingTags.includes(tagsList[panelIndex]) ? <Favorite /> : <FavoriteOutlined/>}
+                       icon={isFollowing ? <Favorite sx={{ color: 'red' }} /> : <Favorite sx={{ color: 'white' }}/>}
                        onClick={() => {
-                            Service.follow_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then(() => {
-                                refreshFollowingTags()
-                            }).catch(() => {
-                                props.sender("Failed to perform this operation.")
-                            })
+                           if (isFollowing) {
+                               Service.unfollow_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then(() => {
+                                   refreshFollowingTags()
+                                   props.sender("Successfully unfollowed tag.")
+                               }).catch(() => {
+                                   props.sender("Failed to unfollow this tag.")
+                               })
+                           } else {
+                               Service.follow_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then(() => {
+                                   refreshFollowingTags()
+                                   props.sender("Successfully followed tag.")
+                               }).catch(() => {
+                                   props.sender("Failed to follow this tag.")
+                               })
+                           }
                        }}
             />
             <Stack>

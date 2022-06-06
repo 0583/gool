@@ -242,17 +242,17 @@ export namespace Request {
 
     export async function register_notification(config: Config, schema_name: string, recordKeys: string[], notificationID?: string): Promise<string> {
         const { data } = await axios.post<Util.RegisterNotificationDTO>(
-            "/api/notification",
+            "/webaas/notification",
             {
-                params: {
                     appID: config.app_id,
                     schemaName: schema_name,
                     notificationID: notificationID,
                     recordKeys: recordKeys,
                 },
+            {
                 headers: {
                     'Content-Type': 'application/json',
-                },
+                }
             },
         );
         return data.notificationID;

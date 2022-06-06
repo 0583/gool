@@ -307,33 +307,33 @@ export namespace Service {
 
     export async function follow_tag(config: Config, tagname: string) {
         config.user.follow_tag_arr.push(tagname);
-
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
         await Request.register_notification(config, Util.SchemaName.Tag, config.user.follow_tag_arr, config.notificationID).then((value) => {
             let newNotificationID = value;
             config.notificationID = newNotificationID;
+            LocalStoreConfig.set_config(config);
         })
     }
 
     export async function unfollow_tag(config: Config, tagname: string) {
         config.user.follow_tag_arr = Util.remove_string_element(config.user.follow_tag_arr, tagname);
-
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
         await Request.register_notification(config, Util.SchemaName.Tag, config.user.follow_tag_arr, config.notificationID).then((value) => {
             let newNotificationID = value;
             config.notificationID = newNotificationID;
+            LocalStoreConfig.set_config(config);
         })
     }
 
     export async function mark_article(config: Config, article_id: string) {
         config.user.bookmark_article_arr.push(article_id);
-
+        LocalStoreConfig.set_config(config);
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
     }
 
     export async function unmark_article(config: Config, article_id: string) {
-        config.user.follow_tag_arr = Util.remove_string_element(config.user.bookmark_article_arr, article_id);
-
+        config.user.bookmark_article_arr = Util.remove_string_element(config.user.bookmark_article_arr, article_id);
+        LocalStoreConfig.set_config(config);
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
     }
 
