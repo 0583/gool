@@ -185,20 +185,45 @@ export namespace Service {
 
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
         await Request.put_record(config, JSON.stringify(article), Util.SchemaName.Article);
-        for (let related_tag of related_tag_arr) {
 
-            await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag = value as Schema.Tag;
+        let tag = {} as Schema.Tag;
+        for (let related_tag of related_tag_arr) {
+            await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then((value) => {
+                tag = value as Schema.Tag;
                 tag.article_arr.push(article.article_id);
-                await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
-            }).catch(async () => {
-                const tag: Schema.Tag = {
-                    tagname: related_tag,
-                    article_arr: [article.article_id]
-                }
-                await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag)
+            }).catch((_) => {
+                tag.tagname = related_tag;
+                tag.article_arr = [article.article_id];
             });
         }
+
+        await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
+    }
+
+    export async function list_article_for_tag(config: Config, tagname: string): Promise<Schema.Article[]> {
+        let res: Schema.Article[] = [];
+
+        // list tag related articles only
+        // get all article_id by tag
+
+        await Request.get_record_by_key(config, tagname, Util.SchemaName.Tag)
+            .then(async (value) => {
+                let tag = value as Schema.Tag;
+                // get all article by article_id
+                for (let article_id of tag.article_arr) {
+                    await Request.get_record_by_key(config, article_id, Util.SchemaName.Article)
+                        .then((value) => {
+                            res.push(value as Schema.Article);
+                        }).catch((reason) => {
+                            console.log(reason);
+                        });
+                }
+            }).catch((reason) => {
+                console.log(reason);
+            });
+
+
+        return res;
     }
 
     export async function list_article_for_user(config: Config): Promise<Schema.Article[]> {
