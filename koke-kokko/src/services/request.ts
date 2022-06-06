@@ -142,6 +142,21 @@ export namespace Request {
         return data.success;
     }
 
+    export async function abort_transaction(transaction_id: string): Promise<boolean> {
+        const { data } = await axios.post<Util.TransactionDto>(
+            "/api/transaction",
+            {},
+            {
+                params: {
+                    action: "abort",
+                    transactionID: transaction_id,
+                },
+            },
+        );
+
+        return data.success;
+    }
+
     export async function put_record_transactional
         (config: Config, content: string, schema_name: string, transaction_id: string) {
         const { data } = await axios.post<Util.RecordDTO>(
@@ -252,11 +267,11 @@ export namespace Request {
         const { data } = await axios.post<Util.RegisterNotificationDTO>(
             "/webaas/notification",
             {
-                    appID: config.app_id,
-                    schemaName: schema_name,
-                    notificationID: notificationID,
-                    recordKeys: recordKeys,
-                },
+                appID: config.app_id,
+                schemaName: schema_name,
+                notificationID: notificationID,
+                recordKeys: recordKeys,
+            },
             {
                 headers: {
                     'Content-Type': 'application/json',
