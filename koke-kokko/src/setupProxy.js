@@ -10,4 +10,13 @@ module.exports = function (app) {
         changeOrigin: true,
         secure: false
     }));
+
+    app.use(createProxyMiddleware('/webaas', {
+        target: 'http://202.120.40.82:11233',
+        pathRewrite: {
+            '^/webaas': '',
+        },
+        changeOrigin: true,
+        secure: false,
+    }))
 }
