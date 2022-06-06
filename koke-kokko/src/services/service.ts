@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 import { Schema } from './schema/schema';
 
+
 export class Config {
     app_name: string | undefined;
     endpoint: string | undefined;
@@ -10,6 +11,7 @@ export class Config {
     filename: string | undefined;
     version: string | undefined;
     app_id: string | undefined;
+    notificationID: string | undefined;
     user: Schema.User = {} as Schema.User;
 }
 
@@ -119,8 +121,18 @@ export namespace Service {
                     console.log("login successful");
                 } else {
                     console.log("login failed");
+                    return;
                 }
             });
+
+        await Request.register_notification(config, Util.SchemaName.Tag, config.user.follow_tag_arr).then((value) => {
+            let notificationid = value;
+            config.notificationID = notificationid;
+        })
+
+
+
+
     }
 
     export function logout(config: Config) {
@@ -285,12 +297,20 @@ export namespace Service {
         config.user.follow_tag_arr.push(tagname);
 
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
+        await Request.register_notification(config, Util.SchemaName.Tag, config.user.follow_tag_arr, config.notificationID).then((value) => {
+            let newNotificationID = value;
+            config.notificationID = newNotificationID;
+        })
     }
 
     export async function unfollow_tag(config: Config, tagname: string) {
         config.user.follow_tag_arr = Util.remove_string_element(config.user.follow_tag_arr, tagname);
 
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
+        await Request.register_notification(config, Util.SchemaName.Tag, config.user.follow_tag_arr, config.notificationID).then((value) => {
+            let newNotificationID = value;
+            config.notificationID = newNotificationID;
+        })
     }
 
     export async function mark_article(config: Config, article_id: string) {
