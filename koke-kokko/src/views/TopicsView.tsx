@@ -67,8 +67,7 @@ function TopicsView(props: SnackBarSenderProps) {
                                     key={index.toString()}
                                     topicName={kokko.content}
                                     category=""
-                                    kokkoCount={Math.random() * 400}
-                                    viewCount={Math.random() * 900}
+                                    author={kokko.author}
                                     image={kokko.article_photo[0]}
                                 />
                             )
