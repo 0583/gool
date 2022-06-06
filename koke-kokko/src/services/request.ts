@@ -28,9 +28,15 @@ namespace Util {
         status: string,
         uuid: string
     }
+
     export type ObjectArrayDTO = {
         more: string,
         entities: ObjectDTO[],
+    };
+
+    export type TransactionDto = {
+        transactionID: string,
+        success: boolean,
     };
 
     export enum MaxRange {
@@ -49,9 +55,6 @@ namespace Util {
 
 
 export namespace Request {
-    import ObjectDTO = Util.ObjectDTO;
-    import ImageDTO = Util.ImageDTO;
-
     export async function register_app(config: Config) {
         const { data } = await axios.post<Util.RegisterAppResponseDTO>(
             "/api/app",
@@ -91,6 +94,53 @@ export namespace Request {
                 params: {
                     appID: config.app_id,
                     version: config.version,
+                },
+            },
+        );
+    }
+
+    export async function begin_transaction(): Promise<string> {
+        const { data } = await axios.post<Util.TransactionDto>(
+            "/api/transaction",
+            {},
+            {
+                params: {
+                    action: "begin",
+                },
+            },
+        );
+
+        return data.transactionID;
+    }
+
+    export async function commit_transaction(transaction_id: string): Promise<boolean> {
+        const { data } = await axios.post<Util.TransactionDto>(
+            "/api/transaction",
+            {},
+            {
+                params: {
+                    action: "commit",
+                    transactionID: transaction_id,
+                },
+            },
+        );
+
+        return data.success;
+    }
+
+    export async function put_record_transactional
+        (config: Config, content: string, schema_name: string, transaction_id: string) {
+        const { data } = await axios.post<Util.RecordDTO>(
+            "/api/record/transactional",
+            content,
+            {
+                params: {
+                    appID: config.app_id,
+                    schemaName: schema_name,
+                    transactionID: transaction_id,
+                },
+                headers: {
+                    'Content-Type': 'application/json',
                 },
             },
         );
@@ -172,7 +222,7 @@ export namespace Request {
     export async function upload_image(image: File): Promise<string> {
         let formData = new FormData()
         formData.append('image', image)
-        const { data } = await axios.post<ImageDTO>(
+        const { data } = await axios.post<Util.ImageDTO>(
             '/api/image',
             formData,
             {
