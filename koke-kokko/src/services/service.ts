@@ -248,7 +248,7 @@ export namespace Service {
         await Request.get_range_record_by_key(config, Util.SchemaName.User)
             .then((users) => {
                 for (let user of users) {
-                    res.push(JSON.parse(user));
+                    res.push(user as Schema.User);
                 }
             }).catch((reason) => {
                 console.log(reason);
@@ -264,7 +264,7 @@ export namespace Service {
         await Request.get_range_record_by_key(config, Util.SchemaName.Article)
             .then((articles) => {
                 for (let article of articles) {
-                    res.push(JSON.parse(article));
+                    res.push(article as Schema.Article);
                 }
             }).catch((reason) => {
                 console.log(reason);
@@ -281,7 +281,7 @@ export namespace Service {
             .then((tags) => {
 
                 for (let tag of tags) {
-                    res.push(JSON.parse(tag));
+                    res.push(tag as Schema.Tag);
                 }
 
             }).catch((reason) => {

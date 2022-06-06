@@ -1,4 +1,4 @@
-import { ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { Badge, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
 import React from "react";
 
 interface DrawerMenuItemProps {
@@ -6,7 +6,8 @@ interface DrawerMenuItemProps {
     setSelectedIndex: (i: number) => void,
     index: number,
     MenuIcon: any,
-    title: string
+    title: string,
+    update: number
 }
 function DrawerMenuItem(props: DrawerMenuItemProps) {
     return (
@@ -15,7 +16,9 @@ function DrawerMenuItem(props: DrawerMenuItemProps) {
                 selected={props.selectedIndex === props.index}
                 onClick={(_) => props.setSelectedIndex(props.index)}>
                 <ListItemIcon>
-                    {props.MenuIcon}
+                    <Badge badgeContent={props.update} color="primary">
+                        {props.MenuIcon}
+                    </Badge>
                 </ListItemIcon>
                 <ListItemText>
                     <Typography fontWeight={props.selectedIndex === props.index ? 'bold' : 'normal'}>

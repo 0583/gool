@@ -137,8 +137,8 @@ export namespace Request {
 
     export async function get_range_record_by_key
         (config: Config, schema_name: string,
-            begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<string[]> {
-        const { data } = await axios.get<Util.StringDTO>(
+            begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<Util.ObjectDTO[]> {
+        const { data } = await axios.get<Util.ObjectDTO[]>(
             "/api/query",
             {
                 params: {
@@ -154,21 +154,6 @@ export namespace Request {
                 },
             },
         );
-
-        let res: string[] = [];
-
-        const raw_content = data;
-        let buffer = Buffer.from(raw_content);
-
-        const length = buffer.length;
-        let offset = 1; // ignore more
-        while (offset < length) {
-            let record_length = buffer.readUInt16BE(offset);
-            offset += 2;
-            res.push(raw_content.slice(offset, offset + record_length));
-            offset += record_length;
-        }
-
-        return res;
+        return data;
     }
 }

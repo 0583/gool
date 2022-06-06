@@ -40,7 +40,6 @@ export interface State {
 }
 
 const drawerWidth = 240;
-
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     open?: boolean;
 }>(({ theme, open }) => ({
@@ -91,6 +90,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+    //notification提示标
+    const [UpdateNoti, setUpdateNoti] = React.useState<number>(0);
     const [snackPack, setSnackPack] = React.useState<readonly SnackbarMessage[]>([]);
     const [open, setOpen] = React.useState(false);
     const [severity, setSeverity] = React.useState<string>('info');
@@ -139,31 +140,36 @@ export default function PersistentDrawerLeft() {
             index: 0,
             title: "Home",
             icon: (<Home />),
-            view: (<HomeView sender={sendMessage} />)
+            view: (<HomeView sender={sendMessage} />),
+            update: 0
         },
         {
             index: 1,
             title: "Topics",
             icon: (<Tag />),
-            view: (<TopicsView sender={sendMessage} />)
+            view: (<TopicsView sender={sendMessage} />),
+            update: 1
         },
         {
             index: 2,
             title: "Notifications",
             icon: (<Notifications />),
-            view: (<NotificationsView sender={sendMessage} />)
+            view: (<NotificationsView sender={sendMessage} />),
+            update: UpdateNoti
         },
         {
             index: 3,
             title: "Bookmarks",
             icon: (<Bookmark />),
-            view: (<BookmarksView sender={sendMessage} />)
+            view: (<BookmarksView sender={sendMessage} />),
+            update: 0
         },
         {
             index: 4,
             title: "Profile",
             icon: (<Person />),
-            view: (<ProfileView sender={sendMessage} />)
+            view: (<ProfileView sender={sendMessage} />),
+            update: 0
         },
     ]
 
@@ -309,13 +315,14 @@ export default function PersistentDrawerLeft() {
                         aria-label="contacts"
                     >
                         {
-                            menuItems.map(({ index, icon, title }) => {
+                            menuItems.map(({ index, icon, title, update }) => {
                                 return (<DrawerMenuItem key={index}
                                     selectedIndex={selectedIndex}
                                     setSelectedIndex={setSelectedIndex}
                                     index={index}
                                     MenuIcon={icon}
-                                    title={title} />);
+                                    title={title}
+                                    update={update} />);
                             })
                         }
                     </List>
