@@ -1,7 +1,7 @@
 import { Request } from "./request";
-import { csdi } from "./proto/koke_kokko";
 import { v4 as uuidv4 } from 'uuid';
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
+import { Schema } from './schema/schema';
 
 export class Config {
     app_name: string | undefined;
@@ -10,7 +10,7 @@ export class Config {
     filename: string | undefined;
     version: string | undefined;
     app_id: string | undefined;
-    user: csdi.User = new csdi.User();
+    user: Schema.User = {} as Schema.User;
 }
 
 namespace Util {
@@ -33,6 +33,7 @@ syntax = "proto3";
 
 package csdi;
 import 'record_metadata_options.proto';
+import { screen } from '@testing-library/react';
 
 message User {
     string email = 1 [ (webaas.db.record.field).primary_key = true ];
@@ -91,8 +92,7 @@ export namespace Service {
     }
 
     export async function signup(config: Config, email: string, username: string, password: string) {
-        console.log(arguments);
-        const user = new csdi.User({
+        let user: Schema.User = {
             email: email,
             username: username,
             password: password,
@@ -100,15 +100,15 @@ export namespace Service {
             follow_tag_arr: [],
             published_article_arr: [],
             bookmark_article_arr: [],
-        });
-        console.log(user);
+        };
+
         let user_content = JSON.stringify(user);
 
         await Request.put_record(config, user_content, Util.SchemaName.User);
     }
 
     export async function login(config: Config, email: string, password: string) {
-        config.user = {} as csdi.User;
+        config.user = {} as Schema.User;
         await Request.get_record_by_key(config, email, Util.SchemaName.User)
             .then((value) => {
                 console.log(value)
@@ -124,7 +124,7 @@ export namespace Service {
     }
 
     export function logout(config: Config) {
-        config.user = {} as csdi.User;
+        config.user = {} as Schema.User;
         LocalStoreConfig.remove_config();
         console.log("logout");
     }
@@ -136,7 +136,7 @@ export namespace Service {
     }
 
     export async function publish_article(config: Config, content: string, location: string, article_photo: string[], related_tag_arr: string[]) {
-        const article = new csdi.Article({
+        const article: Schema.Article = {
             article_id: uuidv4(),
             email: config.user.email,
             author: config.user.username,
@@ -146,7 +146,7 @@ export namespace Service {
             content: content,
             post_time: new Date().toUTCString(),
             related_tag_arr: related_tag_arr,
-        });
+        };
 
         config.user.published_article_arr.push(article.article_id);
 
@@ -154,7 +154,7 @@ export namespace Service {
         await Request.put_record(config, JSON.stringify(article), Util.SchemaName.Article);
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag: csdi.Tag = JSON.parse(value);
+                let tag: Schema.Tag = JSON.parse(value);
                 tag.article_arr.push(article.article_id);
                 await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
             }).catch((reason) => {
@@ -163,20 +163,20 @@ export namespace Service {
         }
     }
 
-    export async function list_article_for_user(config: Config): Promise<csdi.Article[]> {
+    export async function list_article_for_user(config: Config): Promise<Schema.Article[]> {
         // no follow tag, just list all
         if (config.user.follow_tag_arr.length === 0) {
             return list_article(config);
         }
 
-        let res: csdi.Article[] = [];
+        let res: Schema.Article[] = [];
 
         // list related articles only
         // get all article_id by tag
         for (let follow_tag of config.user.follow_tag_arr) {
             await Request.get_record_by_key(config, follow_tag, Util.SchemaName.Tag)
                 .then(async (value) => {
-                    let tag: csdi.Tag = JSON.parse(value);
+                    let tag: Schema.Tag = JSON.parse(value);
                     // get all article by article_id
                     for (let article_id of tag.article_arr) {
                         await Request.get_record_by_key(config, article_id, Util.SchemaName.Article)
@@ -194,7 +194,7 @@ export namespace Service {
         return res;
     }
 
-    export async function remove_article(config: Config, article: csdi.Article) {
+    export async function remove_article(config: Config, article: Schema.Article) {
         let article_id = article.article_id;
         let related_tag_arr = article.related_tag_arr;
 
@@ -210,7 +210,7 @@ export namespace Service {
 
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag: csdi.Tag = JSON.parse(value);
+                let tag: Schema.Tag = JSON.parse(value);
                 tag.article_arr = Util.remove_string_element(tag.article_arr, article_id);
                 await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
             }).catch((reason) => {
@@ -243,8 +243,8 @@ export namespace Service {
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
     }
 
-    export async function list_user(config: Config): Promise<csdi.User[]> {
-        let res: csdi.User[] = [];
+    export async function list_user(config: Config): Promise<Schema.User[]> {
+        let res: Schema.User[] = [];
         let integrity: boolean = false;
         while (!integrity) {
             await Request.get_range_record_by_key(config, Util.SchemaName.User)
@@ -267,8 +267,8 @@ export namespace Service {
         return res;
     }
 
-    export async function list_article(config: Config): Promise<csdi.Article[]> {
-        let res: csdi.Article[] = [];
+    export async function list_article(config: Config): Promise<Schema.Article[]> {
+        let res: Schema.Article[] = [];
         let integrity: boolean = false;
         while (!integrity) {
             await Request.get_range_record_by_key(config, Util.SchemaName.Article)
@@ -291,8 +291,8 @@ export namespace Service {
         return res;
     }
 
-    export async function list_tag(config: Config): Promise<csdi.Tag[]> {
-        let res: csdi.Tag[] = [];
+    export async function list_tag(config: Config): Promise<Schema.Tag[]> {
+        let res: Schema.Tag[] = [];
         let integrity: boolean = false;
         while (!integrity) {
             await Request.get_range_record_by_key(config, Util.SchemaName.Tag)
@@ -315,10 +315,11 @@ export namespace Service {
     }
 
     export async function add_tag(config: Config, tagname: string) {
-        const tag_content = JSON.stringify(new csdi.Tag({
+        let tag: Schema.Tag = {
             tagname: tagname,
             article_arr: [],
-        }));
+        };
+        const tag_content = JSON.stringify(tag);
 
         await Request.put_record(config, tag_content, Util.SchemaName.Tag);
     }

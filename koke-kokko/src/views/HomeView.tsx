@@ -17,7 +17,6 @@ import KokkoMessageCard from "../widgets/KokkoMessageCard";
 import { styled } from "@mui/material/styles";
 import { SnackBarSenderProps } from "../App";
 import { Config, Service } from "../services/service";
-import { csdi } from "../services/proto/koke_kokko";
 import { parseHashTag } from "../utils/hashTagParser";
 import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
 import ImageUploading, { ImageListType, ImageType } from "react-images-uploading";
@@ -25,6 +24,7 @@ import { Box } from "@mui/system";
 // import PicUploadDialog from "./PicUploadDialog";
 import ClearIcon from '@mui/icons-material/Clear';
 import { url } from "inspector";
+import { Schema } from "../services/schema/schema";
 
 function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -74,7 +74,7 @@ function HomeView(props: SnackBarSenderProps) {
             })
     }
 
-    const [articles, setArticles] = React.useState<csdi.Article[]>([]);
+    const [articles, setArticles] = React.useState<Schema.Article[]>([]);
 
     function refreshKokko() {
         Service.list_article(LocalStoreConfig.get_config() ?? new Config())
@@ -294,7 +294,7 @@ function HomeView(props: SnackBarSenderProps) {
                                 />
                             </ListItem>
                             {
-                                articles.map((article: csdi.Article) => {
+                                articles.map((article: Schema.Article) => {
                                     return (<ListItem key={article.article_id}>
                                         <KokkoMessageCard
                                             key={article.article_id}
