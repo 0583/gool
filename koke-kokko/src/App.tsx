@@ -17,7 +17,7 @@ import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
 import { Home, Tag, Notifications, Bookmark, Person, Close, Menu as MenuIcon, Logout } from "@mui/icons-material";
-import { useEffect } from "react";
+import {useEffect, useRef} from "react";
 import { Avatar, Stack, Snackbar, Menu, MenuItem, Button, ListItemIcon } from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
@@ -25,7 +25,6 @@ import { Config, Service } from "./services/service";
 import { LocalStoreConfig } from './widgets/ConifgLocalstorageUtil';
 import {makeWebSocket} from "./services/websocket";
 import {Request} from "./services/request";
-import {Schema} from "./services/schema/schema";
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -102,12 +101,17 @@ export default function PersistentDrawerLeft() {
     const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>(
         undefined,
     );
-    const [isWebaasOK, setIsWebaasOK] = React.useState<boolean>(false);
+    const [isWebaasOK, setIsWebaasOK] = React.useState<boolean | undefined>();
+
+    const timer: any = useRef(null);
 
     useEffect(() => {
-        setInterval(() => {
+        timer.current = setInterval(() => {
             refreshWebaas()
         }, 1000)
+        return () => {
+            clearInterval(timer.current)
+        }
     },[])
 
     const refreshWebaas = () => {
@@ -269,9 +273,15 @@ export default function PersistentDrawerLeft() {
                             </Stack>
 
                             <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
-                                <Button variant="outlined" color={isWebaasOK ? "success" : "error"}>
-                                    {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
-                                </Button>
+                                {
+                                    isWebaasOK !== undefined ?
+                                    <Button variant="outlined" color={isWebaasOK ? "success" : "error"} href="http://202.120.40.82:11233/hello">
+                                        {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
+                                    </Button> :
+                                        <Button variant="outlined" disabled>
+                                            WeBaaS Unknown
+                                        </Button>
+                                }
                                 <PopupState variant="popover" popupId="demo-popup-menu">
                                     {(popupState: any) => (
                                         <React.Fragment>
