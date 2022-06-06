@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     Avatar,
     Typography,
@@ -8,7 +8,7 @@ import {
     TextField,
     Divider,
     Button,
-    Snackbar
+    Snackbar, Stack
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import AppRegistrationSharpIcon from '@mui/icons-material/AppRegistrationSharp';
@@ -19,6 +19,7 @@ import { Config } from "../services/service";
 import { SnackbarMessage, SnackBarSenderProps } from "../App";
 import IconButton from "@mui/material/IconButton";
 import { Close } from "@mui/icons-material";
+import {Request} from "../services/request";
 
 function Copyright(props: any) {
     return (
@@ -31,6 +32,21 @@ function Copyright(props: any) {
 }
 
 function Signup() {
+    const [isWebaasOK, setIsWebaasOK] = React.useState<boolean>(false);
+
+    useEffect(() => {
+        setInterval(() => {
+            refreshWebaas()
+        }, 1000)
+    },[])
+
+    const refreshWebaas = () => {
+        Request.say_hello().then((response: any) => {
+            setIsWebaasOK(response['message'] === "Hello World!")
+        }).catch((err) => {
+            setIsWebaasOK(false)
+        })
+    }
 
     const [snackPack, setSnackPack] = React.useState<readonly SnackbarMessage[]>([]);
     const [open, setOpen] = React.useState(false);
@@ -152,7 +168,12 @@ function Signup() {
                     <Grid sx={{ ml: 3 }} width={"100%"}>
                         <Grid width={400}>
                             <Box width={"100%"}>
-                                <Avatar src={"icon.png"} variant={"square"} sx={{ width: 42, height: 42 }} />
+                                <Stack direction="row" spacing={2} marginY={-2}>
+                                    <Avatar src={"icon.png"} variant={"square"} sx={{ width: 42, height: 42 }} />
+                                    <Button variant="outlined" color={isWebaasOK ? "success" : "error"}>
+                                        {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
+                                    </Button>
+                                </Stack>
                                 <Typography sx={{ mt: 6, mb: 6, fontWeight: 800, fontSize: 64 }}>What's happening</Typography>
                                 <Typography sx={{ fontWeight: 700, fontSize: 31, mb: 4 }}>Join Now</Typography>
                                 <Box component={"form"} onSubmit={handleSubmit} width={300} sx={{ mb: 3 }}>

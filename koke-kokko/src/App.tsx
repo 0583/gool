@@ -104,6 +104,12 @@ export default function PersistentDrawerLeft() {
     );
     const [isWebaasOK, setIsWebaasOK] = React.useState<boolean>(false);
 
+    useEffect(() => {
+        setInterval(() => {
+            refreshWebaas()
+        }, 1000)
+    },[])
+
     const refreshWebaas = () => {
         Request.say_hello().then((response: any) => {
             setIsWebaasOK(response['message'] === "Hello World!")
@@ -263,6 +269,9 @@ export default function PersistentDrawerLeft() {
                             </Stack>
 
                             <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
+                                <Button variant="outlined" color={isWebaasOK ? "success" : "error"}>
+                                    {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
+                                </Button>
                                 <PopupState variant="popover" popupId="demo-popup-menu">
                                     {(popupState: any) => (
                                         <React.Fragment>
