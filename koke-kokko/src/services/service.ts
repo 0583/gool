@@ -74,6 +74,7 @@ message Tag {
 // article: publish_article + list_article
 // tag: add_tag + list_tag
 export namespace Service {
+
     export async function init_config(app_name: string, endpoint: string, fullpath: string, filename: string, version: string): Promise<Config> {
         let config = {
             app_name: app_name,
@@ -167,6 +168,7 @@ export namespace Service {
     }
 
     export async function publish_article(config: Config, content: string, location: string, article_photo: string[], related_tag_arr: string[]) {
+        console.log(article_photo)
         const article: Schema.Article = {
             article_id: uuidv4(),
             email: config.user.email,
@@ -184,12 +186,17 @@ export namespace Service {
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
         await Request.put_record(config, JSON.stringify(article), Util.SchemaName.Article);
         for (let related_tag of related_tag_arr) {
+
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
                 let tag = value as Schema.Tag;
                 tag.article_arr.push(article.article_id);
                 await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
-            }).catch((reason) => {
-                console.log(reason);
+            }).catch(async () => {
+                const tag: Schema.Tag = {
+                    tagname: related_tag,
+                    article_arr: [article.article_id]
+                }
+                await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag)
             });
         }
     }
