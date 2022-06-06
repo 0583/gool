@@ -231,31 +231,14 @@ export namespace Service {
     }
 
     export async function list_article_for_user(config: Config): Promise<Schema.Article[]> {
-        // no follow tag, just list all
-        if (config.user.follow_tag_arr.length === 0) {
-            return list_article(config);
-        }
-
         let res: Schema.Article[] = [];
 
-        // list related articles only
-        // get all article_id by tag
-        for (let follow_tag of config.user.follow_tag_arr) {
-            await Request.get_record_by_key(config, follow_tag, Util.SchemaName.Tag)
-                .then(async (value) => {
-                    let tag = value as Schema.Tag;
-                    // get all article by article_id
-                    for (let article_id of tag.article_arr) {
-                        await Request.get_record_by_key(config, article_id, Util.SchemaName.Article)
-                            .then((value) => {
-                                res.push(value as Schema.Article);
-                            }).catch((reason) => {
-                                console.log(reason);
-                            });
-                    }
-                }).catch((reason) => {
-                    console.log(reason);
-                });
+        for (let article_id of config.user.published_article_arr) {
+            await Request.get_record_by_key(config, article_id, Util.SchemaName.Article).then((value) => {
+                res.push(value as Schema.Article);
+            }).catch((reason) => {
+                console.log(reason);
+            });
         }
 
         return Util.sort_article(res);
