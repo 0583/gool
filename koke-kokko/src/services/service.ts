@@ -134,6 +134,38 @@ export namespace Service {
         logout(config);
     }
 
+    export async function publish_article_transactional(config: Config, content: string, location: string, article_photo: string[], related_tag_arr: string[]) {
+        const article: Schema.Article = {
+            article_id: uuidv4(),
+            email: config.user.email,
+            author: config.user.username,
+            user_photo: config.user.profile_photo,
+            location: location,
+            article_photo: article_photo,
+            content: content,
+            post_time: new Date().toUTCString(),
+            related_tag_arr: related_tag_arr,
+        };
+
+        config.user.published_article_arr.push(article.article_id);
+
+        let transaction_id: string = await Request.begin_transaction();
+
+        await Request.put_record_transactional(config, JSON.stringify(config.user), Util.SchemaName.User, transaction_id);
+        await Request.put_record_transactional(config, JSON.stringify(article), Util.SchemaName.Article, transaction_id);
+        for (let related_tag of related_tag_arr) {
+            await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
+                let tag = value as Schema.Tag;
+                tag.article_arr.push(article.article_id);
+                await Request.put_record_transactional(config, JSON.stringify(tag), Util.SchemaName.Tag, transaction_id);
+            }).catch((reason) => {
+                console.log(reason);
+            });
+        }
+
+        await Request.commit_transaction(transaction_id);
+    }
+
     export async function publish_article(config: Config, content: string, location: string, article_photo: string[], related_tag_arr: string[]) {
         const article: Schema.Article = {
             article_id: uuidv4(),
