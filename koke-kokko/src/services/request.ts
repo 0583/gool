@@ -24,6 +24,11 @@ namespace Util {
 
     export type ObjectDTO = Schema.User | Schema.Article | Schema.Tag;
 
+    export type ImageDTO = {
+        status: string,
+        uuid: string
+    }
+
     export enum MaxRange {
         begin_key = "0",
         end_key = "z",
@@ -40,6 +45,9 @@ namespace Util {
 
 
 export namespace Request {
+    import ObjectDTO = Util.ObjectDTO;
+    import ImageDTO = Util.ImageDTO;
+
     export async function register_app(config: Config) {
         const { data } = await axios.post<Util.RegisterAppResponseDTO>(
             "/api/app",
@@ -154,6 +162,15 @@ export namespace Request {
                 },
             },
         );
-        return data;
+        // @ts-ignore
+        return data['entities'] as ObjectDTO[];
+    }
+
+    export async function upload_image(content: string): Promise<string> {
+        const { data } = await axios.post<ImageDTO>(
+            '/api/image',
+            content
+        );
+        return data.uuid;
     }
 }

@@ -25,6 +25,8 @@ import { Box } from "@mui/system";
 import ClearIcon from '@mui/icons-material/Clear';
 import { url } from "inspector";
 import { Schema } from "../services/schema/schema";
+import {Request} from "../services/request";
+import upload_image = Request.upload_image;
 
 function HomeView(props: SnackBarSenderProps) {
     const [kokkoText, setKokkoText] = React.useState<string>('');
@@ -44,11 +46,13 @@ function HomeView(props: SnackBarSenderProps) {
     ) => {
         // data for submit
         if (imageList.length > 0) {
-            setTimeout(() => {
-                settime(true);
-            }, 2000);
-            console.log(imageList, addUpdateIndex);
-            setImages(imageList);
+
+            const imageUuids = imageList.map((imageObject) => {
+                return upload_image(imageObject.dataURL!)
+            })
+            console.log(imageList, imageUuids, addUpdateIndex);
+            setImages(imageUuids);
+            console.log(images)
         } else {
             setImages([]);
             settime(false);
@@ -300,7 +304,7 @@ function HomeView(props: SnackBarSenderProps) {
                                             key={article.article_id}
                                             username={article.author}
                                             avatar={article.author}
-                                            // image={article.article_photo}
+                                            image={article.article_photo}
                                             date={article.post_time}
                                             content={article.content}
                                             showActions={true} />
