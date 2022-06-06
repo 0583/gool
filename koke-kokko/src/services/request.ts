@@ -82,9 +82,9 @@ export namespace Request {
     }
 
     export async function put_record
-        (config: Config, content: Uint8Array, schema_name: string) {
+        (config: Config, content: string, schema_name: string) {
         const { data } = await axios.post<Util.RecordDTO>(
-            "/api/record",
+            "url",
             content,
             {
                 params: {
@@ -92,7 +92,7 @@ export namespace Request {
                     schemaName: schema_name,
                 },
                 headers: {
-                    'Content-Type': 'application/octet-stream',
+                    'Content-Type': 'application/json',
                 },
             },
         );
@@ -113,7 +113,7 @@ export namespace Request {
     }
 
     export async function get_record_by_key
-        (config: Config, key: string, schema_name: string): Promise<Uint8Array> {
+        (config: Config, key: string, schema_name: string): Promise<string> {
         const { data } = await axios.get<Util.StringDTO>(
             "/api/query",
             {
@@ -124,17 +124,17 @@ export namespace Request {
                 },
                 paramsSerializer: (params) => qs.stringify(params, { encode: false }),
                 headers: {
-                    'Content-Type': 'application/octet-stream',
+                    'Content-Type': 'application/json',
                 },
             },
         );
 
-        return Util.string2binary(data);
+        return data;
     }
 
     export async function get_range_record_by_key
         (config: Config, schema_name: string,
-            begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<Uint8Array[]> {
+            begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<string[]> {
         const { data } = await axios.get<Util.StringDTO>(
             "/api/query",
             {
@@ -147,14 +147,14 @@ export namespace Request {
                     iteration: 1,
                 },
                 headers: {
-                    'Content-Type': 'application/octet-stream',
+                    'Content-Type': 'application/json',
                 },
             },
         );
 
-        let res: Uint8Array[] = [];
+        let res: string[] = [];
 
-        const raw_content = Util.string2binary(data);;
+        const raw_content = data;
         let buffer = Buffer.from(raw_content);
 
         const length = buffer.length;

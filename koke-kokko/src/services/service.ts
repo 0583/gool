@@ -102,7 +102,7 @@ export namespace Service {
             bookmark_article_arr: [],
         });
         console.log(user);
-        let user_content=user.serializeBinary();
+        let user_content = JSON.stringify(user);
 
         await Request.put_record(config, user_content, Util.SchemaName.User);
     }
@@ -112,7 +112,7 @@ export namespace Service {
         await Request.get_record_by_key(config, email, Util.SchemaName.User)
             .then((value) => {
                 console.log(value)
-                let user = csdi.User.deserializeBinary(value);
+                let user = JSON.parse(value);
                 console.log(user)
                 if (user.password === password) {
                     config.user = user;
@@ -150,13 +150,13 @@ export namespace Service {
 
         config.user.published_article_arr.push(article.article_id);
 
-        await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
-        await Request.put_record(config, article.serializeBinary(), Util.SchemaName.Article);
+        await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
+        await Request.put_record(config, JSON.stringify(article), Util.SchemaName.Article);
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag: csdi.Tag = csdi.Tag.deserializeBinary(value);
+                let tag: csdi.Tag = JSON.parse(value);
                 tag.article_arr.push(article.article_id);
-                await Request.put_record(config, tag.serializeBinary(), Util.SchemaName.Tag);
+                await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
             }).catch((reason) => {
                 console.log(reason);
             });
@@ -176,12 +176,12 @@ export namespace Service {
         for (let follow_tag of config.user.follow_tag_arr) {
             await Request.get_record_by_key(config, follow_tag, Util.SchemaName.Tag)
                 .then(async (value) => {
-                    let tag: csdi.Tag = csdi.Tag.deserializeBinary(value);
+                    let tag: csdi.Tag = JSON.parse(value);
                     // get all article by article_id
                     for (let article_id of tag.article_arr) {
                         await Request.get_record_by_key(config, article_id, Util.SchemaName.Article)
                             .then((value) => {
-                                res.push(csdi.Article.deserializeBinary(value));
+                                res.push(JSON.parse(value));
                             }).catch((reason) => {
                                 console.log(reason);
                             });
@@ -204,15 +204,15 @@ export namespace Service {
         }
 
         config.user.published_article_arr = Util.remove_string_element(config.user.published_article_arr, article_id);
-        await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
+        await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
 
         await Request.delete_record(config, article_id, Util.SchemaName.Article);
 
         for (let related_tag of related_tag_arr) {
             await Request.get_record_by_key(config, related_tag, Util.SchemaName.Tag).then(async (value) => {
-                let tag: csdi.Tag = csdi.Tag.deserializeBinary(value);
+                let tag: csdi.Tag = JSON.parse(value);
                 tag.article_arr = Util.remove_string_element(tag.article_arr, article_id);
-                await Request.put_record(config, tag.serializeBinary(), Util.SchemaName.Tag);
+                await Request.put_record(config, JSON.stringify(tag), Util.SchemaName.Tag);
             }).catch((reason) => {
                 console.log(reason);
             });
@@ -222,25 +222,25 @@ export namespace Service {
     export async function follow_tag(config: Config, tagname: string) {
         config.user.follow_tag_arr.push(tagname);
 
-        await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
+        await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
     }
 
     export async function unfollow_tag(config: Config, tagname: string) {
         config.user.follow_tag_arr = Util.remove_string_element(config.user.follow_tag_arr, tagname);
 
-        await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
+        await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
     }
 
     export async function mark_article(config: Config, article_id: string) {
         config.user.bookmark_article_arr.push(article_id);
 
-        await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
+        await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
     }
 
     export async function unmark_article(config: Config, article_id: string) {
         config.user.follow_tag_arr = Util.remove_string_element(config.user.bookmark_article_arr, article_id);
 
-        await Request.put_record(config, config.user.serializeBinary(), Util.SchemaName.User);
+        await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
     }
 
     export async function list_user(config: Config): Promise<csdi.User[]> {
@@ -251,7 +251,7 @@ export namespace Service {
                 .then((users) => {
                     try {
                         for (let user of users) {
-                            res.push(csdi.User.deserializeBinary(user));
+                            res.push(JSON.parse(user));
                         }
                         integrity = true;
                     } catch (_) {
@@ -275,7 +275,7 @@ export namespace Service {
                 .then((articles) => {
                     try {
                         for (let article of articles) {
-                            res.push(csdi.Article.deserializeBinary(article));
+                            res.push(JSON.parse(article));
                         }
                         integrity = true;
                     } catch (_) {
@@ -299,7 +299,7 @@ export namespace Service {
                 .then((tags) => {
                     try {
                         for (let tag of tags) {
-                            res.push(csdi.Tag.deserializeBinary(tag));
+                            res.push(JSON.parse(tag));
                         }
                         integrity = true;
                     } catch (_) {
@@ -315,10 +315,10 @@ export namespace Service {
     }
 
     export async function add_tag(config: Config, tagname: string) {
-        const tag_content = new csdi.Tag({
+        const tag_content = JSON.stringify(new csdi.Tag({
             tagname: tagname,
             article_arr: [],
-        }).serializeBinary();
+        }));
 
         await Request.put_record(config, tag_content, Util.SchemaName.Tag);
     }
