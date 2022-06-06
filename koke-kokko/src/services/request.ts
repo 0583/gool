@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Config } from './service';
 import qs from 'qs';
 import { Buffer } from 'buffer';
+import {Schema} from "./schema/schema";
 
 // @ts-ignore
 window.Buffer = Buffer;
@@ -20,6 +21,8 @@ namespace Util {
     };
 
     export type StringDTO = string;
+    
+    export type ObjectsDTO=Schema.User|Schema.Article|Schema.Tag;
 
     export enum MaxRange {
         begin_key = "0",

@@ -112,6 +112,7 @@ export namespace Service {
         await Request.get_record_by_key(config, email, Util.SchemaName.User)
             .then((value) => {
                 console.log(value)
+
                 let user = JSON.parse(value);
                 console.log(user)
                 if (user.password === password) {

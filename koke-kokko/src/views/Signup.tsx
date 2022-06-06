@@ -97,6 +97,7 @@ function Signup() {
         const data = new FormData(event.currentTarget);
         let config = LocalStoreConfig.get_config() as Config;
         await Service.login(config, data.get("email") as string, data.get("password") as string).then(() => {
+            console.log("aaa")
             LocalStoreConfig.set_config(config);
             sendMessage("login success!");
             window.location.href = "/#/app";
