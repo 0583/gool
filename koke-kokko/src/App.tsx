@@ -274,10 +274,13 @@ export default function PersistentDrawerLeft() {
 
                             <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
                                 {
-                                    isWebaasOK === undefined ||
-                                    <Button variant="outlined" color={isWebaasOK ? "success" : "error"}>
+                                    isWebaasOK !== undefined ?
+                                    <Button variant="outlined" color={isWebaasOK ? "success" : "error"} href="http://202.120.40.82:11233/hello">
                                         {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
-                                    </Button>
+                                    </Button> :
+                                        <Button variant="outlined" disabled>
+                                            WeBaaS Unknown
+                                        </Button>
                                 }
                                 <PopupState variant="popover" popupId="demo-popup-menu">
                                     {(popupState: any) => (
