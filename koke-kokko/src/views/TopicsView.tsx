@@ -94,6 +94,7 @@ function TopicsView(props: SnackBarSenderProps) {
                 }
             </Dialog>
             <SpeedDial ariaLabel={"Favorite Topics"}
+                       hidden={tagsList.length === 0}
                        sx={{ position: 'absolute', top: 64, right: 16 }}
                        // FabProps={{
                        //     sx: {
