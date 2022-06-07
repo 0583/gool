@@ -30,7 +30,7 @@ import ImageUploading, { ImageListType, ImageType } from "react-images-uploading
 import { Box } from "@mui/system";
 import ClearIcon from '@mui/icons-material/Clear';
 import { Schema } from "../services/schema/schema";
-import { Request } from "../services/request";
+import { Request, YuanZhuoUtil } from "../services/request";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 
 function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
@@ -44,7 +44,16 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
     const [loading, setLoading] = React.useState(false)
     //设置图片最大上传数量
 
+    const [news, setNews] = React.useState<YuanZhuoUtil.NewsDTO[]>([])
+
     const maxNumber = 7;
+
+    useEffect( () => {
+        Request.get_news().then((news) => {
+            console.log('news:', news)
+            setNews(news)
+        })
+    }, [])
 
     //上传图片变动处理
     const piconChange = async (
@@ -381,48 +390,27 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                     variant="standard"
                                 />
                             </ListItem>
-                            <ListItem key="news_1">
-                                <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
-                                    <CardMedia
-                                        component="img"
-                                        image="examples/lN4Qc82z.png"
-                                        alt="News Image 1"
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            News · Politics
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            ロシア外務省 日本大使館の外交官ら8人追放へ
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small">Share</Button>
-                                        <Button size="small">Learn More</Button>
-                                    </CardActions>
-                                </Card>
-                            </ListItem>
-                            <ListItem key="news_2">
-                                <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
-                                    <CardMedia
-                                        component="img"
-                                        image="examples/V2oHe4a4.jpeg"
-                                        alt="News Image 2"
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            News · LIVE
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            運航会社社長が会見で謝罪 知床観光船事故
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button size="small">Share</Button>
-                                        <Button size="small">Learn More</Button>
-                                    </CardActions>
-                                </Card>
-                            </ListItem>
+                            {
+                                news.map((neww, index) => {
+                                    return (
+                                        <ListItem key={index.toString()}>
+                                            <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="h5" component="div">
+                                                        {neww.category}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        {neww.title}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Button size="small" href={neww.url}>Learn More</Button>
+                                                </CardActions>
+                                            </Card>
+                                        </ListItem>
+                                    )
+                            })
+                            }
                         </List>
                     </Grid>
                 </Grid>

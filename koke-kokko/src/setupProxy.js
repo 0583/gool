@@ -19,4 +19,13 @@ module.exports = function (app) {
         changeOrigin: true,
         secure: false,
     }))
+
+    app.use(createProxyMiddleware('/news', {
+        target: 'https://news.topurl.cn',
+        pathRewrite: {
+            '^/news': ''
+        },
+        changeOrigin: true,
+        secure: false
+    }))
 }

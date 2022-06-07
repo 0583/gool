@@ -8,7 +8,8 @@ import { Schema } from "./schema/schema";
 // @ts-ignore
 window.Buffer = Buffer;
 
-namespace Util {
+export namespace YuanZhuoUtil {
+
     export type RegisterAppResponseDTO = {
         appID: string,
         appName: string,
@@ -50,6 +51,18 @@ namespace Util {
         end_key = "z",
     }
 
+    export interface NewsApiDTO {
+        data: {
+            newsList: NewsDTO[]
+        }
+    }
+
+    export interface NewsDTO {
+        title: string,
+        url: string,
+        category: string
+    }
+
     export function string2binary(str: string): Uint8Array {
         var bufView = new Uint8Array(str.length);
         for (var i = 0, strLen = str.length; i < strLen; i++) {
@@ -62,6 +75,9 @@ namespace Util {
 
 export namespace Request {
 
+    import NewsDTO = YuanZhuoUtil.NewsDTO;
+    import NewsApiDTO = YuanZhuoUtil.NewsApiDTO;
+
     export async function say_hello() {
         const { data } = await axios.get<string>(
             "/api/hello"
@@ -69,8 +85,15 @@ export namespace Request {
         return data;
     }
 
+    export async function get_news() {
+        const {data} = await axios.get<NewsApiDTO>(
+            "/news/api"
+        );
+        return data.data.newsList ?? []
+    }
+
     export async function register_app(config: Config) {
-        const { data } = await axios.post<Util.RegisterAppResponseDTO>(
+        const { data } = await axios.post<YuanZhuoUtil.RegisterAppResponseDTO>(
             "/api/app",
             {},
             {
@@ -83,7 +106,7 @@ export namespace Request {
     }
 
     export async function upload_schema(config: Config, content: string) {
-        const { data } = await axios.put<Util.StringDTO>(
+        const { data } = await axios.put<YuanZhuoUtil.StringDTO>(
             "/api/schema",
             content,
             {
@@ -101,7 +124,7 @@ export namespace Request {
     }
 
     export async function update_schema(config: Config) {
-        const { data } = await axios.post<Util.StringDTO>(
+        const { data } = await axios.post<YuanZhuoUtil.StringDTO>(
             "/api/schema",
             {},
             {
@@ -114,7 +137,7 @@ export namespace Request {
     }
 
     export async function begin_transaction(): Promise<string> {
-        const { data } = await axios.post<Util.TransactionDto>(
+        const { data } = await axios.post<YuanZhuoUtil.TransactionDto>(
             "/api/transaction",
             {},
             {
@@ -128,7 +151,7 @@ export namespace Request {
     }
 
     export async function commit_transaction(transaction_id: string): Promise<boolean> {
-        const { data } = await axios.post<Util.TransactionDto>(
+        const { data } = await axios.post<YuanZhuoUtil.TransactionDto>(
             "/api/transaction",
             {},
             {
@@ -143,7 +166,7 @@ export namespace Request {
     }
 
     export async function abort_transaction(transaction_id: string): Promise<boolean> {
-        const { data } = await axios.post<Util.TransactionDto>(
+        const { data } = await axios.post<YuanZhuoUtil.TransactionDto>(
             "/api/transaction",
             {},
             {
@@ -159,7 +182,7 @@ export namespace Request {
 
     export async function put_record_transactional
         (config: Config, content: string, schema_name: string, transaction_id: string) {
-        const { data } = await axios.post<Util.RecordDTO>(
+        const { data } = await axios.post<YuanZhuoUtil.RecordDTO>(
             "/api/record/transactional",
             content,
             {
@@ -177,7 +200,7 @@ export namespace Request {
 
     export async function put_record
         (config: Config, content: string, schema_name: string) {
-        const { data } = await axios.post<Util.RecordDTO>(
+        const { data } = await axios.post<YuanZhuoUtil.RecordDTO>(
             "/api/record",
             content,
             {
@@ -194,7 +217,7 @@ export namespace Request {
 
     export async function delete_record
         (config: Config, key: string, schema_name: string) {
-        const { data } = await axios.delete<Util.RecordDTO>(
+        const { data } = await axios.delete<YuanZhuoUtil.RecordDTO>(
             "/api/record",
             {
                 params: {
@@ -207,8 +230,8 @@ export namespace Request {
     }
 
     export async function get_record_by_key
-        (config: Config, key: string, schema_name: string): Promise<Util.ObjectDTO> {
-        const { data } = await axios.get<Util.ObjectDTO>(
+        (config: Config, key: string, schema_name: string): Promise<YuanZhuoUtil.ObjectDTO> {
+        const { data } = await axios.get<YuanZhuoUtil.ObjectDTO>(
             "/api/query",
             {
                 params: {
@@ -228,9 +251,9 @@ export namespace Request {
 
     export async function get_range_record_by_key
         (config: Config, schema_name: string,
-            begin_key: string = Util.MaxRange.begin_key, end_key: string = Util.MaxRange.end_key): Promise<Util.ObjectDTO[]> {
+         begin_key: string = YuanZhuoUtil.MaxRange.begin_key, end_key: string = YuanZhuoUtil.MaxRange.end_key): Promise<YuanZhuoUtil.ObjectDTO[]> {
 
-        const { data } = await axios.get<Util.ObjectArrayDTO>(
+        const { data } = await axios.get<YuanZhuoUtil.ObjectArrayDTO>(
             "/api/query",
             {
                 params: {
@@ -253,7 +276,7 @@ export namespace Request {
     export async function upload_image(image: File): Promise<string> {
         let formData = new FormData()
         formData.append('image', image)
-        const { data } = await axios.post<Util.ImageDTO>(
+        const { data } = await axios.post<YuanZhuoUtil.ImageDTO>(
             '/api/image',
             formData,
             {
@@ -266,7 +289,7 @@ export namespace Request {
     }
 
     export async function register_notification(config: Config, schema_name: string, recordKeys: string[], notificationID?: string): Promise<string> {
-        const { data } = await axios.post<Util.RegisterNotificationDTO>(
+        const { data } = await axios.post<YuanZhuoUtil.RegisterNotificationDTO>(
             "/webaas/notification",
             {
                 appID: config.app_id,
