@@ -6,6 +6,7 @@ import {
     DialogTitle,
     Divider,
     List,
+    Skeleton,
     SpeedDial,
     Stack,
     Tab,
@@ -33,7 +34,7 @@ function TopicsView(props: SnackBarSenderProps) {
     const [activeKokkos, setActiveKokkos] = React.useState<Schema.Article[]>([]);
     const [followingTags, setFollowingTags] = React.useState<string[]>([]);
     const [isFollowing, setIsFollowing] = React.useState<boolean>(false);
-
+    const [loading, setloading] = React.useState<boolean>(false);
     const refreshFollowingTags = () => {
         setFollowingTags([...LocalStoreConfig.get_config()?.user?.follow_tag_arr ?? []]);
     }
@@ -56,9 +57,11 @@ function TopicsView(props: SnackBarSenderProps) {
     useEffect(() => {
         if (tagsList[panelIndex]) {
             // refreshActiveKokkos
+            setloading(false);
             setActiveKokkos([]);
             Service.list_article_for_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then((articles) => {
                 setActiveKokkos([...articles]);
+                setloading(true);
             })
         }
     }, [panelIndex, tagsList])
@@ -136,7 +139,7 @@ function TopicsView(props: SnackBarSenderProps) {
                     </Tabs>
                     <List sx={{ marginTop: 1 }}>
                         {
-                            activeKokkos.map((kokko, index) => {
+                            loading ? (activeKokkos).map((kokko, index) => {
                                 return (
                                     <TopicItem
                                         key={index.toString()}
@@ -148,7 +151,15 @@ function TopicsView(props: SnackBarSenderProps) {
                                         onClick={() => { setActiveKokko(kokko) }}
                                     />
                                 )
-                            })
+                            }) : (
+                                <Box sx={{ display: "flew", justifyContent: "space-between" }}>
+                                    <Box>
+                                        <Skeleton variant="rectangular" sx={{ width: "290px", height: "23px", mb: "3px", mt: "15px" }} />
+                                        <Skeleton variant='rectangular' sx={{ width: "290px", height: "23px" }} />
+                                    </Box>
+                                    <Skeleton variant='rectangular' sx={{ width: "64px", height: "64px", mt: "15px", mr: "20px" }} />
+                                </Box>
+                            )
                         }
                     </List>
                     {
