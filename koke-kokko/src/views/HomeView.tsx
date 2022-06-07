@@ -243,7 +243,6 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                                     onImageUpload();
 
                                                 }}
-
                                             />
                                             <PopupState variant="popover" popupId="topics-popup-menu">
                                                 {(popupState: any) => (

@@ -1,12 +1,32 @@
 import {
+    Divider,
     Grid,
     List,
 } from "@mui/material";
-import React from "react";
+import React, {useEffect} from "react";
 import NotificationItem from "../widgets/NotificationItem";
-import {SnackBarSenderProps} from "../App";
+import {ArticleTransferProps, SnackBarSenderProps} from "../App";
+import {Box} from "@mui/system";
+import {Schema} from "../services/schema/schema";
+import {Service} from "../services/service";
+import {isArticleHit} from "../utils/hashTagMatcher";
+import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
 
-function NotificationsView(props: SnackBarSenderProps) {
+function NotificationsView(props: SnackBarSenderProps & ArticleTransferProps) {
+
+    const [newKokkos, setNewKokkos] = React.useState<Schema.Article[]>([])
+
+    useEffect(() => {
+        const config = LocalStoreConfig.get_config()!
+        Service.list_article(config).then(
+            (latestArticles) => {
+                console.log(latestArticles, props.articles)
+                setNewKokkos(latestArticles.filter((article) => {
+                    return isArticleHit(config, article) && !props.articles.some(item => item.article_id === article.article_id)
+                }))
+            }
+        )
+    }, [])
 
     const notificationItems = [
         {
@@ -40,24 +60,25 @@ function NotificationsView(props: SnackBarSenderProps) {
     ]
 
     return (
-        <Grid container justifyContent={"center"}  >
-            <Grid item >
-                <List sx={{ width: 800, bgcolor: 'background.paper' }}>
-                    {
-                        notificationItems.map(({ Username, UserAvatar, NoticeContext, Time, NewsAva, NewsText }, index) => {
-                            return (<NotificationItem key={index}
-                                Username={Username}
-                                UserAvatar={UserAvatar}
-                                NoticeContext={NoticeContext}
-                                Time={Time}
-                                NewsAva={NewsAva}
-                                NewsText={NewsText}
-                            />);
-                        })
-                    }
-                </List>
-            </Grid>
-        </Grid>
+        <Box>
+            <List sx={{ bgcolor: 'background.paper' }}>
+                {
+                    newKokkos.map((kokko) => {
+                        return (<NotificationItem key={kokko.article_id}
+                                                  Username={kokko.author}
+                                                  UserAvatar={kokko.user_photo}
+                                                  NoticeContext={kokko.related_tag_arr}
+                                                  Time={kokko.post_time}
+                                                  NewsAva={kokko.article_photo[0]}
+                                                  NewsText={kokko.content}
+                        />);
+                    })
+                }
+            </List>
+            {newKokkos.length === 0 &&
+                <Divider sx={{margin: 2, fontSize: 13, color: 'gray'}}>No New Notifications</Divider>
+            }
+        </Box>
     )
 }
 

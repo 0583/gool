@@ -26,6 +26,7 @@ import { LocalStoreConfig } from './widgets/ConifgLocalstorageUtil';
 import {makeWebSocket} from "./services/websocket";
 import {Request} from "./services/request";
 import {Schema} from "./services/schema/schema";
+import {isArticleHit} from "./utils/hashTagMatcher";
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -138,11 +139,12 @@ export default function PersistentDrawerLeft() {
     }, [articles])
 
     const refreshBadge = () => {
-        Service.list_article(LocalStoreConfig.get_config()!).then(
+        const config = LocalStoreConfig.get_config()!
+        Service.list_article(config).then(
             (latestArticles) => {
                 console.log(latestArticles, articlesRef.current)
                 setUpdateNoti(latestArticles.filter((article) => {
-                    return !articlesRef.current.some(item => item.article_id === article.article_id)
+                    return isArticleHit(config, article) && !articlesRef.current.some(item => item.article_id === article.article_id)
                 }).length)
             }
         )
@@ -212,7 +214,9 @@ export default function PersistentDrawerLeft() {
             index: 2,
             title: "Notifications",
             icon: (<Notifications />),
-            view: (<NotificationsView sender={sendMessage} />),
+            view: (<NotificationsView sender={sendMessage}
+                                      articles={articles}
+                                      setArticles={setArticles}/>),
             update: UpdateNoti
         },
         {

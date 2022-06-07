@@ -1,11 +1,12 @@
 import React from "react";
-import { Avatar, ListItem, Typography, ListItemAvatar, ListItemText } from "@mui/material";
+import {Avatar, ListItem, Typography, ListItemAvatar, ListItemText, Stack, Chip} from "@mui/material";
+import {PinDrop, Tag} from "@mui/icons-material";
 
 
 interface NotificationItemProps {
     Username: string,
     UserAvatar: any,
-    NoticeContext: string,
+    NoticeContext: string[],
     Time: string,
     NewsAva: any,
     NewsText: string
@@ -17,30 +18,31 @@ function NotificationItem(props: NotificationItemProps) {
     // if(props.NewsAva == ""){
     //     setNewscontext(false)
     // }
-
-    let ShowPicOrText = (props.NewsAva === '') ?
-        <Typography sx={{
-            width: 56, height: 56,
-            wordBreak: "break-all",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "-webkit-box",
-            fontSize: 1, lineHeight: 1.5, fontStyle: 'italic',
-        }}>{props.NewsText} </Typography> : <Avatar alt="Remy Sharp" src={props.NewsAva} variant="square" sx={{ width: 56, height: 56 }} />
     return (
 
         <ListItem alignItems="flex-start" divider={true}>
             <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={props.UserAvatar} />
+                <Avatar src={"/api/image?uuid=" + props.UserAvatar} />
             </ListItemAvatar>
             <ListItemText
                 primary={<React.Fragment>
-
+                <Stack direction="row" spacing={1}>
                     <Typography sx={{ fontWeight: 500, fontStyle: 'normal' }} display={"inline-block"}>
-                        {props.Username}
+                        {props.Username} Posted a Kokko
                     </Typography>
-                    <Typography sx={{ fontSize: 15, marginLeft: 1 }} display={"inline-block"} >{"   " + props.NoticeContext}</Typography>
-
+                    {/*<Typography sx={{ fontSize: 15, marginLeft: 1 }} display={"inline-block"} >{"   " + props.NoticeContext}</Typography>*/}
+                    <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center">
+                        {props.NoticeContext.map((tagName) => {
+                              return <Chip
+                                icon={<Tag />}
+                                size="small"
+                                label={tagName}
+                                variant="outlined"
+                                />
+                            })
+                        }
+                    </Stack>
+                </Stack>
                 </React.Fragment>}
                 secondary={
                     <React.Fragment>
@@ -56,7 +58,7 @@ function NotificationItem(props: NotificationItemProps) {
                 }
             />
             <ListItemAvatar sx={{ position: 'right', width: 56, height: 56 }}>
-                {ShowPicOrText}
+                <Avatar src={"/api/image?uuid=" + props.NewsAva} variant="square" sx={{ width: 56, height: 56 }} />
             </ListItemAvatar>
         </ListItem>
     )
