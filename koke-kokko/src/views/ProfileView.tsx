@@ -151,6 +151,7 @@ function ProfileView(props: SnackBarSenderProps) {
                                         return (
                                             <ListItem key={kokko.article_id}>
                                                 <KokkoMessageCard
+                                                    articleId={kokko.article_id}
                                                     username={kokko.author}
                                                     avatar={kokko.user_photo}
                                                     date={kokko.post_time}

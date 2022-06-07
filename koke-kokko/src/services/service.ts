@@ -103,7 +103,7 @@ export namespace Service {
             version: version,
         } as Config;
         // await Request.register_app(config);
-        config.app_id = "5b1c7e5a-9647-49e1-81e6-93b5683362ee";
+        config.app_id = "9a216976-4ed9-4c8b-bd7e-eaf14092491e";
         // await Request.upload_schema(config, Util.proto_content);
         // await Request.update_schema(config);
 

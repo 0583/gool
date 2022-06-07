@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     Avatar,
     Card,
@@ -10,24 +10,36 @@ import {
 } from "@mui/material";
 import { Favorite, Share } from "@mui/icons-material";
 import {renderTypographyWithTags} from "../utils/hashTagParser";
+import {LocalStoreConfig} from "./ConifgLocalstorageUtil";
+import {Schema} from "../services/schema/schema";
+import {Service} from "../services/service";
 
 interface KokkoMessageCardProps {
+    articleId: string,
     username: string,
     avatar: string,
     date: string,
     content: string,
     image?: string[],
     showActions: boolean,
-    isLiked?: boolean,
-    onLikeButtonClicked?: (props: KokkoMessageCardProps) => void,
-    onShareButtonClicked?: (props: KokkoMessageCardProps) => void
 }
 
 function KokkoMessageCard(props: KokkoMessageCardProps) {
+
+    const [isLiked, setIsLiked] = React.useState<boolean>(false)
+
+    useEffect(() => {
+        refreshIsLiked()
+    }, [])
+
+    function refreshIsLiked() {
+        setIsLiked(LocalStoreConfig.get_config()?.user.bookmark_article_arr.includes(props.articleId) ?? false)
+    }
+
     return (
         <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
             <CardHeader
-                avatar={<Avatar src={props.avatar} />}
+                avatar={<Avatar src={'/api/image?uuid=' + props.avatar} />}
                 title={props.username}
                 subheader={props.date}
             />
@@ -50,10 +62,18 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
             }
             {props.showActions &&
                 <CardActions disableSpacing>
-                    <IconButton color={props.isLiked === true ? "error" : "default"} aria-label="add to favorites" onClick={
+                    <IconButton color={isLiked ? "error" : "default"} aria-label="add to favorites" onClick={
                         (e) => {
-                            if (props.onLikeButtonClicked) {
-                                props.onLikeButtonClicked(props);
+                            if (isLiked) {
+                                // 已经 like 过了，取消 like
+                                Service.unmark_article(LocalStoreConfig.get_config()!, props.articleId).then(() => {
+                                    refreshIsLiked()
+                                })
+                            } else {
+                                // 没 like 过，like 一下
+                                Service.mark_article(LocalStoreConfig.get_config()!, props.articleId).then(() => {
+                                    refreshIsLiked()
+                                })
                             }
                         }
                     }>
@@ -61,9 +81,7 @@ function KokkoMessageCard(props: KokkoMessageCardProps) {
                     </IconButton>
                     <IconButton aria-label="share" onClick={
                         (e) => {
-                            if (props.onShareButtonClicked) {
-                                props.onShareButtonClicked(props);
-                            }
+
                         }
                     }>
                         <Share />

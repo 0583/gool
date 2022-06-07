@@ -375,9 +375,10 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                 props.articles.map((article: Schema.Article) => {
                                     return (<ListItem key={article.article_id}>
                                         <KokkoMessageCard
+                                            articleId={article.article_id}
                                             key={article.article_id}
                                             username={article.author}
-                                            avatar={article.author}
+                                            avatar={article.user_photo}
                                             image={article.article_photo}
                                             date={article.post_time}
                                             content={article.content}
