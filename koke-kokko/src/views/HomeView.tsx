@@ -337,17 +337,17 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                 </Stack>
                             </ListItem>
 
-                            <ListItem key="preview_kokko">
-                                <KokkoMessageCard
-                                    key={"template"}
-                                    username="<Preview>"
-                                    avatar="avatars/74477599.png"
-                                    date="Jun 3, 2022"
-                                    image={imageUuids}
-                                    content={kokkoText}
-                                    showActions={true}
-                                />
-                            </ListItem>
+                            {/*<ListItem key="preview_kokko">*/}
+                            {/*    <KokkoMessageCard*/}
+                            {/*        key={"template"}*/}
+                            {/*        username="<Preview>"*/}
+                            {/*        avatar="avatars/74477599.png"*/}
+                            {/*        date="Jun 3, 2022"*/}
+                            {/*        image={imageUuids}*/}
+                            {/*        content={kokkoText}*/}
+                            {/*        showActions={true}*/}
+                            {/*    />*/}
+                            {/*</ListItem>*/}
                             {
                                 props.articles.map((article: Schema.Article) => {
                                     return (<ListItem key={article.article_id}>
