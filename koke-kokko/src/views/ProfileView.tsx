@@ -92,7 +92,7 @@ function ProfileView(props: SnackBarSenderProps) {
         })
 
     };
-    
+
     const [myKokkos, setMyKokkos] = React.useState<Schema.Article[]>([])
 
     useEffect(() => {

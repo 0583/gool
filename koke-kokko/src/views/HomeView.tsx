@@ -420,7 +420,7 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                                     </Typography>
                                                 </CardContent>
                                                 <CardActions>
-                                                    <Button sx={{ marginLeft: 1, marginBottom: 1 }} size="small" href={neww.url}>Learn More</Button>
+                                                    <Button sx={{ marginLeft: 1, marginBottom: 1, marginTop: -1 }} size="small" href={neww.url}>Learn More</Button>
                                                 </CardActions>
                                             </Card>
                                         </ListItem>
