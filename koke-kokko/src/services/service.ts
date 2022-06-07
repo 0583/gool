@@ -302,6 +302,20 @@ export namespace Service {
         await Request.put_record(config, JSON.stringify(config.user), Util.SchemaName.User);
     }
 
+    export async function list_marked_article(config: Config): Promise<Schema.Article[]> {
+        let res: Schema.Article[] = [];
+
+        for (let article_id of config.user.bookmark_article_arr) {
+            await Request.get_record_by_key(config, article_id, Util.SchemaName.Article).then((value) => {
+                res.push(value as Schema.Article);
+            }).catch((reason) => {
+                console.log(reason);
+            });
+        }
+
+        return res;
+    }
+
     export async function list_user(config: Config): Promise<Schema.User[]> {
         let res: Schema.User[] = [];
 
