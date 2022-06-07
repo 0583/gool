@@ -1,2 +1,3 @@
 *.proto linguist-detectable=true
 *.md linguist-detectable=true
+*.tsx linguist-detectable=true
