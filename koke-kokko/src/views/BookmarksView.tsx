@@ -29,12 +29,12 @@ function BookmarksView(props: SnackBarSenderProps) {
                             </IconButton>
                         </Stack>
                         <KokkoMessageCard
+                            articleId={"DAMNED"}
                             username="YUAN Zhuo"
                             avatar="avatars/yzhuo.png"
                             date="April 13, 2022"
                             content="The adorable pink hero #Kirby made his debut in Kirby's Dream Land on Game Boy in Japan 30 years ago today! What is your favorite Kirby memory?"
                             image={["examples/FRXaiWUWUAIMXEO.jpeg"]}
-                            isLiked={true}
                             showActions={true}
                         />
                     </Stack>

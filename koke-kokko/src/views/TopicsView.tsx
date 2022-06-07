@@ -87,6 +87,7 @@ function TopicsView(props: SnackBarSenderProps) {
                         </DialogTitle>
                         <DialogContent>
                             <KokkoMessageCard username={activeKokko!.author}
+                                              articleId={activeKokko.article_id}
                                 avatar={activeKokko!.user_photo}
                                 date={activeKokko!.post_time}
                                 content={activeKokko!.content}
