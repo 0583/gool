@@ -10,9 +10,12 @@ import {
 import { Edit, ExpandMore } from "@mui/icons-material";
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
-import React from "react";
+import React, {useEffect} from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 import {SnackBarSenderProps} from "../App";
+import {Schema} from "../services/schema/schema";
+import {Service} from "../services/service";
+import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
 
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -45,40 +48,42 @@ function getProperties(itemName: string, content: string, description: string) {
 }
 
 function ProfileView(props: SnackBarSenderProps) {
+    const [myKokkos, setMyKokkos] = React.useState<Schema.Article[]>([])
+    const config = LocalStoreConfig.get_config()!
+    useEffect(() => {
+        Service.list_article(config).then((articles) => {
+            setMyKokkos(articles.filter((article) => {
+                return article.author === config.user.username
+            }))
+        })
+    }, [])
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={7}>
                 <List>
-                    <ListItem>
+                    <ListItem key="title">
                         <Typography variant="h4">
                             Your Kokkos
                         </Typography>
                     </ListItem>
-                    <ListItem key="my_kokko_1">
-                        <KokkoMessageCard
-                            username="YU Xiqian"
-                            avatar="avatars/xiqyu.png"
-                            date="April 28, 2022"
-                            content="can't believe what i've just seen..."
-                            showActions={false} />
-                    </ListItem>
-                    <ListItem key="my_kokko_2">
-                        <KokkoMessageCard
-                            username="YU Xiqian"
-                            avatar="avatars/xiqyu.png"
-                            date="April 21, 2022"
-                            content="The worst day ever."
-                            showActions={false} />
-                    </ListItem>
-                    <ListItem key="my_kokko_3">
-                        <KokkoMessageCard
-                            username="YU Xiqian"
-                            avatar="avatars/xiqyu.png"
-                            date="March 3, 2022"
-                            content="Why? Why? Why?"
-                            showActions={false} />
-                    </ListItem>
-                    <Divider sx={{ margin: 2, fontSize: 13, color: 'gray' }}>3 Kokkos</Divider>
+                    {
+                        myKokkos.map((kokko) => {
+                            return (
+                                <ListItem key={kokko.article_id}>
+                                    <KokkoMessageCard
+                                        username={kokko.author}
+                                        avatar={kokko.user_photo}
+                                        date={kokko.post_time}
+                                        content={kokko.content}
+                                        image={kokko.article_photo}
+                                        showActions={false} />
+                                </ListItem>
+                            )
+                        })
+                    }
+
+                    <Divider sx={{ margin: 2, fontSize: 13, color: 'gray' }}>{myKokkos.length} Kokkos</Divider>
                 </List>
             </Grid>
             <Grid item xs={5}>
