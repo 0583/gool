@@ -14,11 +14,12 @@ import {
 } from "@mui/material";
 import TopicItem from "../widgets/TopicItem";
 import {
+    Add,
     Article,
     AssuredWorkload, DirectionsRun, Favorite, FavoriteOutlined,
     HealthAndSafety, Info, Mic,
     Newspaper,
-    PhoneAndroid, TrendingUp,
+    PhoneAndroid, Remove, TrendingUp,
 } from "@mui/icons-material";
 import {SnackBarSenderProps} from "../App";
 import {Config, Service} from "../services/service";
@@ -94,15 +95,15 @@ function TopicsView(props: SnackBarSenderProps) {
             </Dialog>
             <SpeedDial ariaLabel={"Favorite Topics"}
                        sx={{ position: 'absolute', top: 64, right: 16 }}
-                       FabProps={{
-                           sx: {
-                               bgcolor: 'pink',
-                               '&:hover': {
-                                   bgcolor: 'pink',
-                               }
-                           }
-                       }}
-                       icon={isFollowing ? <Favorite sx={{ color: 'red' }} /> : <Favorite sx={{ color: 'white' }}/>}
+                       // FabProps={{
+                       //     sx: {
+                       //         bgcolor: 'pink',
+                       //         '&:hover': {
+                       //             bgcolor: 'pink',
+                       //         }
+                       //     }
+                       // }}
+                       icon={isFollowing ? <Remove /> : <Add/>}
                        onClick={() => {
                            if (isFollowing) {
                                Service.unfollow_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then(() => {
