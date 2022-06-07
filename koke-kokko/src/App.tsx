@@ -311,7 +311,12 @@ export default function PersistentDrawerLeft() {
                                     {(popupState: any) => (
                                         <React.Fragment>
                                             <Button {...bindTrigger(popupState)}>
-                                                <Avatar src="avatars/xiqyu.png" />
+                                                {
+                                                    LocalStoreConfig.get_config() ?
+                                                    (<Avatar src={"/api/image?uuid=" + LocalStoreConfig.get_config()!.user.profile_photo} />)
+                                                        :
+                                                        <Avatar/>
+                                                }
                                             </Button>
                                             <Menu {...bindMenu(popupState)}
                                                 elevation={1}
