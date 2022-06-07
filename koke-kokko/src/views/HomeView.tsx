@@ -45,6 +45,20 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
     //设置图片最大上传数量
 
     const [news, setNews] = React.useState<YuanZhuoUtil.NewsDTO[]>([])
+    const [newsKeyword, setNewsKeyword] = React.useState<string>('')
+    const [filteredNews, setFilteredNews] = React.useState<YuanZhuoUtil.NewsDTO[]>([])
+
+    useEffect(() => {
+        const realKeyword = newsKeyword.trim()
+        console.log(realKeyword)
+        if (!realKeyword) {
+            setFilteredNews([...news])
+        } else {
+            setFilteredNews(news.filter((neww) => {
+                return neww.category.includes(realKeyword) || neww.title.includes(realKeyword)
+            }))
+        }
+    }, [news, newsKeyword])
 
     const maxNumber = 7;
 
@@ -379,7 +393,7 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                 <TextField
                                     sx={{ width: '100%' }}
                                     id="input-with-icon-textfield"
-                                    label="Search Koke-kokko"
+                                    label="Search News"
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
@@ -387,11 +401,13 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                             </InputAdornment>
                                         ),
                                     }}
+                                    value={newsKeyword}
+                                    onChange={(e) => { setNewsKeyword(e.target.value) }}
                                     variant="standard"
                                 />
                             </ListItem>
                             {
-                                news.map((neww, index) => {
+                                filteredNews.map((neww, index) => {
                                     return (
                                         <ListItem key={index.toString()}>
                                             <Card sx={{ width: '100%' }} variant="outlined" elevation={0}>
@@ -404,7 +420,7 @@ function HomeView(props: SnackBarSenderProps & ArticleTransferProps) {
                                                     </Typography>
                                                 </CardContent>
                                                 <CardActions>
-                                                    <Button size="small" href={neww.url}>Learn More</Button>
+                                                    <Button sx={{ marginLeft: 1, marginBottom: 1 }} size="small" href={neww.url}>Learn More</Button>
                                                 </CardActions>
                                             </Card>
                                         </ListItem>

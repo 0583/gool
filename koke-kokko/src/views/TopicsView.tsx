@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
     Box,
     Dialog,
@@ -21,10 +21,10 @@ import {
     Newspaper,
     PhoneAndroid, Remove, TrendingUp,
 } from "@mui/icons-material";
-import {SnackBarSenderProps} from "../App";
-import {Config, Service} from "../services/service";
-import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
-import {Schema} from "../services/schema/schema";
+import { SnackBarSenderProps } from "../App";
+import { Config, Service } from "../services/service";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
+import { Schema } from "../services/schema/schema";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
 
 function TopicsView(props: SnackBarSenderProps) {
@@ -35,7 +35,7 @@ function TopicsView(props: SnackBarSenderProps) {
     const [isFollowing, setIsFollowing] = React.useState<boolean>(false);
 
     const refreshFollowingTags = () => {
-        setFollowingTags(LocalStoreConfig.get_config()?.user?.follow_tag_arr?.splice(0) ?? []);
+        setFollowingTags([...LocalStoreConfig.get_config()?.user?.follow_tag_arr ?? []]);
     }
 
     useEffect(() => {
@@ -58,7 +58,7 @@ function TopicsView(props: SnackBarSenderProps) {
             // refreshActiveKokkos
             setActiveKokkos([]);
             Service.list_article_for_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then((articles) => {
-                setActiveKokkos(articles.splice(0));
+                setActiveKokkos([...articles]);
             })
         }
     }, [panelIndex, tagsList])
@@ -79,57 +79,57 @@ function TopicsView(props: SnackBarSenderProps) {
             <Dialog open={activeKokko !== undefined} onClose={() => { setActiveKokko(undefined) }}>
                 {activeKokko === undefined ||
                     <>
-                    <DialogTitle>
-                    Kokko from {activeKokko!.author}
-                    </DialogTitle>
-                    <DialogContent>
-                    <KokkoMessageCard username={activeKokko!.author}
-                    avatar={activeKokko!.user_photo}
-                    date={activeKokko!.post_time}
-                    content={activeKokko!.content}
-                    image={activeKokko.article_photo}
-                    showActions={true}/>
-                    </DialogContent>
+                        <DialogTitle>
+                            Kokko from {activeKokko!.author}
+                        </DialogTitle>
+                        <DialogContent>
+                            <KokkoMessageCard username={activeKokko!.author}
+                                avatar={activeKokko!.user_photo}
+                                date={activeKokko!.post_time}
+                                content={activeKokko!.content}
+                                image={activeKokko.article_photo}
+                                showActions={true} />
+                        </DialogContent>
                     </>
                 }
             </Dialog>
             <SpeedDial ariaLabel={"Favorite Topics"}
-                       hidden={tagsList.length === 0}
-                       sx={{ position: 'absolute', top: 64, right: 16 }}
-                       // FabProps={{
-                       //     sx: {
-                       //         bgcolor: 'pink',
-                       //         '&:hover': {
-                       //             bgcolor: 'pink',
-                       //         }
-                       //     }
-                       // }}
-                       icon={isFollowing ? <Remove /> : <Add/>}
-                       onClick={() => {
-                           if (isFollowing) {
-                               Service.unfollow_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then(() => {
-                                   refreshFollowingTags()
-                                   props.sender("Successfully unfollowed tag.")
-                               }).catch(() => {
-                                   props.sender("Failed to unfollow this tag.")
-                               })
-                           } else {
-                               Service.follow_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then(() => {
-                                   refreshFollowingTags()
-                                   props.sender("Successfully followed tag.")
-                               }).catch(() => {
-                                   props.sender("Failed to follow this tag.")
-                               })
-                           }
-                       }}
+                hidden={tagsList.length === 0}
+                sx={{ position: 'absolute', top: 64, right: 16 }}
+                // FabProps={{
+                //     sx: {
+                //         bgcolor: 'pink',
+                //         '&:hover': {
+                //             bgcolor: 'pink',
+                //         }
+                //     }
+                // }}
+                icon={isFollowing ? <Remove /> : <Add />}
+                onClick={() => {
+                    if (isFollowing) {
+                        Service.unfollow_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then(() => {
+                            refreshFollowingTags()
+                            props.sender("Successfully unfollowed tag.")
+                        }).catch(() => {
+                            props.sender("Failed to unfollow this tag.")
+                        })
+                    } else {
+                        Service.follow_tag(LocalStoreConfig.get_config()!, tagsList[panelIndex]).then(() => {
+                            refreshFollowingTags()
+                            props.sender("Successfully followed tag.")
+                        }).catch(() => {
+                            props.sender("Failed to follow this tag.")
+                        })
+                    }
+                }}
             />
             <Box marginTop={-2}>
                 <Stack>
                     <Tabs aria-label="basic tabs example" value={panelIndex} onChange={handleChange}
-                          variant="scrollable"
-                          scrollButtons="auto">
+                        variant="scrollable"
+                        scrollButtons="auto">
                         {
-                            tagsList.map(( name, index ) => {
+                            tagsList.map((name, index) => {
                                 return (<Tab key={index} label={'#' + name} />);
                             })
                         }
