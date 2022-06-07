@@ -16,16 +16,16 @@ import TopicsView from "./views/TopicsView";
 import NotificationsView from "./views/NotificationsView";
 import BookmarksView from "./views/BookmarksView";
 import ProfileView from "./views/ProfileView";
-import { Home, Tag, Notifications, Bookmark, Person, Close, Menu as MenuIcon, Logout } from "@mui/icons-material";
-import {useEffect, useRef} from "react";
+import { Home, Tag, Notifications, Bookmark, Person, Close, Menu as MenuIcon, Logout, WindowSharp } from "@mui/icons-material";
+import { useEffect, useRef } from "react";
 import { Avatar, Stack, Snackbar, Menu, MenuItem, Button, ListItemIcon } from "@mui/material";
 import DrawerMenuItem from "./widgets/DrawerMenuItem";
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { Config, Service } from "./services/service";
 import { LocalStoreConfig } from './widgets/ConifgLocalstorageUtil';
-import {makeWebSocket} from "./services/websocket";
-import {Request} from "./services/request";
-import {Schema} from "./services/schema/schema";
+import { makeWebSocket } from "./services/websocket";
+import { Request } from "./services/request";
+import { Schema } from "./services/schema/schema";
 
 export interface SnackBarSenderProps {
     sender: (message: string) => void;
@@ -99,7 +99,12 @@ export interface ArticleTransferProps {
 
 export default function PersistentDrawerLeft() {
     //notification提示标
-
+    const init = () => {
+        let config = LocalStoreConfig.get_config()
+        if (!config?.user) {
+            window.location.href = "/#"
+        }
+    }
     const [articles, setArticles] = React.useState<Schema.Article[]>([]);
 
     const [UpdateNoti, setUpdateNoti] = React.useState<number>(0);
@@ -120,7 +125,7 @@ export default function PersistentDrawerLeft() {
         return () => {
             clearInterval(timer.current)
         }
-    },[])
+    }, [])
 
     const refreshWebaas = () => {
         Request.say_hello().then((response: any) => {
@@ -131,7 +136,7 @@ export default function PersistentDrawerLeft() {
     }
 
     React.useEffect(() => {
-        makeWebSocket(( ev) => {
+        makeWebSocket((ev) => {
             console.log('callback function called! with', ev)
 
             Service.list_article_for_tag(LocalStoreConfig.get_config()!, 'yuanzhuo').then(
@@ -186,8 +191,8 @@ export default function PersistentDrawerLeft() {
             title: "Home",
             icon: (<Home />),
             view: (<HomeView sender={sendMessage}
-                             articles={articles}
-                             setArticles={setArticles}/>),
+                articles={articles}
+                setArticles={setArticles} />),
             update: 0
         },
         {
@@ -235,7 +240,7 @@ export default function PersistentDrawerLeft() {
 
 
     return (
-        <div>
+        <div onLoad={init}>
             <Snackbar
                 key={messageInfo ? messageInfo.key : undefined}
                 open={open}
@@ -285,9 +290,9 @@ export default function PersistentDrawerLeft() {
                             <Stack spacing={2} direction="row" justifyContent="flex-end" alignItems="center">
                                 {
                                     isWebaasOK !== undefined ?
-                                    <Button variant="outlined" color={isWebaasOK ? "success" : "error"} href="http://202.120.40.82:11233/hello">
-                                        {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
-                                    </Button> :
+                                        <Button variant="outlined" color={isWebaasOK ? "success" : "error"} href="http://202.120.40.82:11233/hello">
+                                            {isWebaasOK ? "WeBaaS OK" : "WeBaaS Down"}
+                                        </Button> :
                                         <Button variant="outlined" disabled>
                                             WeBaaS Unknown
                                         </Button>
@@ -310,11 +315,11 @@ export default function PersistentDrawerLeft() {
                                                 }}>
                                                 <MenuItem disableRipple>
                                                     <Typography variant='h5'>
-                                                        { LocalStoreConfig.get_config()?.user?.username ?? "?" }
+                                                        {LocalStoreConfig.get_config()?.user?.username ?? "?"}
                                                     </Typography>
                                                 </MenuItem>
                                                 <MenuItem disableRipple>
-                                                    { LocalStoreConfig.get_config()?.user?.email ?? "?" }
+                                                    {LocalStoreConfig.get_config()?.user?.email ?? "?"}
                                                 </MenuItem>
                                                 <Divider />
                                                 <MenuItem onClick={
