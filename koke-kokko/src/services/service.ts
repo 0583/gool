@@ -153,6 +153,7 @@ export namespace Service {
         config.user = {} as Schema.User;
         LocalStoreConfig.remove_config();
         console.log("logout");
+        window.location.href = "/#"
     }
 
     // cancel account when logged in

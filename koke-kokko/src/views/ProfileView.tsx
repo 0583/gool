@@ -1,21 +1,27 @@
 import {
     AccordionDetails,
     AccordionSummary,
+    Alert,
     Box, Button,
     CardMedia, Divider,
     Grid, IconButton, List,
-    ListItem, Stack,
+    ListItem, Skeleton, Stack,
+    TextField,
     Typography
 } from "@mui/material";
 import { Edit, ExpandMore } from "@mui/icons-material";
 import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import KokkoMessageCard from "../widgets/KokkoMessageCard";
-import {SnackBarSenderProps} from "../App";
-import {Schema} from "../services/schema/schema";
-import {Service} from "../services/service";
-import {LocalStoreConfig} from "../widgets/ConifgLocalstorageUtil";
+import { SnackBarSenderProps } from "../App";
+import { Schema } from "../services/schema/schema";
+import { LocalStoreConfig } from "../widgets/ConifgLocalstorageUtil";
+import { Config, Service } from '../services/service';
+import ImageUploading, { ImageListType, ImageType } from "react-images-uploading";
+import { Avatar } from '@mui/material';
+import { Request } from "../services/request";
+
 
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -48,8 +54,47 @@ function getProperties(itemName: string, content: string, description: string) {
 }
 
 function ProfileView(props: SnackBarSenderProps) {
+    let config = LocalStoreConfig.get_config() as Config;
+    const [loading, setloading] = React.useState<boolean>(true);
+    const [images, setImages] = React.useState<ImageType[]>([]);
+    const [AlertOpen, setAlertOpen] = React.useState<boolean>(false);
+    const maxNumber = 1;
+
+
+    const piconChange = async (imageList: ImageListType, addUpdateIndex: number[] | undefined) => {
+        // data for submit
+        if (imageList.length > 0) {
+            setloading(false);
+            config.user.profile_photo = await Request.upload_image(imageList[0].file!);
+            await Service.update_user(config).then(() => {
+                LocalStoreConfig.set_config(config);
+                props.sender("Modified successfully!")
+                setloading(true);
+            }).catch((error) => {
+                props.sender(error)
+            })
+
+        }
+        console.log(imageList, addUpdateIndex);
+        setImages(imageList);
+    };
+    const delectAccounthandler = async () => {
+        await Service.cancel(config)
+    }
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        config.user.username = data.get("name") as string;
+        config.user.password = data.get("password") as string;
+        await Service.update_user(config).then(() => {
+            LocalStoreConfig.set_config(config);
+            props.sender("Modified successfully!");
+        })
+
+    };
+    
     const [myKokkos, setMyKokkos] = React.useState<Schema.Article[]>([])
-    const config = LocalStoreConfig.get_config()!
+
     useEffect(() => {
         Service.list_article(config).then((articles) => {
             setMyKokkos(articles.filter((article) => {
@@ -59,91 +104,143 @@ function ProfileView(props: SnackBarSenderProps) {
     }, [])
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={7}>
-                <List>
-                    <ListItem key="title">
-                        <Typography variant="h4">
-                            Your Kokkos
-                        </Typography>
-                    </ListItem>
-                    {
-                        myKokkos.map((kokko) => {
-                            return (
-                                <ListItem key={kokko.article_id}>
-                                    <KokkoMessageCard
-                                        username={kokko.author}
-                                        avatar={kokko.user_photo}
-                                        date={kokko.post_time}
-                                        content={kokko.content}
-                                        image={kokko.article_photo}
-                                        showActions={false} />
-                                </ListItem>
-                            )
-                        })
+        <div>
+            {AlertOpen &&
+                <Alert
+                    action={
+                        <div>
+                            <Button color="inherit" size="small" onClick={() => {
+                                delectAccounthandler()
+                            }}>
+                                ACCEPT
+                            </Button>
+                            <Button color="inherit" size="small" onClick={() => { setAlertOpen(false) }}>
+                                UNDO
+                            </Button>
+                        </div>
                     }
 
-                    <Divider sx={{ margin: 2, fontSize: 13, color: 'gray' }}>{myKokkos.length} Kokkos</Divider>
-                </List>
-            </Grid>
-            <Grid item xs={5}>
-                <Box margin={2}>
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" marginBottom={2}>
-                        <Typography variant="h4">
-                            Personal Info
-                        </Typography>
-                        <IconButton>
-                            <Edit />
-                        </IconButton>
-                    </Stack>
 
-                    <Accordion variant="outlined">
-                        <AccordionSummary
-                            expandIcon={<ExpandMore />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography fontWeight="bold">Avatar</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <CardMedia
-                                component="img"
-                                image="avatars/xiqyu.png"
-                            />
-                        </AccordionDetails>
-                    </Accordion>
-                    {(
-                        getProperties("First Name", "Xiqian", "A given name (also known as a forename or first name) is the part of a personal name that identifies a person, potentially with a middle name as well, and differentiates that person from the other members of a group (typically a family or clan) who have a common surname.")
-                    )}
+                >
+                    This is a success alert — check it out!
+                </Alert>
+            }
+            <ImageUploading
+                multiple
+                value={images}
+                onChange={piconChange}
+                maxNumber={maxNumber}>{({
+                    imageList,
+                    onImageUpload,
+                    onImageRemoveAll,
+                    onImageUpdate,
+                    onImageRemove,
+                    isDragging,
+                    dragProps,
+                }) => (
+                    <Grid container spacing={2} >
+                        <Grid item xs={7}>
+                            <List>
+                                <ListItem key="title">
+                                    <Typography variant="h4">
+                                        Your Kokkos
+                                    </Typography>
+                                </ListItem>
+                                {
+                                    myKokkos.map((kokko) => {
+                                        return (
+                                            <ListItem key={kokko.article_id}>
+                                                <KokkoMessageCard
+                                                    username={kokko.author}
+                                                    avatar={kokko.user_photo}
+                                                    date={kokko.post_time}
+                                                    content={kokko.content}
+                                                    image={kokko.article_photo}
+                                                    showActions={false} />
+                                            </ListItem>
+                                        )
+                                    })
+                                }
 
-                    {(
-                        getProperties("Last Name", "YU", "Surname, family name, or last name is the portion of one's personal name that indicates one's family, tribe or community.")
-                    )}
+                                <Divider sx={{ margin: 2, fontSize: 13, color: 'gray' }}>{myKokkos.length} Kokkos</Divider>
+                            </List>
+                        </Grid>
+                        <Grid item xs={5}>
+                            <Box margin={2}>
+                                <Stack direction="row" justifyContent="space-between" alignItems="center" marginBottom={2}>
+                                    <Typography variant="h4">
+                                        Personal Info
+                                    </Typography>
+                                </Stack>
 
-                    {(
-                        getProperties("Gender", "Not presented", "Gender is the range of characteristics pertaining to femininity and masculinity and differentiating between them. Depending on the context, this may include sex-based social structures (i.e. gender roles) and gender identity.")
-                    )}
+                                <Box component={"form"} onSubmit={handleSubmit}>
+                                    <Box className="upload__image-wrapper" sx={{ display: "flex", alignItems: "center" }}>
+                                        <Typography fontSize={20} sx={{ fontWeight: 800, pr: "60px" }} >Avatar:</Typography>
+                                        {
+                                            loading ? (
+                                                <Box className="image-item__btn-wrapper" sx={{
+                                                    width: "118px", height: "118px", borderRadius: "999px", backgroundSize: "cover",
+                                                    backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundImage: "url(/api/image?uuid=" + config.user.profile_photo + ")"
+                                                }} >
 
-                    {(
-                        getProperties("Location", "Asia/Shanghai", "In geography, location or place are used to denote a region (point, line, or area) on Earth's surface or elsewhere.")
-                    )}
 
-                    {(
-                        getProperties("Time Zone", "GMT+08:00", "A time zone is an area that observes a uniform standard time for legal, commercial and social purposes. Time zones tend to follow the boundaries between countries and their subdivisions instead of strictly following longitude, because it is convenient for areas in frequent communication to keep the same time.")
-                    )}
-                </Box>
-                <Stack direction="row" spacing={1}>
-                    <Button sx={{ marginLeft: 2 }}>
-                        Export All
-                    </Button>
+                                                    <IconButton sx={{ width: "118px", height: "118px", borderRadius: "999px", background: "rgb(255, 255, 255, 0.1)" }} onClick={() => {
+                                                        onImageRemoveAll();
+                                                        onImageUpload();
+                                                    }} ></IconButton>
 
-                    <Button sx={{ marginLeft: 2 }} variant="outlined" color="error">
-                        Delete Account
-                    </Button>
-                </Stack>
-            </Grid>
-        </Grid>
+                                                </Box>
+                                            ) : (
+                                                <Skeleton variant="circular" width={118} height={118} />
+                                            )}
+                                    </Box>
+
+                                    <TextField
+                                        required
+                                        autoFocus
+                                        margin="dense"
+                                        name="name"
+                                        label="Your Name"
+                                        fullWidth
+                                        variant="outlined"
+                                        defaultValue={config.user.username}
+                                        sx={{ marginY: 2 }}
+                                    />
+
+
+                                    <TextField
+                                        required
+                                        autoFocus
+                                        margin="dense"
+                                        name="password"
+                                        label="Password"
+                                        type="password"
+                                        fullWidth
+                                        variant="outlined"
+                                        sx={{ marginY: 2 }}
+                                        defaultValue={config.user.password}
+                                    />
+
+                                    <Stack direction="row" spacing={1} >
+                                        <Button sx={{ margin: 0, padding: 1 }} type="submit" variant="outlined">
+                                            Modification
+                                        </Button>
+
+                                        <Button sx={{ margin: 0, padding: 1 }} variant="outlined" color="error" onClick={() => {
+                                            setAlertOpen(true)
+                                        }}>
+                                            Delete Account
+                                        </Button>
+                                    </Stack>
+                                </Box>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                )}
+            </ImageUploading>
+        </div>
     )
 }
+
 
 export default ProfileView;
